@@ -12,10 +12,10 @@ public class User extends BaseEntity {
     private int id;
 
     @Column (name = "USER_LOGIN")
-    private String userLog;
+    private String log;
 
     @Column (name = "USER_PASSWORD")
-    private String userPass;
+    private String pass;
 
     @Column (name = "IS_ADMIN")
     private boolean isAdmin;
@@ -24,30 +24,20 @@ public class User extends BaseEntity {
     private boolean isBlocked;
 
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getUserLog() {
-        return userLog;
+        return log;
     }
 
     public void setUserLog(String userLog) {
-        this.userLog = userLog;
+        this.log = userLog;
     }
 
     public String getUserPass() {
-        return userPass;
+        return pass;
     }
 
     public void setUserPass(String userPass) {
-        this.userPass = userPass;
+        this.pass = userPass;
     }
 
     public boolean isAdmin() {
@@ -66,14 +56,4 @@ public class User extends BaseEntity {
         this.isBlocked = isBlocked;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userLog='" + userLog + '\'' +
-                ", userPass='" + userPass + '\'' +
-                ", isAdmin=" + isAdmin +
-                ", isBlocked=" + isBlocked +
-                '}';
-    }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - SHOP@localhost" uuid="037ea1df-8a09-432b-8c4d-cde44c9cda7e">
+    <database-info product="MySQL" version="5.7.13-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="shop"/>
+    <table name="order products" schema="" catalog="shop" type="TABLE">
+      <column name="ORDER_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="PRODUCT_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="QUANTITY" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" def="MQ=="/>
+      <primary-key name="PRIMARY" columns="ORDER_ID,PRODUCT_ID"/>
+    </table>
+    <table name="orders" schema="" catalog="shop" type="TABLE">
+      <column name="ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="ORDER_STATUS" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <primary-key name="PRIMARY" columns="ID"/>
+    </table>
+    <table name="products" schema="" catalog="shop" type="TABLE">
+      <column name="ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="PRODUCT_NAME" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="PRODUCT_PRICE" sqlType="DOUBLE" precision="22" scale="0" nullable="false" jdbcType="8" def="MA=="/>
+      <primary-key name="PRIMARY" columns="ID"/>
+    </table>
+    <table name="users" schema="" catalog="shop" type="TABLE">
+      <column name="ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="USER_LOGIN" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12" def="J1VzZXIn"/>
+      <column name="USER_PASSWORD" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12" def="J3VzZXJwYXNzd29yZCc="/>
+      <column name="IS_ADMIN" sqlType="TINYINT" precision="3" scale="0" nullable="true" jdbcType="-6" def="MA=="/>
+      <column name="IS_BLOCKED" sqlType="TINYINT" precision="3" scale="0" nullable="true" jdbcType="-6" def="MA=="/>
+      <primary-key name="PRIMARY" columns="ID"/>
+      <foreign-key name="USER_ID" columns="ID" ref-table="users orders" ref-schema="" ref-catalog="shop" ref-columns="USER_ID" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="USER_LOGIN_UNIQUE" unique="true" columns="USER_LOGIN"/>
+    </table>
+    <table name="users orders" schema="" catalog="shop" type="TABLE">
+      <column name="USER_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="ORDER_ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="USER_ID,ORDER_ID"/>
+      <exported-key name="USER_ID" table="users" schema="" catalog="shop" columns="ID"/>
+    </table>
+  </data-source>
+</component>

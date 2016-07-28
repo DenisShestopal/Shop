@@ -63,8 +63,8 @@
   </tr>
   <tr>
     <td>${user.id}</td>
-    <td>${user.userLog}</td>
-    <td>${user.userPass}</td>
+    <td>${user.log}</td>
+    <td>${user.pass}</td>
     <td>${user.isAdmin}</td>
     <td>${user.isBlocked}</td>
 

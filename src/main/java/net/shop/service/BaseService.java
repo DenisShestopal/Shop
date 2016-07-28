@@ -5,11 +5,11 @@ import net.shop.model.Product;
 
 public interface BaseService<T extends BaseEntity> {
 
-    public void add(Product product);
+    public T add(T entity);
 
-    public void update(Product product);
+    public T update(T entity);
 
-    public void remove(int id);
+    public boolean remove(int id);
 
-    public Product getById(int id);
+    public T getById(int id);
 }

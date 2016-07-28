@@ -6,49 +6,26 @@ import javax.persistence.*;
 @Table(name = "products")
 public class Product extends BaseEntity{
 
-    @Id
-    @Column (name = "PRODUCT_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @Column (name = "PRODUCT_NAME")
-    private String productName;
+    private String name;
 
     @Column (name = "PRODUCT_PRICE")
-    private double productPrice;
-
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private double price;
 
     public String getProductName() {
-        return productName;
+        return name;
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.name = productName;
     }
 
     public double getProductPrice() {
-        return productPrice;
+        return price;
     }
 
     public void setProductPrice(double productPrice) {
-        this.productPrice = productPrice;
+        this.price = productPrice;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", productName='" + productName + '\'' +
-                ", productPrice=" + productPrice +
-                '}';
-    }
 }

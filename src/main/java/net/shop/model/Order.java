@@ -5,23 +5,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity{
-    @Id
-    @Column(name = "ORDER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Column (name = "ORDER_STATUS")
     private String status;
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getStatus() {
         return status;
@@ -31,11 +17,4 @@ public class Order extends BaseEntity{
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", status='" + status + '\'' +
-                '}';
-    }
 }

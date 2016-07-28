@@ -1,39 +1,45 @@
 package net.shop.service;
 
 import net.shop.dao.BaseDao;
+import net.shop.dao.BaseDaoImpl;
 import net.shop.dao.ProductDao;
 import net.shop.model.BaseEntity;
 import net.shop.model.Product;
+import org.springframework.core.GenericTypeResolver;
 import org.springframework.transaction.annotation.Transactional;
 
 public abstract class BaseServiceImpl <T extends BaseEntity> implements BaseService<T> {
-    private ProductDao productDao;
 
-    public void setProductDao(ProductDao productDao) {
-        this.productDao = productDao;
+    private final Class<T> genericType = (Class<T>) GenericTypeResolver
+            .resolveTypeArgument(getClass(), BaseServiceImpl.class);
+
+    private BaseDao baseDao;
+
+    public void setProductDao(BaseDao baseDao) {
+        this.baseDao = baseDao;
     }
 
     @Override
     @Transactional
-    public void add(Product product) {
-        this.productDao.add(product);
+    public T add(T entity) {
+        this.baseDao.add(entity);
     }
 
     @Override
     @Transactional
-    public void update(Product product) {
-        this.productDao.update(product);
+    public T update(T entity) {
+        this.baseDao.update(entity);
     }
 
     @Override
     @Transactional
-    public void remove(int id) {
-        this.productDao.remove(id);
+    public boolean remove(int id) {
+        this.baseDao.remove(id);
     }
 
     @Override
     @Transactional
-    public Product getById(int id) {
-        return this.productDao.getById(id);
+    public T getById(int id) {
+        return this.baseDao.getById(id);
     }
 }

@@ -5,12 +5,12 @@ import net.shop.model.Product;
 
 public interface BaseDao<T extends BaseEntity> {
 
-        void add(Product product);
+        T add(T entity);
 
-        void update(Product product);
+        T update(T entity);
 
-        void remove(int id);
+        boolean remove(int id);
 
-        Product getById(int id);
+        T getById(int id);//TODO change name to read
 
 }

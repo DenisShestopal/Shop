@@ -69,8 +69,8 @@
     <c:forEach items="${listProducts}" var="product">
       <tr>
         <td>${product.id}</td>
-        <td><a href="/productdata/${product.id}" target="_blank">${product.productName}</a></td>
-        <td>${product.productPrice/100}${product.productPrice%100}</td>
+        <td><a href="/productdata/${product.id}" target="_blank">${product.name}</a></td>
+        <td>${product.price/100}${product.price%100}</td>
         <td><a href="<c:url value='/edit/${product.id}'/>">Edit</a></td>
         <td><a href="<c:url value='/remove/${product.id}'/>">Delete</a></td>
       </tr>
@@ -85,7 +85,7 @@
 
 <form:form action="${addAction}" commandName="product">
   <table>
-    <c:if test="${!empty product.productName}">
+    <c:if test="${!empty product.name}">
       <tr>
         <td>
           <form:label path="id">
@@ -100,31 +100,31 @@
     </c:if>
     <tr>
       <td>
-        <form:label path="productName">
+        <form:label path="name">
           <spring:message text="Name"/>
         </form:label>
       </td>
       <td>
-        <form:input path="productName"/>
+        <form:input path="name"/>
       </td>
     </tr>
     <tr>
       <td>
-        <form:label path="productPrice">
+        <form:label path="price">
           <spring:message text="Price"/>
         </form:label>
       </td>
       <td>
-        <form:input path="productPrice"/>
+        <form:input path="price"/>
       </td>
     </tr>
     <tr>
       <td colspan="2">
-        <c:if test="${!empty product.productName}">
+        <c:if test="${!empty product.name}">
           <input type="submit"
                  value="<spring:message text="Edit Product"/>"/>
         </c:if>
-        <c:if test="${empty product.productName}">
+        <c:if test="${empty product.name}">
           <input type="submit"
                  value="<spring:message text="Add Product"/>"/>
         </c:if>

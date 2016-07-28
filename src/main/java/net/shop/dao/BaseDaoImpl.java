@@ -6,8 +6,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.GenericTypeResolver;
 
-public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
+public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
+
+    //get type of T by reflection
+    @SuppressWarnings("unchecked")
+    private final Class<T> genericType = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), BaseDaoImpl.class);
 
     private static final Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
 
@@ -18,37 +23,41 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     }
 
     @Override
-    public void add(Product product) {
+    public T add(T entity) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.persist(product);
-        logger.info("Product successfully saved. Product details: " + product);
+        session.persist(entity);
+        logger.info("Product successfully saved. Product details: " + entity);
+        return entity;
     }
 
     @Override
-    public void update(Product product) {
+    public T update(T entity) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.update(product);
-        logger.info("Product successfully updated. Product details: " + product);
+        session.update(entity);
+        logger.info("Product successfully updated. Product details: " + entity);
+        return entity;
     }
 
     @Override
-    public void remove(int id) {
+    public boolean remove(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Product product = (Product) session.load(Product.class, new Integer(id));
 
         if (product != null) {
             session.delete(product);
+            logger.info("Product successfully removed. Product details: " + product);
+            return true;
         }
-        logger.info("Product successfully removed. Product details: " + product);
-
+        logger.info("Product wasn't removed. Product not found: " + product);
+        return false;
     }
 
     @Override
-    public Product getById(int id) {
+    public T getById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Product product = (Product) session.load(Product.class, new Integer(id));
-        logger.info("Product successfully loaded. Product details: " + product);
+        T entity = (T) session.load(genericType, new Integer(id));
+        logger.info("Product successfully loaded. Product details: " + entity);
 
-        return product;
+        return entity;
     }
 }

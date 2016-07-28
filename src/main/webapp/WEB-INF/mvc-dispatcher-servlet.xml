@@ -51,6 +51,24 @@
         <property name="productDao" ref="productDao"/>
     </bean>
 
+    <!--OrderDao and OrderService beans-->
+    <bean id="orderDao" class="net.shop.dao.OrderDaoImpl">
+        <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
+    </bean>
+
+    <bean id="orderService" class="net.shop.service.OrderServiceImpl">
+        <property name="orderDao" ref="orderDao"/>
+    </bean>
+
+    <!--UserDao and UserService beans-->
+    <bean id="userDao" class="net.shop.dao.UserDaoImpl">
+        <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
+    </bean>
+
+    <bean id="userService" class="net.shop.service.UserServiceImpl">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
     <context:component-scan base-package="net.shop"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

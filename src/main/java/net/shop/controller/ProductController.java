@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+
 @Controller
+@RequestMapping(value = "product")
 public class ProductController {
 
     private ProductService productService;
@@ -33,7 +35,7 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/products/add", method = RequestMethod.POST)
-    public String addProduct(@ModelAttribute("product") Product product){
+    public String add(@ModelAttribute("product") Product product){
         if(product.getId() == 0){
             this.productService.add(product);
         }else{
@@ -44,14 +46,14 @@ public class ProductController {
     }
 
     @RequestMapping("/remove/{id}")
-    public String removeProduct(@PathVariable("id") int id){
+    public String remove(@PathVariable("id") int id){
         this.productService.remove(id);
 
         return "redirect:/products";
     }
 
     @RequestMapping("edit/{id}")
-    public String editProduct(@PathVariable("id") int id, Model model){
+    public String edit(@PathVariable("id") int id, Model model){
         model.addAttribute("product", this.productService.getById(id));
         model.addAttribute("listProducts", this.productService.listProducts());
 

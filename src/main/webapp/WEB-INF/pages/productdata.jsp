@@ -61,8 +61,8 @@
   </tr>
   <tr>
     <td>${product.id}</td>
-    <td>${product.productName}</td>
-    <td>${product.productPrice/100}${product.productPrice%100}</td>
+    <td>${product.name}</td>
+    <td>${product.price/100}${product.price%100}</td>
   </tr>
 </table>
 </body>
