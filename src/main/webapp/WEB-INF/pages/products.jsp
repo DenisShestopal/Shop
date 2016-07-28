@@ -110,12 +110,12 @@
     </tr>
     <tr>
       <td>
-        <form:label path="price">
+        <form:label path="productPrice">
           <spring:message text="Price"/>
         </form:label>
       </td>
       <td>
-        <form:input path="price"/>
+        <form:input path="productPrice"/>
       </td>
     </tr>
     <tr>

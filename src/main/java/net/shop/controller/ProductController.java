@@ -22,7 +22,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    //display our products on page
+    //display our products on the page
     @RequestMapping(value = "products", method = RequestMethod.GET)
     public String listProducts(Model model){
         model.addAttribute("product", new Product());

@@ -60,7 +60,7 @@ public class ProductDaoImpl implements ProductDao {
     @SuppressWarnings("unchecked")
     public List<Product> listProducts() {
         Session session = this.sessionFactory.getCurrentSession();
-        List<Product> productList = session.createQuery("from products").list();
+        List<Product> productList = session.createQuery("from Product").list();
 
         for(Product product: productList){
             logger.info("Product list: " + product);
