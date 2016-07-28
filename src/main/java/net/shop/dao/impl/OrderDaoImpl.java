@@ -1,7 +1,7 @@
-package net.shop.dao;
+package net.shop.dao.impl;
 
+import net.shop.dao.OrderDao;
 import net.shop.model.Order;
-import net.shop.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;

@@ -43,29 +43,29 @@
     </bean>
 
     <!--ProductDao and ProductService beans-->
-    <bean id="productDao" class="net.shop.dao.ProductDaoImpl">
+    <bean id="productDao" class="net.shop.dao.impl.ProductDaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </bean>
 
-    <bean id="productService" class="net.shop.service.ProductServiceImpl">
+    <bean id="productService" class="net.shop.service.impl.ProductServiceImpl">
         <property name="productDao" ref="productDao"/>
     </bean>
 
     <!--OrderDao and OrderService beans-->
-    <bean id="orderDao" class="net.shop.dao.OrderDaoImpl">
+    <bean id="orderDao" class="net.shop.dao.impl.OrderDaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </bean>
 
-    <bean id="orderService" class="net.shop.service.OrderServiceImpl">
+    <bean id="orderService" class="net.shop.service.impl.OrderServiceImpl">
         <property name="orderDao" ref="orderDao"/>
     </bean>
 
     <!--UserDao and UserService beans-->
-    <bean id="userDao" class="net.shop.dao.UserDaoImpl">
+    <bean id="userDao" class="net.shop.dao.impl.UserDaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </bean>
 
-    <bean id="userService" class="net.shop.service.UserServiceImpl">
+    <bean id="userService" class="net.shop.service.impl.UserServiceImpl">
         <property name="userDao" ref="userDao"/>
     </bean>
 

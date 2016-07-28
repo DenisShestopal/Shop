@@ -1,5 +1,6 @@
-package net.shop.dao;
+package net.shop.dao.impl;
 
+import net.shop.dao.BaseDao;
 import net.shop.model.BaseEntity;
 import net.shop.model.Product;
 import org.hibernate.Session;
@@ -8,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.GenericTypeResolver;
 
-public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
+public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     //get type of T by reflection
     @SuppressWarnings("unchecked")

@@ -1,12 +1,19 @@
 package net.shop.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-public class BaseEntity {
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@MappedSuperclass
+public abstract class BaseEntity {
 
     @Id
     @Column(name = "ID")
@@ -15,9 +22,5 @@ public class BaseEntity {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

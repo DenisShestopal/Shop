@@ -1,5 +1,6 @@
-package net.shop.dao;
+package net.shop.dao.impl;
 
+import net.shop.dao.UserDao;
 import net.shop.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

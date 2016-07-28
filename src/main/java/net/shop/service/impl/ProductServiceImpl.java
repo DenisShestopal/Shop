@@ -1,9 +1,10 @@
-package net.shop.service;
+package net.shop.service.impl;
 
 
-import net.shop.dao.BaseDaoImpl;
 import net.shop.dao.ProductDao;
 import net.shop.model.Product;
+import net.shop.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +13,8 @@ import java.util.List;
 @Service
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService {
 
+    @Autowired
     private ProductDao productDao;
-
-    public void setProductDao(ProductDao productDao) {
-        this.productDao = productDao;
-    }
 
     @Override
     @Transactional

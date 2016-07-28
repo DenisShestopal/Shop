@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface OrderService extends BaseService<Order> {
     public List<Order> listOrders();
+    public boolean confirmOrder(int orderId);
+    public boolean payOrder(int orderId);
+
 }

@@ -1,6 +1,7 @@
-package net.shop.dao;
+package net.shop.dao.impl;
 
 
+import net.shop.dao.ProductDao;
 import net.shop.model.Product;
 
 import org.hibernate.Session;

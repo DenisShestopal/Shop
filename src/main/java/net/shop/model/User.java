@@ -1,21 +1,20 @@
 package net.shop.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 public class User extends BaseEntity {
 
-    @Id
-    @Column(name = "USER_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column (name = "LOGIN")
+    private String login;
 
-    @Column (name = "USER_LOGIN")
-    private String log;
-
-    @Column (name = "USER_PASSWORD")
-    private String pass;
+    @Column (name = "PASSWORD")
+    private String password;
 
     @Column (name = "IS_ADMIN")
     private boolean isAdmin;
@@ -23,37 +22,32 @@ public class User extends BaseEntity {
     @Column (name = "IS_BLOCKED")
     private boolean isBlocked;
 
+    @OneToMany()
+    @JoinColumn(name = "ORDER_ID")
+    private List<Order> orderList;
 
-    public String getUserLog() {
-        return log;
+    public void setBlocked(boolean isBlocked) {
+        this.isBlocked = isBlocked;
     }
 
-    public void setUserLog(String userLog) {
-        this.log = userLog;
+    public List<Order> getOrderList() {
+        return orderList;
     }
 
-    public String getUserPass() {
-        return pass;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserPass(String userPass) {
-        this.pass = userPass;
+    public String getPassword() {
+        return password;
     }
 
     public boolean isAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
     public boolean isBlocked() {
         return isBlocked;
-    }
-
-    public void setBlocked(boolean isBlocked) {
-        this.isBlocked = isBlocked;
     }
 
 }
