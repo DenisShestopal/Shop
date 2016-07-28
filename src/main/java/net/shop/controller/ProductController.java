@@ -35,9 +35,9 @@ public class ProductController {
     @RequestMapping(value = "/products/add", method = RequestMethod.POST)
     public String addProduct(@ModelAttribute("product") Product product){
         if(product.getId() == 0){
-            this.productService.addProduct(product);
+            this.productService.add(product);
         }else{
-            this.productService.updateProduct(product);
+            this.productService.update(product);
         }
 
         return "redirect:/products";
@@ -45,14 +45,14 @@ public class ProductController {
 
     @RequestMapping("/remove/{id}")
     public String removeProduct(@PathVariable("id") int id){
-        this.productService.removeProduct(id);
+        this.productService.remove(id);
 
         return "redirect:/products";
     }
 
     @RequestMapping("edit/{id}")
     public String editProduct(@PathVariable("id") int id, Model model){
-        model.addAttribute("product", this.productService.getProductById(id));
+        model.addAttribute("product", this.productService.getById(id));
         model.addAttribute("listProducts", this.productService.listProducts());
 
         return "products";
@@ -60,7 +60,7 @@ public class ProductController {
 
     @RequestMapping("productdata/{id}")
     public String productData(@PathVariable("id") int id, Model model){
-        model.addAttribute("product", this.productService.getProductById(id));
+        model.addAttribute("product", this.productService.getById(id));
 
         return "productdata";
     }
