@@ -1,5 +1,7 @@
 package net.shop.controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.model.User;
 import net.shop.service.UserService;
 import net.shop.util.AuthException;
@@ -12,11 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.persistence.SecondaryTable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping(value = "user")
+//@RequestMapping(value = "users")
+@Getter
+@Setter
 public class UserController {
 
     private UserService userService;
@@ -34,6 +39,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "users", method = RequestMethod.GET)
+    public String listUsers(Model model){
+        model.addAttribute("user", new User());
+        model.addAttribute("listUsers", this.userService.listUsers());
+
+        //return reference to the page "users"
+        return "users";
+    }
+
+    @RequestMapping(value = "users/blacklist", method = RequestMethod.GET)
     public String blackList(Model model){
         model.addAttribute("user", new User());
         model.addAttribute("listUsers", this.userService.listUnpaidUsers());

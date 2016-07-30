@@ -1,5 +1,7 @@
 package net.shop.controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.model.Order;
 import net.shop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = "order")
+//@RequestMapping(value = "order")
+@Getter
+@Setter
 public class OrderController {
 
     private OrderService orderService;
 
-    @Autowired(required = true)
-    @Qualifier(value = "orderService")
-    public void setProductService(OrderService orderService) {
+    //@Autowired(required = true)
+    //@Qualifier(value = "orderService")
+    /*public void setProductService(OrderService orderService) {
         this.orderService = orderService;
-    }
+    }*/
 
     @RequestMapping(value = "confirm/{orderId}")
     public boolean confirmOrder(@PathVariable("orderId") int orderId){

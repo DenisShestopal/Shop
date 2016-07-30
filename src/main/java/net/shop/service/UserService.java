@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface UserService extends BaseService<User> {
     List<User> listUnpaidUsers();
+    public List<User> listUsers();
     int getUserIdFromRequest(HttpServletRequest request) throws AuthException;
 }

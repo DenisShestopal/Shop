@@ -1,5 +1,7 @@
 package net.shop.service.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.dao.OrderDao;
 
 import net.shop.model.Order;
@@ -12,12 +14,14 @@ import java.util.List;
 
 
 @Service
+@Getter
+@Setter
 public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderService {
     private OrderDao orderDao;
 
-    public void setOrderDao(OrderDao orderDao) {
+    /*public void setOrderDao(OrderDao orderDao) {
         this.orderDao = orderDao;
-    }
+    }*/
 
     @Override
     @Transactional

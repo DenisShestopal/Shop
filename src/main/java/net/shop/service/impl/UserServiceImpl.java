@@ -1,5 +1,7 @@
 package net.shop.service.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.dao.UserDao;
 import net.shop.model.Order;
 import net.shop.model.OrderStatus;
@@ -18,16 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Getter
+@Setter
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
-    @Autowired
+    //@Autowired
     private UserDao userDao;
 
-    @Autowired(required = true)
+    /*@Autowired(required = true)
     //@Qualifier(value = "userDao")
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
-    }
+    }*/
 
     @Override
     @Transactional
@@ -58,6 +62,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             return LoggedUserUtil.getSessionUserIdMap().get(userSessionId);
         }
         throw new AuthException();
+    }
+
+    public List<User> listUsers() {
+        return this.userDao.listUsers();
     }
 
 }

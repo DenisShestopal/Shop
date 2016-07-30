@@ -30,6 +30,8 @@
         <property name="annotatedClasses">
             <list>
                 <value>net.shop.model.Product</value>
+                <value>net.shop.model.Order</value>
+                <value>net.shop.model.User</value>
             </list>
         </property>
         <property name="hibernateProperties">

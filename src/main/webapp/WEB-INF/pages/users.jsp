@@ -73,8 +73,8 @@
     <c:forEach items="${listUsers}" var="user">
       <tr>
         <td>${user.id}</td>
-        <td><a href="/userdata/${user.id}" target="_blank">${user.log}</a></td>
-        <td>${user.pass}</td>
+        <td><a href="/userdata/${user.id}" target="_blank">${user.login}</a></td>
+        <td>${user.password}</td>
         <td>${user.isAdmin}</td>
         <td>${user.isBlocked}</td>
         <td><a href="<c:url value='/edit/${user.id}'/>">Edit</a></td>
@@ -92,7 +92,7 @@
 
 <form:form action="${addAction}" commandName="user">
   <table>
-    <c:if test="${!empty user.log}">
+    <c:if test="${!empty user.login}">
       <tr>
         <td>
           <form:label path="id">
@@ -107,22 +107,22 @@
     </c:if>
     <tr>
       <td>
-        <form:label path="log">
+        <form:label path="login">
           <spring:message text="Login"/>
         </form:label>
       </td>
       <td>
-        <form:input path="log"/>
+        <form:input path="login"/>
       </td>
     </tr>
     <tr>
       <td>
-        <form:label path="pass">
+        <form:label path="password">
           <spring:message text="Password"/>
         </form:label>
       </td>
       <td>
-        <form:input path="pass"/>
+        <form:input path="password"/>
       </td>
     </tr>
     <tr>
@@ -147,11 +147,11 @@
     </tr>
     <tr>
       <td colspan="2">
-        <c:if test="${!empty user.log}">
+        <c:if test="${!empty user.login}">
           <input type="submit"
                  value="<spring:message text="Edit User"/>"/>
         </c:if>
-        <c:if test="${empty user.log}">
+        <c:if test="${empty user.login}">
           <input type="submit"
                  value="<spring:message text="Add User"/>"/>
         </c:if>

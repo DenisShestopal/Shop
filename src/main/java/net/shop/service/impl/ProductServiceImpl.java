@@ -1,6 +1,8 @@
 package net.shop.service.impl;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.dao.ProductDao;
 import net.shop.model.Product;
 import net.shop.service.ProductService;
@@ -11,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Getter
+@Setter
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService {
 
-    @Autowired
+    //@Autowired
     private ProductDao productDao;
 
     @Override

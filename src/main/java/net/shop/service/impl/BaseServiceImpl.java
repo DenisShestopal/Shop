@@ -1,5 +1,7 @@
 package net.shop.service.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.dao.BaseDao;
 import net.shop.model.BaseEntity;
 import net.shop.service.BaseService;
@@ -8,16 +10,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
+@Getter
+@Setter
 public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
-    @Autowired
+    //@Autowired
     private BaseDao<T> baseDao;
 
-    @Autowired(required = true)
+    /*@Autowired(required = true)
     //@Qualifier(value = "baseDao")
     public void setBaseDao(BaseDao baseDao) {
         this.baseDao = baseDao;
-    }
+    }*/
 
     @Override
     public T add(T entity) {
