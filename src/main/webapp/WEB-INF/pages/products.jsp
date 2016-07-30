@@ -50,7 +50,7 @@
   </style>
 </head>
 <body>
-<a href="../../users.jsp">Back to Users table</a>
+<a href="../../users">Back to Users table</a>
 
 <br/>
 <br/>

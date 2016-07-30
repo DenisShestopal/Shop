@@ -21,11 +21,11 @@ public class OrderController {
 
     private OrderService orderService;
 
-    //@Autowired(required = true)
-    //@Qualifier(value = "orderService")
-    /*public void setProductService(OrderService orderService) {
+    @Autowired(required = true)
+    @Qualifier(value = "orderService")
+    public void setProductService(OrderService orderService) {
         this.orderService = orderService;
-    }*/
+    }
 
     @RequestMapping(value = "confirm/{orderId}")
     public boolean confirmOrder(@PathVariable("orderId") int orderId){

@@ -59,7 +59,7 @@ public class UserController {
     public boolean addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthException {
         int loggedUserId = userService.getUserIdFromRequest(request);
         User loggedUser = userService.getById(loggedUserId);
-        //TODO validate if user have permition if admin ? next : exception
+        //TODO validate if user has permission if admin ? next : exception
         String[] strUri = request.getRequestURI().split("userId=");
         int userId = Integer.valueOf(strUri[1]);
         User user = userService.getById(userId);

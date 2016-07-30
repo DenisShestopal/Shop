@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService {
 
-    //@Autowired
+    @Autowired
     private ProductDao productDao;
 
     @Override

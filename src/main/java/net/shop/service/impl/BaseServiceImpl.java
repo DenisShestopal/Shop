@@ -17,11 +17,11 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
     //@Autowired
     private BaseDao<T> baseDao;
 
-    /*@Autowired(required = true)
+    @Autowired(required = true)
     //@Qualifier(value = "baseDao")
     public void setBaseDao(BaseDao baseDao) {
         this.baseDao = baseDao;
-    }*/
+    }
 
     @Override
     public T add(T entity) {

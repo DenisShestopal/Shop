@@ -27,11 +27,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     //@Autowired
     private UserDao userDao;
 
-    /*@Autowired(required = true)
+    @Autowired(required = true)
     //@Qualifier(value = "userDao")
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
-    }*/
+    }
 
     @Override
     @Transactional
