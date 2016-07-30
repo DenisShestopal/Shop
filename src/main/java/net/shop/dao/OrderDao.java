@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface OrderDao extends BaseDao<Order>{
+public interface OrderDao extends BaseDao<Order> {
 
     List<Order> listOrders();
 }

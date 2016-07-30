@@ -5,7 +5,9 @@ import net.shop.model.Product;
 import java.util.List;
 
 
-public interface ProductService extends BaseService<Product>{
+public interface ProductService extends BaseService<Product> {
 
     List<Product> listProducts();
+
+    boolean addToBasket(int userId, int orderId, int productId);
 }

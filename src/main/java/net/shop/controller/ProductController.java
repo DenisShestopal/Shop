@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.shop.model.Product;
 import net.shop.model.User;
+import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.ProductService;
 import net.shop.service.UserService;
 import net.shop.util.AuthException;
@@ -43,17 +44,23 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping(value="/basket/add", method = RequestMethod.POST)
-    public boolean addToBasket(HttpServletRequest request, HttpServletResponse response) throws AuthException {
-        int loggedUserId = userService.getUserIdFromRequest(request);
-        User user = userService.getById(loggedUserId);
+    @RequestMapping(value = "/products/addtoorder", method = RequestMethod.POST)
+    public String addToBasket(HttpServletRequest request, HttpServletResponse response) throws AuthException {
+        //int loggedUserId = userService.getUserIdFromRequest(request);
+        User user = new LoggedUserMock();
+        int userId = user.getId();
+        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+        int productId = Integer.valueOf(request.getRequestURI().split("productId=")[1]);
+        //int userId = Integer.valueOf(request.getRequestURI().split("userId=")[1]);
 
-        return true;//TODO add to basket
+        getProductService().addToBasket(userId, orderId, productId);
+
+        return "redirect:/products";//TODO DONE? add to order
     }
 
     //display our products on the page
     @RequestMapping(value = "products", method = RequestMethod.GET)
-    public String listProducts(Model model){
+    public String listProducts(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("listProducts", this.productService.listProducts());
 
@@ -62,11 +69,11 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/products/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute("product") Product product){
+    public String add(@ModelAttribute("product") Product product) {
         //TODO get user by id and user's authority. if admin ? next : exception
-        if(product.getId() == 0){
+        if (product.getId() == 0) {
             this.productService.add(product);
-        }else{
+        } else {
             this.productService.update(product);
         }
 
@@ -74,7 +81,7 @@ public class ProductController {
     }
 
     @RequestMapping("/remove/{id}")
-    public String remove(@PathVariable("id") int id){
+    public String remove(@PathVariable("id") int id) {
         //TODO get user by id and user's authority. if admin ? next : exception
         this.productService.remove(id);
 
@@ -83,7 +90,7 @@ public class ProductController {
 
     @RequestMapping("edit/{id}")
     //TODO get user by id and user's authority. if admin ? next : exception
-    public String edit(@PathVariable("id") int id, Model model){
+    public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("product", this.productService.getById(id));
         model.addAttribute("listProducts", this.productService.listProducts());
 
@@ -91,7 +98,7 @@ public class ProductController {
     }
 
     @RequestMapping("productdata/{id}")
-    public String productData(@PathVariable("id") int id, Model model){
+    public String productData(@PathVariable("id") int id, Model model) {
         model.addAttribute("product", this.productService.getById(id));
 
         return "productdata";

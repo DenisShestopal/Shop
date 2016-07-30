@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml">
-    <data-source source="LOCAL" name="MySQL - SHOP@localhost" uuid="037ea1df-8a09-432b-8c4d-cde44c9cda7e">
+    <data-source source="LOCAL" name="MySQL - SHOP@localhost" uuid="8fe39cdf-52d1-43bf-b280-91a41b452cb7">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/SHOP</jdbc-url>
       <driver-properties>
+        <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />
         <property name="tinyInt1isBit" value="false" />
         <property name="characterEncoding" value="utf8" />

@@ -9,6 +9,7 @@ import net.shop.model.User;
 import net.shop.service.UserService;
 import net.shop.util.AuthException;
 import net.shop.util.LoggedUserUtil;
+import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         List<User> resultList = new ArrayList<>();
         for (User user : usersList) {
             for (Order order : user.getOrderList()) {
-                if(order.getStatus().equals(OrderStatus.ORDERED)){
+                if (order.getStatus().equals(OrderStatus.ORDERED)) {
                     resultList.add(user);
                     break;
                 }
@@ -54,11 +55,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         String sId = "J_SESSION_ID";
         String userSessionId = "";
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(sId)){
+            if (cookie.getName().equals(sId)) {
                 userSessionId = cookie.getValue();
             }
         }
-        if(LoggedUserUtil.getSessionUserIdMap().containsKey(userSessionId)){
+        if (LoggedUserUtil.getSessionUserIdMap().containsKey(userSessionId)) {
             return LoggedUserUtil.getSessionUserIdMap().get(userSessionId);
         }
         throw new AuthException();
@@ -66,6 +67,17 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     public List<User> listUsers() {
         return this.userDao.listUsers();
+    }
+
+    public boolean addUserToBlackList(User admin, User user) throws PermissionException {
+        if (admin.getAdmin()) {
+            //TODO validate if user has permission if admin ? next : exception
+            user.setBlocked(true);
+            userDao.update(user);
+            return true;
+        } else {
+            throw new PermissionException();
+        }
     }
 
 }

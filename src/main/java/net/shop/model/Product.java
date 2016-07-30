@@ -2,20 +2,20 @@ package net.shop.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PRODUCTS")
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
-    @Column (name = "PRODUCT_NAME")
+    @Column(name = "NAME")
     private String name;
 
-    @Column (name = "PRODUCT_PRICE")
-    private double price;
-
-
+    @Column(name = "PRICE")
+    private Long price;
 }

@@ -71,7 +71,7 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <!--BaseDao and UserDao beans-->
+    <!--BaseDao and BaseService beans-->
     <bean id="baseDao" class="net.shop.dao.impl.BaseDaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
     </bean>

@@ -30,7 +30,7 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
         Session session = this.sessionFactory.getCurrentSession();
         List<Product> productList = session.createQuery("from Product").list();
 
-        for(Product product: productList){
+        for (Product product : productList) {
             logger.info("Product list: " + product);
         }
 

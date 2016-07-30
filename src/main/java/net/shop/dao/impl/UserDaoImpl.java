@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Repository
@@ -29,7 +30,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         Session session = this.sessionFactory.getCurrentSession();
         List<User> userList = session.createQuery("from User").list();
 
-        for(User user: userList){
+        for (User user : userList) {
             logger.info("Users list: " + user);
         }
 

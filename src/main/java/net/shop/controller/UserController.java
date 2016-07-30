@@ -3,14 +3,17 @@ package net.shop.controller;
 import lombok.Getter;
 import lombok.Setter;
 import net.shop.model.User;
+import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.UserService;
 import net.shop.util.AuthException;
 import net.shop.util.LoggedUserUtil;
+import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -33,13 +36,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute("user") User user){
+    public String add(@ModelAttribute("user") User user) {
         this.userService.add(user);
         return "redirect:/users";
     }
 
     @RequestMapping(value = "users", method = RequestMethod.GET)
-    public String listUsers(Model model){
+    public String listUsers(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("listUsers", this.userService.listUsers());
 
@@ -47,8 +50,8 @@ public class UserController {
         return "users";
     }
 
-    @RequestMapping(value = "users/blacklist", method = RequestMethod.GET)
-    public String blackList(Model model){
+    @RequestMapping(value = "/users/blacklist", method = RequestMethod.GET)
+    public String blackList(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("listUsers", this.userService.listUnpaidUsers());
 
@@ -56,15 +59,36 @@ public class UserController {
         return "users";
     }
 
-    public boolean addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthException {
-        int loggedUserId = userService.getUserIdFromRequest(request);
-        User loggedUser = userService.getById(loggedUserId);
-        //TODO validate if user has permission if admin ? next : exception
-        String[] strUri = request.getRequestURI().split("userId=");
-        int userId = Integer.valueOf(strUri[1]);
-        User user = userService.getById(userId);
-        user.setBlocked(true);
-        userService.update(user);
-        return true;
+    @RequestMapping(value = "/users/addtoblacklist/{id}", method = RequestMethod.GET)
+    public String addUserToBlackList(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws AuthException, PermissionException {
+//        int loggedUserId = userService.getUserIdFromRequest(request);
+//        User loggedUser = userService.getById(loggedUserId);
+//        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+//        String[] strUri = request.getRequestURI().split("userId=");
+//        int userId = Integer.valueOf(strUri[1]);
+        User admin = new LoggedUserMock();
+        User user = new LoggedUserMock();
+
+        getUserService().addUserToBlackList(admin, user);
+
+        return "redirect:/users";
+
+    }
+
+    @RequestMapping("/removeuser/{id}")
+    public String remove(@PathVariable("id") int id) {
+        //TODO get user by id and user's authority. if admin ? next : exception
+        this.userService.remove(id);
+
+        return "redirect:/users";
+    }
+
+    @RequestMapping("edituser/{id}")
+    //TODO get user by id and user's authority. if admin ? next : exception
+    public String edit(@PathVariable("id") int id, Model model) {
+        model.addAttribute("users", this.userService.getById(id));
+        model.addAttribute("listUsers", this.userService.listUsers());
+
+        return "users";
     }
 }
