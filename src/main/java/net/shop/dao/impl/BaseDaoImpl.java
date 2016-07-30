@@ -14,6 +14,8 @@ import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Getter
+@Setter
 public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     //get type of T by reflection
