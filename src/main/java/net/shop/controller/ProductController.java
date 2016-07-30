@@ -31,7 +31,7 @@ public class ProductController {
     private ProductService productService;
     private UserService userService;
 
-    /*@Autowired(required = true)
+    @Autowired(required = true)
     @Qualifier(value = "userService")
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -41,7 +41,7 @@ public class ProductController {
     @Qualifier(value = "productService")
     public void setProductService(ProductService productService) {
         this.productService = productService;
-    }*/
+    }
 
     @RequestMapping(value="/basket/add", method = RequestMethod.POST)
     public boolean addToBasket(HttpServletRequest request, HttpServletResponse response) throws AuthException {
