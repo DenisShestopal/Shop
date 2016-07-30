@@ -13,7 +13,6 @@ import javax.persistence.*;
 @ToString
 @EqualsAndHashCode
 @MappedSuperclass
-@Entity
 public abstract class BaseEntity {
 
     @Id
