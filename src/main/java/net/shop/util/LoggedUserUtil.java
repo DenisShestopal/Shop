@@ -22,19 +22,6 @@ public class LoggedUserUtil {
         return sessionUserIdMap;
     }
 
-    public static int getUserIdFromRequest(HttpServletRequest request) throws AuthException {
-        Cookie[] cookies = request.getCookies();
-        String sId = "J_SESSION_ID";
-        String userSessionId = "";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(sId)){
-                userSessionId = cookie.getValue();
-            }
-        }
-        if(LoggedUserUtil.getSessionUserIdMap().containsKey(userSessionId)){
-            return LoggedUserUtil.getSessionUserIdMap().get(userSessionId);
-        }
-        throw new AuthException();
-    }
+
 
 }

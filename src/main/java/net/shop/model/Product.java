@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "products")
+@Table(name = "PRODUCTS")
 public class Product extends BaseEntity{
 
     @Column (name = "PRODUCT_NAME")

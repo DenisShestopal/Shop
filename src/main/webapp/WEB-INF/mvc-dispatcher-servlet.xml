@@ -78,6 +78,7 @@
         <property name="baseDao" ref="baseDao"/>
     </bean>
 
+
     <context:component-scan base-package="net.shop"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

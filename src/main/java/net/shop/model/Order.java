@@ -1,5 +1,7 @@
 package net.shop.model;
 
+
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,19 +21,4 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "PRODUCT_ID")
     private List<Product> productList;
 
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
 }

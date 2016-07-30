@@ -41,7 +41,7 @@ public class ProductController {
 
     @RequestMapping(value="/basket/add", method = RequestMethod.POST)
     public boolean addToBasket(HttpServletRequest request, HttpServletResponse response) throws AuthException {
-        int loggedUserId = LoggedUserUtil.getUserIdFromRequest(request);
+        int loggedUserId = userService.getUserIdFromRequest(request);
         User user = userService.getById(loggedUserId);
 
         return true;//TODO add to basket

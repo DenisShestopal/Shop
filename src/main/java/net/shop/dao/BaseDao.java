@@ -2,6 +2,8 @@ package net.shop.dao;
 
 import net.shop.model.BaseEntity;
 import net.shop.model.Product;
+import org.springframework.stereotype.Repository;
+
 
 public interface BaseDao<T extends BaseEntity> {
 

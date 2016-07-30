@@ -1,5 +1,7 @@
 package net.shop.dao.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.shop.dao.BaseDao;
 import net.shop.model.BaseEntity;
 import net.shop.model.Product;
@@ -7,9 +9,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.stereotype.Repository;
 
-public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
+@Repository
+public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     //get type of T by reflection
     @SuppressWarnings("unchecked")

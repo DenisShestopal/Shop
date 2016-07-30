@@ -13,14 +13,11 @@ import javax.persistence.*;
 @ToString
 @EqualsAndHashCode
 @MappedSuperclass
+@Entity
 public abstract class BaseEntity {
 
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    public int getId() {
-        return id;
-    }
 }

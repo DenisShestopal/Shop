@@ -3,13 +3,19 @@ package net.shop.service.impl;
 import net.shop.dao.BaseDao;
 import net.shop.model.BaseEntity;
 import net.shop.service.BaseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+@Service
+public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
-public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
-
+    @Autowired
     private BaseDao<T> baseDao;
 
-    public void setProductDao(BaseDao baseDao) {
+    @Autowired(required = true)
+    //@Qualifier(value = "baseDao")
+    public void setBaseDao(BaseDao baseDao) {
         this.baseDao = baseDao;
     }
 
