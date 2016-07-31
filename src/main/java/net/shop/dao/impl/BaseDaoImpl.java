@@ -15,9 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Getter
-@Setter
-@Transactional
+//@Transactional
 public class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     //get type of T by reflection

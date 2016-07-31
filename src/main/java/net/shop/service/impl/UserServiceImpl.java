@@ -11,7 +11,6 @@ import net.shop.util.AuthException;
 import net.shop.util.LoggedUserUtil;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,9 +68,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return this.userDao.listUsers();
     }
 
-    public boolean addUserToBlackList(User admin, User user) throws PermissionException {
-        if (admin.getAdmin()) {
-            //TODO validate if user has permission if admin ? next : exception
+    public boolean addUserToBlackList(User loggedUser, int userId) throws PermissionException {
+        if (loggedUser.getAdmin()) {
+            //TODO validate if user has permission if loggedUser ? next : exception
+            User user = userDao.getById(userId);
             user.setBlocked(true);
             userDao.update(user);
             return true;

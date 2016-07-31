@@ -1,1 +1,2 @@
-INSERT INTO shop.users (ID, ADMIN, BLOCKED, LOGIN, PASSWORD) VALUES (1, true, false, 'UserTest', 'PasswordTest');
+INSERT INTO shop.users (ID, ADMIN, BLOCKED, LOGIN, PASSWORD) VALUES (1, true, false, 'UserTestAdm', 'PasswordTest1');
+INSERT INTO shop.users (ID, ADMIN, BLOCKED, LOGIN, PASSWORD) VALUES (2, false, false, 'UserTestUser', 'PasswordTest2');

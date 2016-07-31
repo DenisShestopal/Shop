@@ -17,14 +17,12 @@ import java.util.List;
 
 
 @Service
-@Getter
-@Setter
 public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderService {
     private OrderDao orderDao;
 
-    /*public void setOrderDao(OrderDao orderDao) {
+    public void setOrderDao(OrderDao orderDao) {
         this.orderDao = orderDao;
-    }*/
+    }
 
     @Override
     @Transactional

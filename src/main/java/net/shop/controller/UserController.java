@@ -60,16 +60,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addUserToBlackList(@PathVariable("id") int id, HttpServletRequest request, HttpServletResponse response) throws AuthException, PermissionException {
+    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthException, PermissionException {
 //        int loggedUserId = userService.getUserIdFromRequest(request);
 //        User loggedUser = userService.getById(loggedUserId);
-//        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+        int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
 //        String[] strUri = request.getRequestURI().split("userId=");
 //        int userId = Integer.valueOf(strUri[1]);
         User admin = new LoggedUserMock();
-        User user = new LoggedUserMock();
 
-        getUserService().addUserToBlackList(admin, user);
+        getUserService().addUserToBlackList(admin, userId);
 
         return "redirect:/users";
 
