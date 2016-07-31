@@ -67,19 +67,19 @@ public class ProductController {
         return "products";
     }
 
-    @RequestMapping("/remove/{id}")
+    @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
         //TODO get user by id and user's authority. if admin ? next : exception
-        int productId = Integer.parseInt(req.getParameter("id"));
+        int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
         this.productService.remove(productId);
 
         return "redirect:/products";
     }
 
-    @RequestMapping("edit/{id}")
+    @RequestMapping(value= "edit/{id}", method = RequestMethod.GET)
     //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
-        int productId = Integer.parseInt(req.getParameter("id"));
+        int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
         req.setAttribute("product", this.productService.getById(productId));
         req.setAttribute("listProducts", this.productService.listProducts());
 

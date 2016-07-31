@@ -73,8 +73,8 @@
             <tr>
                 <td>${order.id}</td>
                 <%--<td><a href="/productdata/${product.id}" target="_blank">${product.name}</a></td>--%>
-                <td>${product.name}</td>
-                <td>${product.price/100}${product.price%100}</td>
+                <td>${order.product.name}</td>
+                <td>${order.product.price/100}${product.price%100}</td>
                 <%--<td>${product.quantity}</td>--%>
                 <td>${order.status}</td>
                 <td><a href="<c:url value='/confirm/${order.id}'/>">Confirm</a></td>

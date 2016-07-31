@@ -78,8 +78,8 @@
                 <td>${user.password}</td>
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>
-                <td><a href="<c:url value='users/edituser/${user.id}'/>">Edit</a></td>
-                <td><a href="<c:url value='users/removeuser/${user.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='users/edit/${user.id}'/>">Edit</a></td>
+                <td><a href="<c:url value='users/remove/${user.id}'/>">Delete</a></td>
                 <td><a href="<c:url value='users/addtoblacklist/${user.id}'/>">Add user to black list</a></td>
                 <td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>
             </tr>
@@ -88,7 +88,7 @@
 </c:if>
 
 
-<h1>Add a User</h1>
+<h1>Add User</h1>
 
 <c:url var="addAction" value="/users/add"/>
 

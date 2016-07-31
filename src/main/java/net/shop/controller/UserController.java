@@ -92,19 +92,21 @@ public class UserController {
 
     }
 
-    @RequestMapping("/removeuser/{id}")
-    public String remove(@PathVariable("id") int id) {
+    @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
+    public String remove(HttpServletRequest req, HttpServletResponse resp) {
         //TODO get user by id and user's authority. if admin ? next : exception
-        this.userService.remove(id);
+        int userId = Integer.valueOf(req.getRequestURI().split("users/remove/")[1]);
+        this.userService.remove(userId);
 
         return "redirect:/users";
     }
 
-    @RequestMapping("edituser/{id}")
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     //TODO get user by id and user's authority. if admin ? next : exception
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("users", this.userService.getById(id));
-        model.addAttribute("listUsers", this.userService.listUsers());
+    public String edit(HttpServletRequest req, HttpServletResponse resp) {
+        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
+        req.setAttribute("users", this.userService.getById(userId));
+        req.setAttribute("listUsers", this.userService.listUsers());
 
         return "users";
     }
