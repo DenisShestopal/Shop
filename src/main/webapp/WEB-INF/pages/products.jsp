@@ -70,7 +70,7 @@
         <c:forEach items="${listProducts}" var="product">
             <tr>
                 <td>${product.id}</td>
-                <td><a href="products/${product.id}" target="_blank">${product.name}</a></td>
+                <td><a href="products/${product.id}">${product.name}</a></td>
                 <td>${product.price/100}</td>
                 <td><a href="<c:url value='products/edit/${product.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='products/remove/${product.id}'/>">Delete</a></td>

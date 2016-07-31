@@ -65,5 +65,7 @@
         <td>${product.price/100}${product.price%100}</td>
     </tr>
 </table>
+
+<a href="../../products">Back to Products list</a>
 </body>
 </html>

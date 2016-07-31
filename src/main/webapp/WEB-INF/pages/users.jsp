@@ -74,7 +74,7 @@
         <c:forEach items="${listUsers}" var="user">
             <tr>
                 <td>${user.id}</td>
-                <td><a href="users/${user.id}" target="_blank">${user.login}</a></td>
+                <td><a href="users/${user.id}">${user.login}</a></td>
                 <td>${user.password}</td>
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>

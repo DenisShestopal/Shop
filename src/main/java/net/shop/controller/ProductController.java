@@ -43,13 +43,14 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
     public String addToBasket(HttpServletRequest req, HttpServletResponse resp) throws AuthException {
         //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = new LoggedUserMock();
         int userId = user.getId();
-        int orderId = Integer.valueOf(req.getRequestURI().split("orderId=")[1]);
-        int productId = Integer.valueOf(req.getRequestURI().split("productId=")[1]);
+        int orderId = Integer.valueOf(req.getParameter("orderId"));
+        //int orderId = Integer.valueOf(req.getRequestURI().split("orderId=")[1]);
+        int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
         //int userId = Integer.valueOf(request.getRequestURI().split("userId=")[1]);
 
         getProductService().addToBasket(userId, orderId, productId);
@@ -99,6 +100,7 @@ public class ProductController {
     public String add(HttpServletRequest req, HttpServletResponse resp) {
         Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")));
         //TODO get user by id and user's authority. if admin ? next : exception
+
         if (product.getId() == 0) {
             this.productService.add(product);
         } else {
@@ -107,4 +109,21 @@ public class ProductController {
 
         return "redirect:/products";
     }
+
+//    @RequestMapping(value = "/add", method = RequestMethod.POST)
+//    public String add(HttpServletRequest req, HttpServletResponse resp) {
+//        String login = req.getParameter("login");
+//        String password = req.getParameter("password");
+//        Boolean admin = Boolean.parseBoolean(req.getParameter("admin"));
+//        Boolean blocked = Boolean.parseBoolean(req.getParameter("blocked"));
+//        Integer userId = Integer.parseInt(req.getParameter("userId");
+//        if (userId == null) {
+//            this.userService.add(new User(all params));
+//        } else {
+//            this.userService.update(new User(all params with ID);
+//          TODO make appropriate contsructor and change id to Integer in BaseEntity
+//        }
+//
+//        return "redirect:/users";
+//    }
 }

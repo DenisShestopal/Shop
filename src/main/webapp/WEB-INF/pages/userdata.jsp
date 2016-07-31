@@ -70,5 +70,7 @@
 
     </tr>
 </table>
+
+<a href="../../users">Back to Users list</a>
 </body>
 </html>
