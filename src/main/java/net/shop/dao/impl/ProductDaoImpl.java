@@ -25,9 +25,14 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
     }
 
     @Override
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public List<Product> listProducts() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = getSessionFactory().getCurrentSession();
         List<Product> productList = session.createQuery("from Product").list();
 
         for (Product product : productList) {

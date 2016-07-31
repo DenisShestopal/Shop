@@ -20,6 +20,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     private SessionFactory sessionFactory;
 
+    @Override
+    public SessionFactory getSessionFactory(){
+        return sessionFactory;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -27,7 +32,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<User> listUsers() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = getSessionFactory().getCurrentSession();
         List<User> userList = session.createQuery("from User").list();
 
         for (User user : userList) {

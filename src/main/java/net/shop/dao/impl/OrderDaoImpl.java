@@ -19,13 +19,18 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
 
     private SessionFactory sessionFactory;
 
+    @Override
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @SuppressWarnings("unchecked")
     public List<Order> listOrders() {
-        Session session = this.sessionFactory.getCurrentSession();
+        Session session = getSessionFactory().getCurrentSession();
         List<Order> orderList = session.createQuery("from Order").list();
 
         for (Order order : orderList) {

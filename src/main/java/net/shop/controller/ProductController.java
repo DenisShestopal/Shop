@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 //@RequestMapping(value = "product")
 @Getter
-@Setter
 public class ProductController {
 
     private ProductService productService;
@@ -44,7 +43,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping(value = "/products/addtoorder", method = RequestMethod.POST)
+    @RequestMapping(value = "/products/addtoorder/{productId}", method = RequestMethod.POST)
     public String addToBasket(HttpServletRequest request, HttpServletResponse response) throws AuthException {
         //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = new LoggedUserMock();

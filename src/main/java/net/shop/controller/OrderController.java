@@ -37,6 +37,15 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    @RequestMapping(value = "orders", method = RequestMethod.GET)
+    public String listProducts(Model model) {
+        model.addAttribute("order", new Order());
+        model.addAttribute("listOrders", this.orderService.listOrders());
+
+        //return reference to the page "products"
+        return "orders";
+    }
+
     @RequestMapping(value = "confirm/{orderId}")
     public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws AuthException, NoOrdersException, PermissionException {
         //TODO DONE take id and read user if orderId->user ? next : exception

@@ -65,6 +65,7 @@
             <th width="120">Price</th>
             <th width="60">Edit</th>
             <th width="60">Delete</th>
+            <th width="120">Order Product</th>
         </tr>
         <c:forEach items="${listProducts}" var="product">
             <tr>
@@ -73,6 +74,7 @@
                 <td>${product.price/100}${product.price%100}</td>
                 <td><a href="<c:url value='/edit/${product.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/remove/${product.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='/addtoorder/${product.id}'/>">Add to Basket</a></td>
             </tr>
         </c:forEach>
     </table>

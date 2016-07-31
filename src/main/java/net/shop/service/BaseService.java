@@ -4,7 +4,6 @@ import net.shop.model.BaseEntity;
 import net.shop.model.Product;
 import org.springframework.stereotype.Service;
 
-@Service
 public interface BaseService<T extends BaseEntity> {
 
     public T add(T entity);

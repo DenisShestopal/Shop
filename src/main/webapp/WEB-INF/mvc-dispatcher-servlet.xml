@@ -72,13 +72,13 @@
     </bean>
 
     <!--BaseDao and BaseService beans-->
-    <bean id="baseDao" class="net.shop.dao.impl.BaseDaoImpl">
-        <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
-    </bean>
+    <!--<bean id="baseDao" class="net.shop.dao.impl.BaseDaoImpl">-->
+        <!--<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>-->
+    <!--</bean>-->
 
-    <bean id="baseService" class="net.shop.service.impl.BaseServiceImpl">
-        <property name="baseDao" ref="baseDao"/>
-    </bean>
+    <!--<bean id="baseService" class="net.shop.service.impl.BaseServiceImpl">-->
+        <!--<property name="baseDao" ref="baseDao"/>-->
+    <!--</bean>-->
 
 
     <context:component-scan base-package="net.shop"/>

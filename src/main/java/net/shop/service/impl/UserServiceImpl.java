@@ -2,6 +2,7 @@ package net.shop.service.impl;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.shop.dao.BaseDao;
 import net.shop.dao.UserDao;
 import net.shop.model.Order;
 import net.shop.model.OrderStatus;
@@ -11,6 +12,7 @@ import net.shop.util.AuthException;
 import net.shop.util.LoggedUserUtil;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,21 +22,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Getter
-@Setter
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
-    //@Autowired
     private UserDao userDao;
 
     @Autowired(required = true)
-    //@Qualifier(value = "userDao")
+    @Qualifier(value = "userDao")
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
 
     @Override
-    @Transactional
+    public BaseDao<User> getDao() {
+        return userDao;
+    }
+
+    @Override
     public List<User> listUnpaidUsers() {
         List<User> usersList = userDao.listUsers();
         List<User> resultList = new ArrayList<>();
@@ -49,6 +52,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return resultList;
     }
 
+    @Override
     public int getUserIdFromRequest(HttpServletRequest request) throws AuthException {
         Cookie[] cookies = request.getCookies();
         String sId = "J_SESSION_ID";
@@ -68,6 +72,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return this.userDao.listUsers();
     }
 
+    @Override
     public boolean addUserToBlackList(User loggedUser, int userId) throws PermissionException {
         if (loggedUser.getAdmin()) {
             //TODO validate if user has permission if loggedUser ? next : exception

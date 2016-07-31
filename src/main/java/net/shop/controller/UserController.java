@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 //@RequestMapping(value = "users")
 @Getter
-@Setter
 public class UserController {
 
     private UserService userService;
