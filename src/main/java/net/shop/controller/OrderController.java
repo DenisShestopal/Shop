@@ -41,6 +41,7 @@ public class OrderController {
     public String listProducts(Model model) {
         model.addAttribute("order", new Order());
         model.addAttribute("listOrders", this.orderService.listOrders());
+        //TODO using HttpServletRequest take userId and return to Response methods: getOrderByUserId
 
         //return reference to the page "products"
         return "orders";

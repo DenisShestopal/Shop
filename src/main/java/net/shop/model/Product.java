@@ -18,4 +18,6 @@ public class Product extends BaseEntity {
 
     @Column(name = "PRICE")
     private Long price;
+
+    //TODO add currency value-column
 }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
     private UserDao userDao;
@@ -76,6 +77,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     public boolean addUserToBlackList(User loggedUser, int userId) throws PermissionException {
         if (loggedUser.getAdmin()) {
             //TODO validate if user has permission if loggedUser ? next : exception
+            //TODO change method -> change status
             User user = userDao.getById(userId);
             user.setBlocked(true);
             userDao.update(user);

@@ -71,7 +71,7 @@
             <tr>
                 <td>${product.id}</td>
                 <td><a href="/productdata/${product.id}" target="_blank">${product.name}</a></td>
-                <td>${product.price/100}${product.price%100}</td>
+                <td>${product.price/100}</td>
                 <td><a href="<c:url value='/edit/${product.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/remove/${product.id}'/>">Delete</a></td>
                 <td><a href="<c:url value='/addtoorder/${product.id}'/>">Add to Basket</a></td>
@@ -81,7 +81,7 @@
 </c:if>
 
 
-<h1>Add a Product</h1>
+<h1>Add Product</h1>
 
 <c:url var="addAction" value="/products/add"/>
 

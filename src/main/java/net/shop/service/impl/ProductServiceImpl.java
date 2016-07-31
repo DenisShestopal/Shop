@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService {
 
     private ProductDao productDao;

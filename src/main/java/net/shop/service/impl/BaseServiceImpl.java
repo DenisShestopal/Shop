@@ -8,7 +8,9 @@ import net.shop.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     public abstract BaseDao<T> getDao();
