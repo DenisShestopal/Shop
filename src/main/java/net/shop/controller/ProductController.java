@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @Controller
-//@RequestMapping(value = "product")
+@RequestMapping(value = "products")
 @Getter
 public class ProductController {
 
@@ -43,13 +43,13 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping(value = "/products/addtoorder/{productId}", method = RequestMethod.POST)
-    public String addToBasket(HttpServletRequest request, HttpServletResponse response) throws AuthException {
+    @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.POST)
+    public String addToBasket(HttpServletRequest req, HttpServletResponse resp) throws AuthException {
         //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = new LoggedUserMock();
         int userId = user.getId();
-        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        int productId = Integer.valueOf(request.getRequestURI().split("productId=")[1]);
+        int orderId = Integer.valueOf(req.getRequestURI().split("orderId=")[1]);
+        int productId = Integer.valueOf(req.getRequestURI().split("productId=")[1]);
         //int userId = Integer.valueOf(request.getRequestURI().split("userId=")[1]);
 
         getProductService().addToBasket(userId, orderId, productId);
@@ -58,17 +58,46 @@ public class ProductController {
     }
 
     //display our products on the page
-    @RequestMapping(value = "products", method = RequestMethod.GET)
-    public String listProducts(Model model) {
-        model.addAttribute("product", new Product());
-        model.addAttribute("listProducts", this.productService.listProducts());
+    @RequestMapping(method = RequestMethod.GET)
+    public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
+        req.setAttribute("product", new Product());
+        req.setAttribute("listProducts", this.productService.listProducts());
 
         //return reference to the page "products"
         return "products";
     }
 
-    @RequestMapping(value = "/products/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute("product") Product product) {
+    @RequestMapping("/remove/{id}")
+    public String remove(HttpServletRequest req, HttpServletResponse resp) {
+        //TODO get user by id and user's authority. if admin ? next : exception
+        int productId = Integer.parseInt(req.getParameter("id"));
+        this.productService.remove(productId);
+
+        return "redirect:/products";
+    }
+
+    @RequestMapping("edit/{id}")
+    //TODO get user by id and user's authority. if admin ? next : exception
+    public String edit(HttpServletRequest req, HttpServletResponse resp) {
+        int productId = Integer.parseInt(req.getParameter("id"));
+        req.setAttribute("product", this.productService.getById(productId));
+        req.setAttribute("listProducts", this.productService.listProducts());
+
+        return "products";
+    }
+
+    @RequestMapping("/{id}")
+    public String productData(HttpServletRequest req, HttpServletResponse resp) {
+        int productId = Integer.parseInt(req.getParameter("id"));
+        req.setAttribute("product", this.productService.getById(productId));
+
+        return "productdata";
+    }
+
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String add(HttpServletRequest req, HttpServletResponse resp) {
+        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")));
         //TODO get user by id and user's authority. if admin ? next : exception
         if (product.getId() == 0) {
             this.productService.add(product);
@@ -77,29 +106,5 @@ public class ProductController {
         }
 
         return "redirect:/products";
-    }
-
-    @RequestMapping("/remove/{id}")
-    public String remove(@PathVariable("id") int id) {
-        //TODO get user by id and user's authority. if admin ? next : exception
-        this.productService.remove(id);
-
-        return "redirect:/products";
-    }
-
-    @RequestMapping("edit/{id}")
-    //TODO get user by id and user's authority. if admin ? next : exception
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("product", this.productService.getById(id));
-        model.addAttribute("listProducts", this.productService.listProducts());
-
-        return "products";
-    }
-
-    @RequestMapping("productdata/{id}")
-    public String productData(@PathVariable("id") int id, Model model) {
-        model.addAttribute("product", this.productService.getById(id));
-
-        return "productdata";
     }
 }

@@ -20,9 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.persistence.SecondaryTable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
 
 @Controller
-//@RequestMapping(value = "users")
+@RequestMapping(value = "users")
 @Getter
 public class UserController {
 
@@ -34,31 +35,49 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute("user") User user) {
-        this.userService.add(user);
-        return "redirect:/users";
-    }
 
-    @RequestMapping(value = "users", method = RequestMethod.GET)
-    public String listUsers(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("listUsers", this.userService.listUsers());
+//    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
+//    public String add(@ModelAttribute("user") User user) {
+//        this.userService.add(user);
+//        return "redirect:/users";
+//    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
+        User user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        req.setAttribute("user", new User());
+        req.setAttribute("listUsers", this.userService.listUsers());
 
         //return reference to the page "users"
         return "users";
     }
 
-    @RequestMapping(value = "/users/blacklist", method = RequestMethod.GET)
-    public String blackList(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("listUsers", this.userService.listUnpaidUsers());
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String add(HttpServletRequest req, HttpServletResponse resp) {
+        User user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        if (user.getId() == 0) {
+            this.userService.add(user);
+        } else {
+            this.userService.update(user);
+        }
+
+        return "redirect:/users";
+    }
+
+    @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
+    public String blackList(HttpServletRequest req, HttpServletResponse resp) {
+        User user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        req.setAttribute("user", new User());
+        req.setAttribute("listUsers", this.userService.listUnpaidUsers());
 
         //return reference to the page "products"
         return "users";
     }
 
-    @RequestMapping(value = "/users/addtoblacklist/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
     public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthException, PermissionException {
 //        int loggedUserId = userService.getUserIdFromRequest(request);
 //        User loggedUser = userService.getById(loggedUserId);

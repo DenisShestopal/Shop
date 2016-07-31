@@ -1,14 +1,14 @@
 package net.shop.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @ToString(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "PRODUCTS")
 public class Product extends BaseEntity {
@@ -19,5 +19,8 @@ public class Product extends BaseEntity {
     @Column(name = "PRICE")
     private Long price;
 
-    //TODO add currency value-column
+//    @Column(name = "CURRENCY")
+//    private String currency;
+
+    //TODO DONE REDO add currency value-column
 }

@@ -23,9 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-//@RequestMapping(value = "order")
+@RequestMapping(value = "order")
 @Getter
-@Setter
 public class OrderController {
 
     private OrderService orderService;
@@ -33,14 +32,14 @@ public class OrderController {
 
     @Autowired(required = true)
     @Qualifier(value = "orderService")
-    public void setProductService(OrderService orderService) {
+    public void setOrderService(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @RequestMapping(value = "orders", method = RequestMethod.GET)
-    public String listProducts(Model model) {
-        model.addAttribute("order", new Order());
-        model.addAttribute("listOrders", this.orderService.listOrders());
+    @RequestMapping(method = RequestMethod.GET)
+    public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
+        req.setAttribute("order", new Order());
+        req.setAttribute("listOrders", this.orderService.listOrders());
         //TODO using HttpServletRequest take userId and return to Response methods: getOrderByUserId
 
         //return reference to the page "products"
