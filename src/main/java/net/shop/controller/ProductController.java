@@ -88,7 +88,7 @@ public class ProductController {
 
     @RequestMapping("/{id}")
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
-        int productId = Integer.parseInt(req.getParameter("id"));
+        int productId = Integer.valueOf(req.getRequestURI().split("products/")[1]);
         req.setAttribute("product", this.productService.getById(productId));
 
         return "productdata";

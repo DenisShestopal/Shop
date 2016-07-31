@@ -105,9 +105,17 @@ public class UserController {
     //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
         int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
-        req.setAttribute("users", this.userService.getById(userId));
+        req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
 
         return "users";
+    }
+
+    @RequestMapping("/{id}")
+    public String productData(HttpServletRequest req, HttpServletResponse resp) {
+        int userId = Integer.valueOf(req.getRequestURI().split("users/")[1]);
+        req.setAttribute("user", this.userService.getById(userId));
+
+        return "userdata";
     }
 }
