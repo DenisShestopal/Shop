@@ -41,7 +41,7 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
         return orderList;
     }
 
-    public List<Order> getOrderListByUserId(User user){
+    public List<Order> getOrdersByUserId(User user){
         Session session = getSessionFactory().getCurrentSession();
         Integer userId = user.getId();
         List<Order> orderList = session.createQuery("from net.shop.model.Order o where o.owner.id = :userId")
