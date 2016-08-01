@@ -27,10 +27,10 @@ public class User extends BaseEntity {
     @Column(name = "BLOCKED")
     private Boolean blocked;
 
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER) //TODO add to OrderDao getOrdersByUserId
-    @JoinTable(name = "USER_ORDERS",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ORDER_ID"))
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner") //TODO add to OrderDao getOrdersByUserId
+//    @JoinTable(name = "USER_ORDERS",
+//            joinColumns = @JoinColumn(name = "USER_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "ORDER_ID"))
     private Set<Order> orderList;
 
     public void setBlocked(Boolean isBlocked) {
