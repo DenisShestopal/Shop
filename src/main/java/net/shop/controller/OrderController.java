@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping(value = "order")
+@RequestMapping(value = "orders")
 @Getter
 public class OrderController {
 
@@ -42,7 +42,7 @@ public class OrderController {
         req.setAttribute("listOrders", this.orderService.listOrders());
         //TODO using HttpServletRequest take userId and return to Response methods: getOrderByUserId
 
-        //return reference to the page "products"
+        //return reference to the page "oreders"
         return "orders";
     }
 

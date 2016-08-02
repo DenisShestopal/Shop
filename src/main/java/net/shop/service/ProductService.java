@@ -9,5 +9,5 @@ public interface ProductService extends BaseService<Product> {
 
     List<Product> listProducts();
 
-    boolean addToBasket(int userId, int orderId, int productId);
+    boolean addToOrder(int userId, int orderId, int productId);
 }

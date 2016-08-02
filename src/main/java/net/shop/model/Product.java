@@ -19,8 +19,8 @@ public class Product extends BaseEntity {
     @Column(name = "PRICE")
     private Long price;
 
-//    @Column(name = "CURRENCY")
-//    private String currency;
+    @Column(name = "CURRENCY")
+    private String currency="USD";
 
     //TODO DONE REDO add currency value-column
 }

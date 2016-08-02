@@ -47,10 +47,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
-    public boolean addToBasket(int userId, int orderId, int productId) {
+    public boolean addToOrder(int userId, int orderId, int productId) {
         Order order = orderDao.getById(orderId);
         Product product = productDao.getById(productId);
-        order.getProductList().put(product, 1);
+        order.getProductList().put(product, 1);//should we put here a product to the orders table as a new "order's product"?
 
         return true;
 

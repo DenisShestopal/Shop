@@ -63,6 +63,7 @@
             <th width="80">ID</th>
             <th width="120">Name</th>
             <th width="120">Price</th>
+            <th width="120">Currency</th>
             <th width="60">Edit</th>
             <th width="60">Delete</th>
             <th width="120">Order Product</th>
@@ -72,6 +73,7 @@
                 <td>${product.id}</td>
                 <td><a href="products/${product.id}">${product.name}</a></td>
                 <td>${product.price/100}</td>
+                <td>${product.currency}</td>
                 <td><a href="<c:url value='products/edit/${product.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='products/remove/${product.id}'/>">Delete</a></td>
                 <td><a href="<c:url value='products/addtoorder/${product.id}'/>">Add to Basket</a></td>

@@ -44,16 +44,14 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
-    public String addToBasket(HttpServletRequest req, HttpServletResponse resp) throws AuthException {
+    public String addToOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthException {
         //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = new LoggedUserMock();
         int userId = user.getId();
         int orderId = Integer.valueOf(req.getParameter("orderId"));
-        //int orderId = Integer.valueOf(req.getRequestURI().split("orderId=")[1]);
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
-        //int userId = Integer.valueOf(request.getRequestURI().split("userId=")[1]);
 
-        getProductService().addToBasket(userId, orderId, productId);
+        getProductService().addToOrder(userId, orderId, productId);
 
         return "redirect:/products";//TODO DONE? add to order
     }
@@ -98,7 +96,7 @@ public class ProductController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
-        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")));
+        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
         //TODO get user by id and user's authority. if admin ? next : exception
 
         if (product.getId() == 0) {

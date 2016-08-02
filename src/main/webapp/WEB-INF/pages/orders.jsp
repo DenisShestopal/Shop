@@ -57,7 +57,7 @@
 
 <h1>Orders List</h1>
 
-<c:if test="${!empty listOrders}">
+<c:if test="${!empty productList}">
     <table class="tg">
         <tr>
             <th width="80">Order ID</th>
@@ -69,7 +69,7 @@
             <th width="60">Pay</th>
             <th width="60">Delete</th>
         </tr>
-        <c:forEach items="${listOrders}" var="order">
+        <c:forEach items="${productList}" var="order">
             <tr>
                 <td>${order.id}</td>
                 <%--<td><a href="/productdata/${product.id}" target="_blank">${product.name}</a></td>--%>

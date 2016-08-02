@@ -26,7 +26,7 @@ public class Order extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "USER_ID"))
     private User owner;
 
-    @ElementCollection//(fetch = FetchType.EAGER)
+    @ElementCollection
     @MapKeyJoinColumn(name = "PRODUCT_ID")
     @CollectionTable(name = "ORDER_PRODUCTS",
             joinColumns = @JoinColumn(name = "ORDER_ID")

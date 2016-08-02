@@ -7,6 +7,7 @@ import net.shop.dao.OrderDao;
 
 import net.shop.model.Order;
 import net.shop.model.OrderStatus;
+import net.shop.model.Product;
 import net.shop.model.User;
 import net.shop.service.OrderService;
 import net.shop.util.NoOrdersException;
@@ -61,5 +62,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         orderDao.update(order);
         return true;
     }
+
+    //TODO CONFIRMED? add a method returning a products list of this order
+//    public List<Product> getOrdersProductsList(int orderId){
+//
+//    }
 
 }
