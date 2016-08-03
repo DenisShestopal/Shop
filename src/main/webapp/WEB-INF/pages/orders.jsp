@@ -70,14 +70,35 @@
             <th width="60">Quantity</th>
             <th width="60">Delete</th>
         </tr>
+        <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+            public Long totalPrice = 0L;%>
         <c:forEach items="${userOrder.productList}" var="product">
+            <% totalPrice += Long.valueOf("${product.price}"); %>
             <tr>
                 <td>${product.name}</td>
                 <td>${product.price/100}${product.price%100}</td>
-                <td>${product.quantity}</td>
-                <td><a href="<c:url value='orders/removeProduct/${product.id}'/>">Delete</a></td>
+                <td>${product.quantity}
+                    <c:if test="${userOrder.status == 'UNORDERED'}">
+                    <form:form action="${'/orders/changeQuantity'}" commandName="user">
+                        <input name="productId" type="hidden" value="${product.id}">
+                        <input name="quantity" type="number" required min="0" max="1000"/> <%--onselect="&quantity${}"--%>
+                        <input type="submit"
+                               value="<spring:message text="accept"/>"/>
+                    </form:form><%--TODO sda--%>
+                    </c:if>
+
+                </td>
+                <td>
+                    <a href="<c:url value='orders/removeProduct/${product.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
+        <tr>
+            <td></td>
+            <td>Total price : <%=totalPrice%></td>
+            <td></td>
+            <td></td>
+            <td><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a></td>
+        </tr>
     </table>
 </c:if>
 

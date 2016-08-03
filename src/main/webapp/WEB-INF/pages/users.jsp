@@ -79,8 +79,14 @@
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>
                 <td><a href="<c:url value='/users/edit/${user.id}'/>">Edit</a></td>
-                <td><a href="<c:url value='/users/remove/${user.id}'/>">Delete</a></td>
-                <td><a href="<c:url value='/users/addtoblacklist/${user.id}'/>">Add user to black list</a></td>
+                <td><a href="<c:url value='/users/remove/${user.id}'/>">Delete</a>
+
+                <td><a href="<c:if test="${!user.blocked}">
+                <c:url value='/users/addtoblacklist/${user.id}'/>">Add</c:if>
+                    <c:if test="${user.blocked}">
+                        <c:url value='/users/removefromblacklist/${user.id}'/>">Remove</c:if></a></td>
+
+
                 <td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>
             </tr>
         </c:forEach>
@@ -122,9 +128,9 @@
         </tr>
         <tr>
             <td>
-                <form:label path="password">
+                <form:password path="password">
                     <spring:message text="Password"/>
-                </form:label>
+                </form:password>
             </td>
             <td>
                 <form:input path="password"/>

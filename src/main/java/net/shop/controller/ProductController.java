@@ -97,13 +97,13 @@ public class ProductController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
         Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
-        Integer productId = Integer.valueOf(req.getParameter("id"));
+        String strProductId = req.getParameter("id");
         //TODO get user by id and user's authority. if admin ? next : exception
         //TODO divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
-        if (productId == null) {
+        if (strProductId == null) {
             this.productService.add(product);
         } else {
-            product.setId(productId);
+            product.setId(Integer.valueOf(strProductId));
             this.productService.update(product);
         }
 

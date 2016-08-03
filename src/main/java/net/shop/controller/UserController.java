@@ -57,12 +57,12 @@ public class UserController {
     public String add(HttpServletRequest req, HttpServletResponse resp) {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
-        Integer userId = Integer.valueOf(req.getParameter("id"));
+        String strUserId = req.getParameter("id");
         //TODO divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
-        if (userId == null) {
+        if (strUserId == null) {
             this.userService.add(user);
         } else {
-            user.setId(userId);
+            user.setId(Integer.valueOf(strUserId));
             this.userService.update(user);
         }
 
