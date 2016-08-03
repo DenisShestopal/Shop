@@ -1,9 +1,7 @@
 package net.shop.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Map;
@@ -11,6 +9,8 @@ import java.util.Map;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @ToString(callSuper = true)
 @Table(name = "ORDERS")
