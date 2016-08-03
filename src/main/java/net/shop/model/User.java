@@ -31,7 +31,7 @@ public class User extends BaseEntity {
 //    @JoinTable(name = "USER_ORDERS",
 //            joinColumns = @JoinColumn(name = "USER_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "ORDER_ID"))
-    private Set<Order> orderList;
+    private Set<Order> orderList;//TODO see composition
 
     public void setBlocked(Boolean isBlocked) {
         this.blocked = isBlocked;

@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
+    public String userOrder(HttpServletRequest req, HttpServletResponse resp) {
         req.setAttribute("order", new Order());
         req.setAttribute("listOrders", this.orderService.listOrders());
         //TODO using HttpServletRequest take userId and return to Response methods: getOrderByUserId

@@ -57,33 +57,31 @@
 
 <h1>Orders List</h1>
 
-<c:if test="${!empty productList}">
+<c:if test="${!empty userOrder}">
+    <br>Order status
+    <br>${userOrder.status}
+    <a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>
+    <a href="<c:url value='orders/pay/${userOrder.id}'/>">Pay</a>
+    <a href="<c:url value='orders/remove/${userOrder.id}'/>">Delete</a>
     <table class="tg">
         <tr>
-            <th width="80">Order ID</th>
             <th width="120">Product</th>
             <th width="120">Price</th>
-            <%--<th width="60">Quantity</th>--%>
-            <th width="120">Order status</th>
-            <th width="60">Confirm</th>
-            <th width="60">Pay</th>
+            <th width="60">Quantity</th>
             <th width="60">Delete</th>
         </tr>
-        <c:forEach items="${productList}" var="order">
+        <c:forEach items="${userOrder.productList}" var="product">
             <tr>
-                <td>${order.id}</td>
-                <%--<td><a href="/productdata/${product.id}" target="_blank">${product.name}</a></td>--%>
-                <td>${order.product.name}</td>
-                <td>${order.product.price/100}${product.price%100}</td>
-                <%--<td>${product.quantity}</td>--%>
-                <td>${order.status}</td>
-                <td><a href="<c:url value='/confirm/${order.id}'/>">Confirm</a></td>
-                <td><a href="<c:url value='/pay/${order.id}'/>">Pay</a></td>
-                <td><a href="<c:url value='/remove/${order.id}'/>">Delete</a></td>
+                <td>${product.name}</td>
+                <td>${product.price/100}${product.price%100}</td>
+                <td>${product.quantity}</td>
+                <td><a href="<c:url value='orders/removeProduct/${product.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
     </table>
 </c:if>
+
+
 
 </body>
 </html>

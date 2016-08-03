@@ -78,9 +78,9 @@
                 <td>${user.password}</td>
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>
-                <td><a href="<c:url value='users/edit/${user.id}'/>">Edit</a></td>
-                <td><a href="<c:url value='users/remove/${user.id}'/>">Delete</a></td>
-                <td><a href="<c:url value='users/addtoblacklist/${user.id}'/>">Add user to black list</a></td>
+                <td><a href="<c:url value='/users/edit/${user.id}'/>">Edit</a></td>
+                <td><a href="<c:url value='/users/remove/${user.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='/users/addtoblacklist/${user.id}'/>">Add user to black list</a></td>
                 <td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>
             </tr>
         </c:forEach>
@@ -92,7 +92,10 @@
 
 <c:url var="addAction" value="/users/add"/>
 
+<%! public boolean[] tf = {false, true};%>
+
 <form:form action="${addAction}" commandName="user">
+
     <table>
         <c:if test="${!empty user.login}">
             <tr>
@@ -134,7 +137,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="admin"/>
+                <form:select path="admin" items = "<%=tf%>"/>
             </td>
         </tr>
         <tr>
@@ -144,7 +147,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="blocked"/>
+                <form:select path="blocked" items = "<%=tf%>"/>
             </td>
         </tr>
         <tr>

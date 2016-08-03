@@ -32,6 +32,6 @@ public class Order extends BaseEntity {
             joinColumns = @JoinColumn(name = "ORDER_ID")
     )
     @Column(name = "QUANTITY")
-    private Map<Product, Integer> productList;
+    private Map<Product, Integer> productList;//TODO see aggregation
 
 }
