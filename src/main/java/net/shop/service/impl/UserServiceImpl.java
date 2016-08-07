@@ -79,12 +79,30 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             //TODO validate if user has permission if loggedUser ? next : exception
             //TODO change method -> change status
             User user = userDao.getById(userId);
-            user.setBlocked(true);
+            if (user.getBlocked()) {
+                user.setBlocked(false);
+            } else {
+                user.setBlocked(true);
+            }
             userDao.update(user);
             return true;
         } else {
             throw new PermissionException();
         }
     }
+
+//    @Override
+//    public boolean removeUserToBlackList(User loggedUser, int userId) throws PermissionException {
+//        if (loggedUser.getAdmin()) {
+//            //TODO validate if user has permission if loggedUser ? next : exception
+//            //TODO change method -> change status
+//            User user = userDao.getById(userId);
+//            user.setBlocked(false);
+//            userDao.update(user);
+//            return true;
+//        } else {
+//            throw new PermissionException();
+//        }
+//    }
 
 }

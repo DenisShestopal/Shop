@@ -84,7 +84,7 @@
                 <td><a href="<c:if test="${!user.blocked}">
                 <c:url value='/users/addtoblacklist/${user.id}'/>">Add</c:if>
                     <c:if test="${user.blocked}">
-                        <c:url value='/users/removefromblacklist/${user.id}'/>">Remove</c:if></a></td>
+                        <c:url value='/users/addtoblacklist/${user.id}'/>">Remove</c:if></a></td>
 
 
                 <td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>
@@ -128,9 +128,9 @@
         </tr>
         <tr>
             <td>
-                <form:password path="password">
+                <form:label path="password">
                     <spring:message text="Password"/>
-                </form:password>
+                </form:label>
             </td>
             <td>
                 <form:input path="password"/>
