@@ -12,7 +12,7 @@
 #Todo
 <br>Fix addToOrder (basket) aspect
 <br>Complete orders.jsp
-<br>Divide 'add' and 'update' functional in add method in Controllers
+<br>+ Divide 'add' and 'update' functional in add method in Controllers
 <br>Authorization
 <br>Add Logging
 <br>Add Tests
