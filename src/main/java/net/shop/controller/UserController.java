@@ -58,13 +58,8 @@ public class UserController {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
-        //TODO divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
-//        if (strUserId == null) {
+        //TODO DONE divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
             this.userService.add(user);
-//        } else {
-//            user.setId(Integer.valueOf(strUserId));
-//            this.userService.update(user);
-//        }
 
         return "redirect:/users";
     }

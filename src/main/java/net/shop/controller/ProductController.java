@@ -66,11 +66,36 @@ public class ProductController {
         return "products";
     }
 
-    @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
-    public String remove(HttpServletRequest req, HttpServletResponse resp) {
+    @RequestMapping("/{id}")
+    public String productData(HttpServletRequest req, HttpServletResponse resp) {
+        int productId = Integer.valueOf(req.getRequestURI().split("products/")[1]);
+        req.setAttribute("product", this.productService.getById(productId));
+
+        return "productdata";
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String add(HttpServletRequest req, HttpServletResponse resp) {
+        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
+        String strProductId = req.getParameter("id");
         //TODO get user by id and user's authority. if admin ? next : exception
-        int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
-        this.productService.remove(productId);
+        //TODO DONE divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
+
+            this.productService.add(product);
+
+        return "redirect:/products";
+    }
+
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String update(HttpServletRequest req, HttpServletResponse resp) {
+        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
+        String strProductId = req.getParameter("id");
+        //TODO get user by id and user's authority. if admin ? next : exception
+        //TODO DONE divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
+
+        product.setId(Integer.valueOf(strProductId));
+        this.productService.update(product);
 
         return "redirect:/products";
     }
@@ -85,27 +110,11 @@ public class ProductController {
         return "products";
     }
 
-    @RequestMapping("/{id}")
-    public String productData(HttpServletRequest req, HttpServletResponse resp) {
-        int productId = Integer.valueOf(req.getRequestURI().split("products/")[1]);
-        req.setAttribute("product", this.productService.getById(productId));
-
-        return "productdata";
-    }
-
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(HttpServletRequest req, HttpServletResponse resp) {
-        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
-        String strProductId = req.getParameter("id");
+    @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
+    public String remove(HttpServletRequest req, HttpServletResponse resp) {
         //TODO get user by id and user's authority. if admin ? next : exception
-        //TODO divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
-        if (strProductId == null) {
-            this.productService.add(product);
-        } else {
-            product.setId(Integer.valueOf(strProductId));
-            this.productService.update(product);
-        }
+        int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
+        this.productService.remove(productId);
 
         return "redirect:/products";
     }

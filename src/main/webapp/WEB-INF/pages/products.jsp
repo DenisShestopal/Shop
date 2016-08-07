@@ -83,11 +83,16 @@
 </c:if>
 
 
-<h1>Add Product</h1>
-
 <c:url var="addAction" value="/products/add"/>
+<c:url var="editAction" value="/products/edit"/>
 
-<form:form action="${addAction}" commandName="product">
+<c:set var="actionType" value="${addAction}"/>
+
+<c:if test="${!empty product.name}">
+    <c:set var="actionType" value="${editAction}"/>
+</c:if>
+
+<form:form action="${actionType}" commandName="product">
     <table>
         <c:if test="${!empty product.name}">
             <tr>
@@ -102,6 +107,7 @@
                 </td>
             </tr>
         </c:if>
+        <h2>Product data</h2>
         <tr>
             <td>
                 <form:label path="name">
