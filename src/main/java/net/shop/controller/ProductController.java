@@ -48,10 +48,10 @@ public class ProductController {
         //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = new LoggedUserMock();
         int userId = user.getId();
-        int orderId = Integer.valueOf(req.getParameter("orderId")); //TODO remove param orderId from this aspect
+//        int orderId = Integer.valueOf(req.getParameter("orderId")); //TODO remove param orderId from this aspect
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
 
-        getProductService().addToOrder(userId, orderId, productId);
+        getProductService().addToOrder(userId, productId);
 
         return "redirect:/products";//TODO DONE? add to order
     }

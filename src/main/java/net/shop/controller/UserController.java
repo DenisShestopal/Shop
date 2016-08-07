@@ -59,14 +59,42 @@ public class UserController {
                 Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
         //TODO divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
-        if (strUserId == null) {
+//        if (strUserId == null) {
             this.userService.add(user);
-        } else {
-            user.setId(Integer.valueOf(strUserId));
-            this.userService.update(user);
-        }
+//        } else {
+//            user.setId(Integer.valueOf(strUserId));
+//            this.userService.update(user);
+//        }
 
         return "redirect:/users";
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String update(HttpServletRequest req, HttpServletResponse resp) {
+        User user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        String strUserId = req.getParameter("id");
+
+            user.setId(Integer.valueOf(strUserId));
+            this.userService.update(user);
+
+        return "redirect:/users";
+    }
+
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+    //TODO get user by id and user's authority. if admin ? next : exception
+    public String edit(HttpServletRequest req, HttpServletResponse resp) {
+        User user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
+        //String strUserId = req.getParameter("id");
+        req.setAttribute("user", this.userService.getById(userId));
+        req.setAttribute("listUsers", this.userService.listUsers());
+
+        user.setId(Integer.valueOf(userId));
+            this.userService.update(user);
+
+        return "users";
     }
 
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
@@ -102,16 +130,6 @@ public class UserController {
         this.userService.remove(userId);
 
         return "redirect:/users";
-    }
-
-    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    //TODO get user by id and user's authority. if admin ? next : exception
-    public String edit(HttpServletRequest req, HttpServletResponse resp) {
-        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
-        req.setAttribute("user", this.userService.getById(userId));
-        req.setAttribute("listUsers", this.userService.listUsers());
-
-        return "users";
     }
 
     @RequestMapping("/{id}")

@@ -57,6 +57,9 @@
 
 <h1>Orders List</h1>
 
+<%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    public Long totalPrice = 0L;%>
+
 <c:if test="${!empty userOrder}">
     <br>Order status
     <br>${userOrder.status}
@@ -70,8 +73,7 @@
             <th width="60">Quantity</th>
             <th width="60">Delete</th>
         </tr>
-        <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-            public Long totalPrice = 0L;%>
+
         <c:forEach items="${userOrder.productList}" var="product">
             <% totalPrice += Long.valueOf("${product.price}"); %>
             <tr>

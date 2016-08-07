@@ -94,16 +94,23 @@
 </c:if>
 
 
-<h1>Add User</h1>
 
 <c:url var="addAction" value="/users/add"/>
+<c:url var="editAction" value="/users/edit"/>
 
 <%! public boolean[] tf = {false, true};%>
 
-<form:form action="${addAction}" commandName="user">
+<c:set var="actionType" value="${addAction}"/>
+
+<c:if test="${!empty user.login}">
+    <c:set var="actionType" value="${editAction}"/>
+</c:if>
+
+<form:form action="${actionType}" commandName="user">
 
     <table>
         <c:if test="${!empty user.login}">
+            <h1>Edit User</h1>
             <tr>
                 <td>
                     <form:label path="id">
@@ -116,6 +123,7 @@
                 </td>
             </tr>
         </c:if>
+        <h2>User data</h2>
         <tr>
             <td>
                 <form:label path="login">

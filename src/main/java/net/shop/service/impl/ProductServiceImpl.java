@@ -52,10 +52,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
-    public boolean addToOrder(int userId, int orderId, int productId) {
+    public boolean addToOrder(int userId, int productId) {
         User user = userDao.getById(userId);
-        Order order = orderDao.getById(orderId);
         Product product = productDao.getById(productId);
+
+        Order order = orderDao.getById(1);//TODO look if user has orders
 
         Set<Order> userOrderList = user.getOrderList();
         userOrderList.contains(order);
