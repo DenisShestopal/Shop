@@ -10,7 +10,7 @@
 <br>3. JSPs for each Entity for CRUD operations.
 
 #Todo
-<br>Fix addToOrder (basket) aspect
+<br>+ Fix addToOrder (basket) aspect
 <br>Complete orders.jsp
 <br>+ Divide 'add' and 'update' functional in add method in Controllers
 <br>Authorization
