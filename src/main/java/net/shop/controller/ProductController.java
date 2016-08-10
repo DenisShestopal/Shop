@@ -2,20 +2,15 @@ package net.shop.controller;
 
 
 import lombok.Getter;
-import lombok.Setter;
 import net.shop.model.Product;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.ProductService;
 import net.shop.service.UserService;
-import net.shop.util.AuthException;
-import net.shop.util.LoggedUserUtil;
+import net.shop.util.AuthenticateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -44,14 +39,16 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
-    public String addToOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthException {
+    public String addToOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
         //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = new LoggedUserMock();
         int userId = user.getId();
 //        int orderId = Integer.valueOf(req.getParameter("orderId")); //TODO remove param orderId from this aspect
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
 
-        getProductService().addToOrder(userId, productId);
+        boolean result = getProductService().addToOrder(userId, productId);
+
+        req.setAttribute("result", result);
 
         return "redirect:/products";//TODO DONE? add to order
     }

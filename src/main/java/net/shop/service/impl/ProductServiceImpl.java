@@ -9,6 +9,7 @@ import net.shop.model.Order;
 import net.shop.model.OrderStatus;
 import net.shop.model.Product;
 import net.shop.model.User;
+import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,29 +54,49 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
 
     @Override
     public boolean addToOrder(int userId, int productId) {
-        User user = userDao.getById(userId);
+//        User user = userDao.getById(userId);// Dao null !
+        User user = new LoggedUserMock();
         Product product = productDao.getById(productId);
 
-        Order order = orderDao.getById(1);//TODO look if user has orders
+        List<Order> orderList = orderDao.getOrdersByUserId(userId);
 
-        Set<Order> userOrderList = user.getOrderList();
-        userOrderList.contains(order);
-
-        boolean hasUnordered = false;
-        if (!order.getStatus().equals(OrderStatus.UNORDERED))
-            for (Order iterOrder : userOrderList) {
-                if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
-                    hasUnordered = true;
-                    order = iterOrder;
-                }
+        Order order = null;
+        for (Order iterOrder : orderList) {
+            if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
+                order = iterOrder;
             }
+        }
 
-        if (!hasUnordered)
+        if (order == null) {
             order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());
+        }
 
-        order.getProductList().put(product, 1);//should we put here a product to the orders table as a new "order's product"?
+        if (!order.getProductList().containsKey(product))
+            order.getProductList().put(product, 1);
 
-        orderDao.update(order);
+        if (order.isNew())
+            orderDao.add(order);
+        else
+            orderDao.update(order);
+
+//        Set<Order> userOrderList = user.getOrderList();
+//        userOrderList.contains(order);
+//
+//        boolean hasUnordered = false;
+//        if (!order.getStatus().equals(OrderStatus.UNORDERED))
+//            for (Order iterOrder : userOrderList) {
+//                if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
+//                    hasUnordered = true;
+//                    order = iterOrder;
+//                }
+//            }
+//
+//        if (!hasUnordered)
+//            order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());
+//
+//        order.getProductList().put(product, 1);//should we put here a product to the orders table as a new "order's product"?
+//
+//        orderDao.update(order);
         return true;
 
     }

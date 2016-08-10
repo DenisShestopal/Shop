@@ -2,6 +2,7 @@ package net.shop.dao.impl;
 
 import net.shop.dao.UserDao;
 import net.shop.model.User;
+import net.shop.util.AuthorizationException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public SessionFactory getSessionFactory(){
+    public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
@@ -42,5 +43,17 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         return userList;
     }
 
+    @Override
+    public User getUserByLogin(String login) throws AuthorizationException {
+        Session session = getSessionFactory().getCurrentSession();
 
+        User user = (User) session.createQuery("from net.shop.model.User u where u.login = :login")
+                .setParameter("login", login)
+                .uniqueResult();
+        if (user != null)
+            return user;
+        else
+            throw new AuthorizationException("Login or/and password are incorrect");
+
+    }
 }

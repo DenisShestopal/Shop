@@ -18,5 +18,9 @@ public abstract class BaseEntity {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+
+    public boolean isNew() {
+        return (this.id == null);
+    }
 }

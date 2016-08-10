@@ -63,7 +63,7 @@
             <version>1.16.8</version>
         </dependency>
 
-        <!-- Hibernate -->
+        <!-- Hybernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>

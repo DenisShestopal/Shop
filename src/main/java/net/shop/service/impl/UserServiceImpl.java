@@ -1,14 +1,12 @@
 package net.shop.service.impl;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.shop.dao.BaseDao;
 import net.shop.dao.UserDao;
 import net.shop.model.Order;
 import net.shop.model.OrderStatus;
 import net.shop.model.User;
 import net.shop.service.UserService;
-import net.shop.util.AuthException;
+import net.shop.util.AuthenticateException;
 import net.shop.util.LoggedUserUtil;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     @Override
-    public int getUserIdFromRequest(HttpServletRequest request) throws AuthException {
+    public int getUserIdFromRequest(HttpServletRequest request) throws AuthenticateException {
         Cookie[] cookies = request.getCookies();
         String sId = "J_SESSION_ID";
         String userSessionId = "";
@@ -66,7 +64,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         if (LoggedUserUtil.getSessionUserIdMap().containsKey(userSessionId)) {
             return LoggedUserUtil.getSessionUserIdMap().get(userSessionId);
         }
-        throw new AuthException();
+        throw new AuthenticateException();
     }
 
     public List<User> listUsers() {

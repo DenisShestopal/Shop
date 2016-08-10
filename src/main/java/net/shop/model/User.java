@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "USERS")
 public class User extends BaseEntity {
 
-    @Column(name = "LOGIN")
+    @Column(name = "LOGIN", unique = true)
     private String login;
 
     @Column(name = "PASSWORD")

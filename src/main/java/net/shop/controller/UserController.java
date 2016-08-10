@@ -1,23 +1,17 @@
 package net.shop.controller;
 
 import lombok.Getter;
-import lombok.Setter;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.UserService;
-import net.shop.util.AuthException;
-import net.shop.util.LoggedUserUtil;
+import net.shop.util.AuthenticateException;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.persistence.SecondaryTable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
@@ -104,7 +98,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthException, PermissionException {
+    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, PermissionException {
 //        int loggedUserId = userService.getUserIdFromRequest(request);
 //        User loggedUser = userService.getById(loggedUserId);
         int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);

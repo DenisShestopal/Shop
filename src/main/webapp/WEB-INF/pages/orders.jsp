@@ -86,7 +86,7 @@
                         <input name="quantity" type="number" required min="0" max="1000"/> <%--onselect="&quantity${}"--%>
                         <input type="submit"
                                value="<spring:message text="accept"/>"/>
-                    </form:form><%--TODO sda--%>
+                    </form:form>
                     </c:if>
 
                 </td>

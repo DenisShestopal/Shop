@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoggedUserUtil {
-    private static int id;
+public class LoggedUserUtil { //TODO need to implement BaseDao or OrderDao??
+    private static int id = 1;
     private static Map<String, Integer> sessionUserIdMap = new HashMap<>();
 
     public static int getId() {

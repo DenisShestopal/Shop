@@ -76,7 +76,7 @@
                 <td>${product.currency}</td>
                 <td><a href="<c:url value='/products/edit/${product.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/products/remove/${product.id}'/>">Delete</a></td>
-                <td><a href="<c:url value='/products/addtoorder/${product.id}'/>">Add to Basket</a></td>
+                <td><a href="<c:url value='/products/addtoorder/${product.id}'/>" onclick="">Add to Basket</a></td>
             </tr>
         </c:forEach>
     </table>
