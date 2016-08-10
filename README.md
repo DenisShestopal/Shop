@@ -20,7 +20,7 @@
 
 #Extra Todo
 <br>Implement own TAG which will include regular expressions for entered data.
-<br>Change id type from int to Integer in the Base Entity
+<br>+ Change id type from int to Integer in the Base Entity
 <br>Add exceptions
 <br>Blacklist create management .jsp 
 
