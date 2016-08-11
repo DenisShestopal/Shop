@@ -8,8 +8,7 @@
 
     <context:component-scan base-package="net.shop"/>
 
-
-    <util:map id="usersTokenMap" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java.lang.String" value-type="java.lang.Integer">
+    <util:map id="usersTokenMap" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java:java.lang.String" value-type="java.lang.Integer">
     </util:map>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -75,24 +74,11 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <!--<bean id="securityService" class="net.shop.service.impl.SecurityServiceImpl">-->
-        <!--<property name="userDao" ref="userDao"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="userTokenMap" class="net.shop.service.impl.SecurityServiceImpl">-->
-        <!--<property name="userTokenService" ref="userDao"/>-->
-    <!--</bean>-->
-
-
-
-    <!--BaseDao and BaseService beans-->
-    <!--<bean id="baseDao" class="net.shop.dao.impl.BaseDaoImpl">-->
-        <!--<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="baseService" class="net.shop.service.impl.BaseServiceImpl">-->
-        <!--<property name="baseDao" ref="baseDao"/>-->
-    <!--</bean>-->
+    <!--SecurityService beans-->
+    <bean id="securityService" class="net.shop.service.impl.SecurityServiceImpl">
+        <property name="usersTokenMap" ref="usersTokenMap"/>
+        <property name="userDao" ref="userDao"/>
+    </bean>
 
 
     <context:component-scan base-package="net.shop"/>

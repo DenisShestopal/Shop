@@ -56,7 +56,6 @@ public class UserController {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
-        //TODO DONE divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
             this.userService.add(user);
 
         return "redirect:/users";
@@ -125,7 +124,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @RequestMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
         int userId = Integer.valueOf(req.getRequestURI().split("users/")[1]);
         req.setAttribute("user", this.userService.getById(userId));
@@ -133,15 +132,11 @@ public class UserController {
         return "userdata";
     }
 
-    @RequestMapping("/authorization")
+    @RequestMapping(value="/authorization", method = RequestMethod.POST)
     public String userAuthorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
         String password = req.getParameter("password");
-        String passwordCheck = req.getParameter("passwordCheck");
 
-        if(!password.equals(passwordCheck))
-            return "redirect:/authorization";
-        else
-            req.setAttribute("user", getSecurityService().authorization(req, resp));
+        req.setAttribute("user", getSecurityService().authorization(req, resp));
         return "redirect:/products";
     }
 }

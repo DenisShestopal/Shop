@@ -36,10 +36,13 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String userOrder(HttpServletRequest req, HttpServletResponse resp) {
+    public String userOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
         req.setAttribute("order", new Order());
         req.setAttribute("listOrders", this.orderService.listOrders());
-        //TODO using HttpServletRequest take userId and return to Response methods: getOrderByUserId
+        //TODO DONE?? using HttpServletRequest take userId and return to Response methods: getOrderByUserId
+        User user = getSecurityService().authenticate(req.getCookies());
+        req.setAttribute("userOrder", user.getOrderList());
+
 
         //return reference to the page "oreders"
         return "orders";

@@ -21,13 +21,20 @@ import java.util.UUID;
 @Transactional
 public class SecurityServiceImpl implements SecurityService {
 
+    private UserDao userDao;
+    private Map<String, Integer> usersTokenMap;
+
     @Autowired(required = true)
     @Qualifier(value = "userDao")
-    private UserDao userDao;
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Autowired
     @Qualifier(value = "usersTokenMap")
-    private Map<String, Integer> usersTokenMap;
+    public void setUsersTokenMap(Map<String, Integer> usersTokenMap) {
+        this.usersTokenMap = usersTokenMap;
+    }
 
     @Override
     public User authenticate(Cookie[] cookies) throws AuthenticateException {
