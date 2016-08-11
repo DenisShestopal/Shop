@@ -6,6 +6,7 @@ import net.shop.model.Product;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.ProductService;
+import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class ProductController {
 
     private ProductService productService;
     private UserService userService;
+    private SecurityService securityService;
 
     @Autowired(required = true)
     @Qualifier(value = "userService")
@@ -41,7 +43,7 @@ public class ProductController {
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
     public String addToOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
         //int loggedUserId = userService.getUserIdFromRequest(request);
-        User user = new LoggedUserMock();
+        User user = getSecurityService().authenticate(req.getCookies());
         int userId = user.getId();
 //        int orderId = Integer.valueOf(req.getParameter("orderId")); //TODO remove param orderId from this aspect
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
@@ -116,20 +118,4 @@ public class ProductController {
         return "redirect:/products";
     }
 
-//    @RequestMapping(value = "/add", method = RequestMethod.POST)
-//    public String add(HttpServletRequest req, HttpServletResponse resp) {
-//        String login = req.getParameter("login");
-//        String password = req.getParameter("password");
-//        Boolean admin = Boolean.parseBoolean(req.getParameter("admin"));
-//        Boolean blocked = Boolean.parseBoolean(req.getParameter("blocked"));
-//        Integer userId = Integer.parseInt(req.getParameter("userId");
-//        if (userId == null) {
-//            this.userService.add(new User(all params));
-//        } else {
-//            this.userService.update(new User(all params with ID);
-//          TODO make appropriate contsructor and change id to Integer in BaseEntity
-//        }
-//
-//        return "redirect:/users";
-//    }
 }

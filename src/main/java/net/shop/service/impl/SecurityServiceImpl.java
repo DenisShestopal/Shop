@@ -8,6 +8,7 @@ import net.shop.util.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class SecurityServiceImpl implements SecurityService {
 
     @Autowired(required = true)
@@ -44,9 +46,11 @@ public class SecurityServiceImpl implements SecurityService {
     public User authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        String passwordCheck = req.getParameter("passwordCheck");
 
         User user = userDao.getUserByLogin(login);
         password = Base64.getEncoder().encodeToString((login + ":" + password).getBytes());
+        passwordCheck = Base64.getEncoder().encodeToString((login + ":" + passwordCheck).getBytes());
 
         if(!user.getPassword().equals(password))
             throw new AuthorizationException("Login or/and password are incorrect");

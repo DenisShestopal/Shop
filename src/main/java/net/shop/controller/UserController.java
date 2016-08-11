@@ -3,8 +3,11 @@ package net.shop.controller;
 import lombok.Getter;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
+import net.shop.service.SecurityService;
 import net.shop.service.UserService;
+import net.shop.service.impl.SecurityServiceImpl;
 import net.shop.util.AuthenticateException;
+import net.shop.util.AuthorizationException;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +25,7 @@ import java.util.HashSet;
 public class UserController {
 
     private UserService userService;
+    private SecurityService securityService;
 
     @Autowired(required = true)
     @Qualifier(value = "userService")
@@ -29,12 +33,12 @@ public class UserController {
         this.userService = userService;
     }
 
-
-//    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-//    public String add(@ModelAttribute("user") User user) {
-//        this.userService.add(user);
-//        return "redirect:/users";
+//    @Autowired(required = true)
+//    @Qualifier(value = "securityService")
+//    public void setSecurityService(SecurityService securityService) {
+//        this.securityService = securityService;
 //    }
+
 
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
@@ -104,7 +108,7 @@ public class UserController {
         int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
 //        String[] strUri = request.getRequestURI().split("userId=");
 //        int userId = Integer.valueOf(strUri[1]);
-        User admin = new LoggedUserMock();
+        User admin = getSecurityService().authenticate(request.getCookies());//TODO admin verification??
 
         getUserService().addUserToBlackList(admin, userId);
 
@@ -127,5 +131,17 @@ public class UserController {
         req.setAttribute("user", this.userService.getById(userId));
 
         return "userdata";
+    }
+
+    @RequestMapping("/authorization")
+    public String userAuthorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+        String password = req.getParameter("password");
+        String passwordCheck = req.getParameter("passwordCheck");
+
+        if(!password.equals(passwordCheck))
+            return "redirect:/authorization";
+        else
+            req.setAttribute("user", getSecurityService().authorization(req, resp));
+        return "redirect:/products";
     }
 }

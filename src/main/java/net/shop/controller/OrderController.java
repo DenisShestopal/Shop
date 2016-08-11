@@ -5,6 +5,7 @@ import net.shop.model.Order;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.OrderService;
+import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.NoOrdersException;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @Getter
 public class OrderController {
 
+
+    private SecurityService securityService;
     private OrderService orderService;
     private UserService userService;
 
@@ -47,7 +50,7 @@ public class OrderController {
         //TODO DONE take id and read user if orderId->user ? next : exception
 //        int loggedUserId = userService.getUserIdFromRequest(request);
         int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        User user = new LoggedUserMock();
+        User user = getSecurityService().authenticate(request.getCookies());
 
         getOrderService().confirmOrder(user, orderId);
         return "redirect:/orders";
@@ -58,7 +61,7 @@ public class OrderController {
         //TODO DONE take id and read user if orderId->user ? next : exception
 //        int loggedUserId = userService.getUserIdFromRequest(request);
         int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        User user = new LoggedUserMock();
+        User user = getSecurityService().authenticate(request.getCookies());
 
         getOrderService().confirmOrder(user, orderId);
         return "redirect:/orders";

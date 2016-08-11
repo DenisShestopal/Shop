@@ -75,6 +75,14 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
+    <!--<bean id="securityService" class="net.shop.service.impl.SecurityServiceImpl">-->
+        <!--<property name="userDao" ref="userDao"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="userTokenMap" class="net.shop.service.impl.SecurityServiceImpl">-->
+        <!--<property name="userTokenService" ref="userDao"/>-->
+    <!--</bean>-->
+
 
 
     <!--BaseDao and BaseService beans-->
