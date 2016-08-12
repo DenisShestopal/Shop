@@ -16,13 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Transactional
-public class SecurityServiceImpl implements SecurityService {
+public class InMemorySecurityServiceImpl implements SecurityService {
+
 
     private UserDao userDao;
-    private Map<String, Integer> usersTokenMap;
+
+    private Map<String, Integer> usersTokenMap = new ConcurrentHashMap<>();
 
     @Autowired(required = true)
     @Qualifier(value = "userDao")
@@ -30,11 +33,11 @@ public class SecurityServiceImpl implements SecurityService {
         this.userDao = userDao;
     }
 
-    @Autowired
-    @Qualifier(value = "usersTokenMap")
-    public void setUsersTokenMap(Map<String, Integer> usersTokenMap) {
-        this.usersTokenMap = usersTokenMap;
-    }
+//    @Autowired
+//    @Qualifier(value = "usersTokenMap")
+//    public void setUsersTokenMap(Map<String, Integer> usersTokenMap) {
+//        this.usersTokenMap = usersTokenMap;
+//    }
 
     @Override
     public User authenticate(Cookie[] cookies) throws AuthenticateException {

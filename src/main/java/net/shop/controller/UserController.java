@@ -2,10 +2,8 @@ package net.shop.controller;
 
 import lombok.Getter;
 import net.shop.model.User;
-import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
-import net.shop.service.impl.SecurityServiceImpl;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
 import net.shop.util.PermissionException;
