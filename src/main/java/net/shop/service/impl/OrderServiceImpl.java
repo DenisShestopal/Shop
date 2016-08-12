@@ -23,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional
 public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderService {
+
     private OrderDao orderDao;
 
     @Override

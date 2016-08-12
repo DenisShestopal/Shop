@@ -56,11 +56,9 @@ public class InMemorySecurityServiceImpl implements SecurityService {
     public User authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        String passwordCheck = req.getParameter("passwordCheck");
 
         User user = userDao.getUserByLogin(login);
         password = Base64.getEncoder().encodeToString((login + ":" + password).getBytes());
-        passwordCheck = Base64.getEncoder().encodeToString((login + ":" + passwordCheck).getBytes());
 
         if(!user.getPassword().equals(password))
             throw new AuthorizationException("Login or/and password are incorrect");

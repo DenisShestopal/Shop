@@ -130,11 +130,11 @@ public class UserController {
         return "userdata";
     }
 
-    @RequestMapping(value="/authorization", method = RequestMethod.POST)
-    public String userAuthorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
-        String password = req.getParameter("password");
-
-        req.setAttribute("user", getSecurityService().authorization(req, resp));
-        return "redirect:/products";
-    }
+//    @RequestMapping(value="/authorization", method = RequestMethod.POST)
+//    public String userAuthorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+//        String password = req.getParameter("password");
+//
+//        req.setAttribute("user", getSecurityService().authorization(req, resp));
+//        return "redirect:/products";
+//    }
 }
