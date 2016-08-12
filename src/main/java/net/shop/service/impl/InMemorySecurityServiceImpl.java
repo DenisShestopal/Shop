@@ -40,9 +40,17 @@ public class InMemorySecurityServiceImpl implements SecurityService {
 //    }
 
     @Override
-    public User authenticate(Cookie[] cookies) throws AuthenticateException {
+    public User authenticate(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
+
+        if(req.getCookies()==null)
+            throw new AuthenticateException();
+
+        Cookie[] cookies = req.getCookies();
+
         User user = null;
         for (Cookie cookie : cookies) {
+            if (cookie == null)
+                throw new AuthenticateException();
             if (cookie.getName().equals(TOKEN))
                 if (usersTokenMap.containsKey(cookie.getValue()))
                     user = userDao.getById(Integer.valueOf(cookie.getValue()));

@@ -13,7 +13,7 @@ public interface SecurityService {
 
     String TOKEN = "token";
 
-    User authenticate(Cookie[] cookies) throws AuthenticateException;
+    User authenticate(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException;
 
     User authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException;
 }

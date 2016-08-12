@@ -115,7 +115,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="name"/>
+                <form:input path="name" required = "true"/>
             </td>
         </tr>
         <tr>
@@ -125,7 +125,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="price"/>
+                <form:input path="price" required = "true"/>
             </td>
         </tr>
         <tr>

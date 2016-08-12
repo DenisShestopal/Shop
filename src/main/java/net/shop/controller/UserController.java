@@ -41,7 +41,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUsers());
 
@@ -52,9 +52,9 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
-            this.userService.add(user);
+        this.userService.add(user);
 
         return "redirect:/users";
     }
@@ -62,11 +62,11 @@ public class UserController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
 
-            user.setId(Integer.valueOf(strUserId));
-            this.userService.update(user);
+        user.setId(Integer.valueOf(strUserId));
+        this.userService.update(user);
 
         return "redirect:/users";
     }
@@ -75,14 +75,14 @@ public class UserController {
     //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
         //String strUserId = req.getParameter("id");
         req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
 
         user.setId(Integer.valueOf(userId));
-            this.userService.update(user);
+        this.userService.update(user);
 
         return "users";
     }
@@ -90,7 +90,7 @@ public class UserController {
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public String blackList(HttpServletRequest req, HttpServletResponse resp) {
         User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")),Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUnpaidUsers());
 
@@ -99,13 +99,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, PermissionException {
+    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, PermissionException, AuthorizationException {
 //        int loggedUserId = userService.getUserIdFromRequest(request);
 //        User loggedUser = userService.getById(loggedUserId);
         int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
 //        String[] strUri = request.getRequestURI().split("userId=");
 //        int userId = Integer.valueOf(strUri[1]);
-        User admin = getSecurityService().authenticate(request.getCookies());//TODO admin verification??
+        User admin = getSecurityService().authenticate(request, response);//TODO admin verification??
 
         getUserService().addUserToBlackList(admin, userId);
 
@@ -130,11 +130,22 @@ public class UserController {
         return "userdata";
     }
 
-//    @RequestMapping(value="/authorization", method = RequestMethod.POST)
-//    public String userAuthorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
-//        String password = req.getParameter("password");
-//
-//        req.setAttribute("user", getSecurityService().authorization(req, resp));
-//        return "redirect:/products";
-//    }
+    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
+    public String authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+        String password = req.getParameter("password");
+
+        try {
+            getSecurityService().authorization(req, resp);
+        } catch (AuthorizationException e) {
+            //TODO return loginStatus = false and display this on authorization.jsp
+            return "authorization";
+        }
+        return "redirect:/products";
+    }
+
+    @RequestMapping(value = "/authorization", method = RequestMethod.GET)
+    public String authorizationView(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+        return "authorization";
+    }
+
 }

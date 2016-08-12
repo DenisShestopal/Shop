@@ -9,6 +9,7 @@ import net.shop.service.ProductService;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
+import net.shop.util.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -40,21 +41,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
-    public String addToOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
-        //int loggedUserId = userService.getUserIdFromRequest(request);
-        User user = getSecurityService().authenticate(req.getCookies());
-        int userId = user.getId();
-//        int orderId = Integer.valueOf(req.getParameter("orderId")); //TODO remove param orderId from this aspect
-        int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
-
-        boolean result = getProductService().addToOrder(userId, productId);
-
-        req.setAttribute("result", result);
-
-        return "redirect:/products";//TODO DONE? add to order
-    }
-
     //display our products on the page
     @RequestMapping(method = RequestMethod.GET)
     public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
@@ -63,6 +49,26 @@ public class ProductController {
 
         //return reference to the page "products"
         return "products";
+    }
+
+    @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
+    public String addToOrder(HttpServletRequest req, HttpServletResponse resp) {
+        //int loggedUserId = userService.getUserIdFromRequest(request);
+        User user = null;
+        try {
+            user = getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+        int userId = user.getId();
+
+        int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
+
+        boolean result = getProductService().addToOrder(userId, productId);
+
+        req.setAttribute("result", result);
+
+        return "redirect:/products";
     }
 
     @RequestMapping("/{id}")

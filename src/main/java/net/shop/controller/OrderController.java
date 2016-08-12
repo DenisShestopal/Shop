@@ -8,6 +8,7 @@ import net.shop.service.OrderService;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
+import net.shop.util.AuthorizationException;
 import net.shop.util.NoOrdersException;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +37,12 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String userOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
+    public String userOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException, AuthorizationException {
         req.setAttribute("order", new Order());
         req.setAttribute("listOrders", this.orderService.listOrders());
         //TODO DONE?? using HttpServletRequest take userId and return to Response methods: getOrderByUserId
-        User user = getSecurityService().authenticate(req.getCookies());
+//        User user = getSecurityService().authenticate(req, resp);
+        User user = new LoggedUserMock();
         req.setAttribute("userOrder", user.getOrderList());
 
 
@@ -49,22 +51,22 @@ public class OrderController {
     }
 
     @RequestMapping(value = "confirm/{orderId}")
-    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, NoOrdersException, PermissionException {
+    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, NoOrdersException, PermissionException, AuthorizationException {
         //TODO DONE take id and read user if orderId->user ? next : exception
 //        int loggedUserId = userService.getUserIdFromRequest(request);
         int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        User user = getSecurityService().authenticate(request.getCookies());
+        User user = getSecurityService().authenticate(request, response);
 
         getOrderService().confirmOrder(user, orderId);
         return "redirect:/orders";
     }
 
     @RequestMapping(value = "pay/{orderId}")
-    public String payOrder(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, NoOrdersException, PermissionException {
+    public String payOrder(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, NoOrdersException, PermissionException, AuthorizationException {
         //TODO DONE take id and read user if orderId->user ? next : exception
 //        int loggedUserId = userService.getUserIdFromRequest(request);
         int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        User user = getSecurityService().authenticate(request.getCookies());
+        User user = getSecurityService().authenticate(request, response);
 
         getOrderService().confirmOrder(user, orderId);
         return "redirect:/orders";
