@@ -30,6 +30,12 @@ public class ProductController {
     private SecurityService securityService;
 
     @Autowired(required = true)
+    @Qualifier(value = "securityService")
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+
+    @Autowired(required = true)
     @Qualifier(value = "userService")
     public void setUserService(UserService userService) {
         this.userService = userService;

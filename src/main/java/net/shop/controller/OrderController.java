@@ -31,6 +31,18 @@ public class OrderController {
     private UserService userService;
 
     @Autowired(required = true)
+    @Qualifier(value = "securityService")
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+
+    @Autowired(required = true)
+    @Qualifier(value = "userService")
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired(required = true)
     @Qualifier(value = "orderService")
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;

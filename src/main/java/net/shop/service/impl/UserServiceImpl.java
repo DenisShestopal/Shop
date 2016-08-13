@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -24,6 +25,13 @@ import java.util.List;
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
     private UserDao userDao;
+
+    @Override
+    public User add(User entity) {
+        entity.setPassword(Base64.getEncoder()
+                .encodeToString((entity.getLogin() + ":" + entity.getPassword()).getBytes()));
+        return super.add(entity);
+    }
 
     @Autowired(required = true)
     @Qualifier(value = "userDao")

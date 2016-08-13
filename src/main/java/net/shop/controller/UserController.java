@@ -28,6 +28,12 @@ public class UserController {
     private SecurityService securityService;
 
     @Autowired(required = true)
+    @Qualifier(value = "securityService")
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+
+    @Autowired(required = true)
     @Qualifier(value = "userService")
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -178,65 +184,38 @@ public class UserController {
         return "userdata";
     }
 
-    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
-    public String authorization(HttpServletRequest req, HttpServletResponse resp) {
-        String password = req.getParameter("password");
-
-        try {
-            getSecurityService().authorization(req, resp);
-        } catch (AuthorizationException e) {
-            //TODO return loginStatus = false and display this on authorization.jsp
-            return "authorization";
-        }
-        return "redirect:/products";
-    }
-
     @RequestMapping(value = "/authorization", method = RequestMethod.GET)
     public String authorizationView(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
         return "authorization";
     }
 
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public String signIn(HttpServletRequest req, HttpServletResponse resp) {
+    public String authorization(HttpServletRequest req, HttpServletResponse resp) {
 
-        String login = req.getParameter("login");
-
-        String password = Base64.getEncoder().encodeToString((login + ":" + req.getParameter("password")).getBytes());
-
-        for (User user : userService.listUsers()) {
-            if (user.getLogin().equals(login))
-                if (user.getPassword().equals(password)) //TODO is correct?
-                    return "redirect:/products";
-                else {
-                    return "authorization";
-                    //TODO add message to user that log/pass is incorrect
-                }
+        try {
+            securityService.authorization(req, resp);
+        } catch (AuthorizationException e) {
+            req.setAttribute("authorizationException", "Wrong login or password");
+            return "authorization";
         }
-        return "authorization";
+
+        return "redirect:/products";
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signUp(HttpServletRequest req, HttpServletResponse resp) {
+    public String registration(HttpServletRequest req, HttpServletResponse resp) {
 
         String login = req.getParameter("login");
-        String password = Base64.getEncoder().encodeToString((login + ":" + req.getParameter("password")).getBytes());
+        String password = req.getParameter("password");
+        User user = new User(login, password, false, false, new HashSet<>());
 
-        for (User iterUser : userService.listUsers()) {
-            if (iterUser.getLogin().equals(login)) {
-                return "authorization";
-                //TODO add message to user that login already exists
-            } else {
-                User user = new User(req.getParameter("login"),
-                        Base64.getEncoder().encodeToString((login + ":" + req.getParameter("password")).getBytes()),
-                        false,
-                        false,
-                        new HashSet<>());
-                userService.add(user);
-
-                return "redirect:/products";
-            }
+        try {
+            userService.add(user);
+        } catch (Exception e) {
+            req.setAttribute("exception", "LoginAlreadyUsed");
+            return "authorization";
         }
-        return "authorization";
+        return "redirect:/products";
     }
 
 }
