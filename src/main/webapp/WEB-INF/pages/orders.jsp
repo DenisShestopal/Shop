@@ -79,31 +79,32 @@
             <tr>
                 <td>${product.name}</td>
                 <td>${product.price/100}${product.price%100}</td>
-                <td>${product.quantity}
-                    <c:if test="${userOrder.status == 'UNORDERED'}">
+                <td>${product.quantity}</td>
+                <c:if test="${userOrder.status == 'UNORDERED'}">
                     <form:form action="${'/orders/changeQuantity'}" commandName="user">
                         <input name="productId" type="hidden" value="${product.id}">
-                        <input name="quantity" type="number" required min="0" max="1000"/> <%--onselect="&quantity${}"--%>
+                        <input name="quantity" type="number" required min="0"
+                               max="1000"/> <%--onselect="&quantity${}"--%>
                         <input type="submit"
                                value="<spring:message text="accept"/>"/>
                     </form:form>
-                    </c:if>
+                </c:if>
 
-                </td>
+
                 <td>
                     <a href="<c:url value='orders/removeProduct/${product.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <tr>
             <td></td>
-            <td>Total price : <%=totalPrice%></td>
+            <td>Total price : <%=totalPrice%>
+            </td>
             <td></td>
             <td></td>
             <td><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a></td>
         </tr>
     </table>
 </c:if>
-
 
 
 </body>

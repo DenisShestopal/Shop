@@ -115,7 +115,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="name" required = "true"/>
+                <form:input path="name" maxlength="16" required = "true"/>
             </td>
         </tr>
         <tr>
@@ -125,7 +125,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="price" required = "true"/>
+                <form:input type="number" min="0" max ="10000" step="1" path="price" required = "true"/>
             </td>
         </tr>
         <tr>

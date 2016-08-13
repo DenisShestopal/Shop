@@ -85,7 +85,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="login" required = "true"/>
+                <form:input path="login" maxlength="16" required = "true"/>
             </td>
         </tr>
         <tr>
@@ -95,7 +95,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="password"/>
+                <form:input path="password" maxlength="16"/>
             </td>
         </tr>
         <c:if test="<%=tf%>">
@@ -107,7 +107,7 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="passwordCheck"/>
+                    <form:input path="passwordCheck" maxlength="16"/>
                 </td>
             </tr>
         </c:if>

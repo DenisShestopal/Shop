@@ -131,7 +131,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="login" required = "true"/>
+                <form:input path="login" required = "true" maxlength="16"/>
             </td>
         </tr>
         <tr>
@@ -141,7 +141,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="password" required = "true"/>
+                <form:input path="password" required = "true" maxlength="16"/>
             </td>
         </tr>
         <tr>
