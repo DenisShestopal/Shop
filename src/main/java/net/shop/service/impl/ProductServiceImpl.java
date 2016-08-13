@@ -55,7 +55,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     @Override
     public boolean addToOrder(User user, int productId) {
 
-//        User user = new LoggedUserMock();
         Product product = productDao.getById(productId);
         int userId = user.getId();
 
@@ -80,24 +79,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         else
             orderDao.update(order);
 
-//        Set<Order> userOrderList = user.getOrderList();
-//        userOrderList.contains(order);
-//
-//        boolean hasUnordered = false;
-//        if (!order.getStatus().equals(OrderStatus.UNORDERED))
-//            for (Order iterOrder : userOrderList) {
-//                if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
-//                    hasUnordered = true;
-//                    order = iterOrder;
-//                }
-//            }
-//
-//        if (!hasUnordered)
-//            order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());
-//
-//        order.getProductList().put(product, 1);//should we put here a product to the orders table as a new "order's product"?
-//
-//        orderDao.update(order);
         return true;
 
     }

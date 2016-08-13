@@ -64,9 +64,13 @@
             <th width="120">Name</th>
             <th width="120">Price</th>
             <th width="120">Currency</th>
-            <th width="60">Edit</th>
-            <th width="60">Delete</th>
-            <th width="120">Order Product</th>
+            <c:if test="${user.admin==true}">
+                <th width="60">Edit</th>
+                <th width="60">Delete</th>
+            </c:if>
+            <c:if test="${!empty user.login}">
+                <th width="120">Order Product</th>
+            </c:if>
         </tr>
         <c:forEach items="${listProducts}" var="product">
             <tr>
@@ -74,9 +78,15 @@
                 <td><a href="products/${product.id}">${product.name}</a></td>
                 <td>${product.price/100}</td>
                 <td>${product.currency}</td>
-                <td><a href="<c:url value='/products/edit/${product.id}'/>">Edit</a></td>
-                <td><a href="<c:url value='/products/remove/${product.id}'/>">Delete</a></td>
-                <td><a href="<c:url value='/products/addtoorder/${product.id}'/>" onclick="">Add to Basket</a></td>
+                <c:if test="${user.admin==true}">
+                    <td>
+                        <a href="<c:url value='/products/edit/${product.id}'/>">Edit</a></td>
+                    <td>
+                        <a href="<c:url value='/products/remove/${product.id}'/>">Delete</a></td>
+                </c:if>
+                <c:if test="${!empty user.login}">
+                    <td><a href="<c:url value='/products/addtoorder/${product.id}'/>" onclick="">Add to Basket</a></td>
+                </c:if>
             </tr>
         </c:forEach>
     </table>
@@ -115,7 +125,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="name" maxlength="16" required = "true"/>
+                <form:input path="name" maxlength="16" required="true"/>
             </td>
         </tr>
         <tr>
@@ -125,7 +135,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input type="number" min="0" max ="10000" step="1" path="price" required = "true"/>
+                <form:input type="number" min="0" max="10000" step="1" path="price" required="true"/>
             </td>
         </tr>
         <tr>

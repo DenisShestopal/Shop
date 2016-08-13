@@ -215,6 +215,11 @@ public class UserController {
             req.setAttribute("exception", "LoginAlreadyUsed");
             return "authorization";
         }
+        try {
+            securityService.authorization(req, resp);
+        } catch (AuthorizationException e) {
+            e.printStackTrace();
+        }
         return "redirect:/products";
     }
 

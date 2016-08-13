@@ -50,6 +50,14 @@ public class ProductController {
     //display our products on the page
     @RequestMapping(method = RequestMethod.GET)
     public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
+        User user = null;
+        try {
+            user = getSecurityService().authenticate(req, resp);
+            req.setAttribute("user", user);
+        } catch (AuthenticateException e) {
+            req.setAttribute("user", new User());
+        }
+
         req.setAttribute("product", new Product());
         req.setAttribute("listProducts", this.productService.listProducts());
 
@@ -125,10 +133,17 @@ public class ProductController {
     //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
 
+        User user = null;
+
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
+        }
+
+        if(!user.getAdmin()){
+            req.setAttribute("exception", "Only admin can manage products list");
+            return "products";
         }
 
         int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
@@ -140,16 +155,25 @@ public class ProductController {
 
     @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
-        //TODO get user by id and user's authority. if admin ? next : exception
+
+
+        User user = null;
 
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
+        //TODO DONE?? get user by id and user's authority. if admin ? next : exception
+        if(!user.getAdmin()){
+            req.setAttribute("exception", "Only admin can manage products list");
+            return "products";
+        }
+
         int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
         this.productService.remove(productId);
+
 
         return "redirect:/products";
     }

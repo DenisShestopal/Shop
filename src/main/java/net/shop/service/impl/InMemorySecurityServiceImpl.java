@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@Transactional
 public class InMemorySecurityServiceImpl implements SecurityService {
 
 
@@ -40,27 +39,34 @@ public class InMemorySecurityServiceImpl implements SecurityService {
 //    }
 
     @Override
+    @Transactional
     public User authenticate(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
 
-        if(req.getCookies()==null)
+        if (req.getCookies() == null) {
+            req.setAttribute("exception", "Not authorized yet");
             throw new AuthenticateException();
+        }
 
         Cookie[] cookies = req.getCookies();
 
         User user = null;
         for (Cookie cookie : cookies) {
-            if (cookie == null)
-                throw new AuthenticateException();
             if (cookie.getName().equals(TOKEN))
                 if (usersTokenMap.containsKey(cookie.getValue()))
-                    user = userDao.getById(Integer.valueOf(cookie.getValue()));
+                    user = userDao.getById(usersTokenMap.get(cookie.getValue()));
         }
-        if (user == null)
+        if (user == null){
+            req.setAttribute("exception", "Not authorized yet");
             throw new AuthenticateException();
+        }
+
+        //erase credentials after authentication fo security
+        //TODO realize correctly user.setPassword("");
         return user;
     }
 
     @Override
+    @Transactional
     public User authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
@@ -68,8 +74,10 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         User user = userDao.getUserByLogin(login);
         password = Base64.getEncoder().encodeToString((login + ":" + password).getBytes());
 
-        if(!user.getPassword().equals(password))
+        if (!user.getPassword().equals(password)){
+            req.setAttribute("exception", "Login or/and password are incorrect");
             throw new AuthorizationException("Login or/and password are incorrect");
+        }
 
         String token = UUID.randomUUID().toString();
         usersTokenMap.put(token, user.getId());
