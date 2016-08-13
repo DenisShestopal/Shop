@@ -52,6 +52,7 @@ public class OrderController {
     public String userOrder(HttpServletRequest req, HttpServletResponse resp){
 
         User user = null;
+
         try {
             user = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
         } catch (AuthenticateException e) {
@@ -60,7 +61,6 @@ public class OrderController {
 
         req.setAttribute("order", new Order());
         req.setAttribute("listOrders", this.orderService.listOrders());
-        //User user = getSecurityService().authenticate(req, resp);
         req.setAttribute("userOrder", user.getOrderList());
 
         return "orders";
@@ -70,21 +70,21 @@ public class OrderController {
     public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws NoOrdersException{
 
         User user = null;
+
         try {
             user = getSecurityService().authenticate(request, response);//TODO Check authorization if correct
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-
         int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        //User user = getSecurityService().authenticate(request, response);
 
         try {
             getOrderService().confirmOrder(user, orderId);
         } catch (PermissionException e) {
+            request.setAttribute("exception", "You don't have access to this user's orders");
             return "orders";
-            //TODO set attribute with permission exception text for user
+
         }
         return "redirect:/orders";
     }
@@ -99,14 +99,13 @@ public class OrderController {
             return "authorization";
         }
 
-
         int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-//        User user = getSecurityService().authenticate(request, response);
 
         try {
             getOrderService().payOrder(user, orderId);
         } catch (PermissionException e) {
-            return "orders"; //TODO set attribute with permission exception text for user
+            request.setAttribute("exception", "You don't have access to this user's orders");
+            return "orders";
         }
         return "redirect:/orders";
     }

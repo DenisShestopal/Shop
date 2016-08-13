@@ -47,10 +47,10 @@ public class ProductController {
         this.productService = productService;
     }
 
-    //display our products on the page
     @RequestMapping(method = RequestMethod.GET)
     public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
         User user = null;
+
         try {
             user = getSecurityService().authenticate(req, resp);
             req.setAttribute("user", user);
@@ -61,25 +61,22 @@ public class ProductController {
         req.setAttribute("product", new Product());
         req.setAttribute("listProducts", this.productService.listProducts());
 
-        //return reference to the page "products"
         return "products";
     }
 
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
     public String addToOrder(HttpServletRequest req, HttpServletResponse resp) {
-        //int loggedUserId = userService.getUserIdFromRequest(request);
         User user = null;
+
         try {
             user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
+
         int userId = user.getId();
-
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
-
         boolean result = getProductService().addToOrder(user, productId);
-
         req.setAttribute("result", result);
 
         return "redirect:/products";
@@ -97,12 +94,17 @@ public class ProductController {
     public String add(HttpServletRequest req, HttpServletResponse resp) {
         Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
         String strProductId = req.getParameter("id");
-        //TODO get user by id and user's authority. if admin ? next : exception
+        User user = null;
 
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
+        }
+
+        if(!user.getAdmin()){
+            req.setAttribute("exception", "Only admin can manage products list");
+            return "products";
         }
 
         this.productService.add(product);
@@ -115,12 +117,17 @@ public class ProductController {
     public String update(HttpServletRequest req, HttpServletResponse resp) {
         Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
         String strProductId = req.getParameter("id");
-        //TODO get user by id and user's authority. if admin ? next : exception
+        User user = null;
 
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
+        }
+
+        if(!user.getAdmin()){
+            req.setAttribute("exception", "Only admin can manage products list");
+            return "products";
         }
 
         product.setId(Integer.valueOf(strProductId));
@@ -130,7 +137,6 @@ public class ProductController {
     }
 
     @RequestMapping(value= "edit/{id}", method = RequestMethod.GET)
-    //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
 
         User user = null;
@@ -156,7 +162,6 @@ public class ProductController {
     @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
 
-
         User user = null;
 
         try {
@@ -165,7 +170,6 @@ public class ProductController {
             return "authorization";
         }
 
-        //TODO DONE?? get user by id and user's authority. if admin ? next : exception
         if(!user.getAdmin()){
             req.setAttribute("exception", "Only admin can manage products list");
             return "products";
@@ -173,7 +177,6 @@ public class ProductController {
 
         int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
         this.productService.remove(productId);
-
 
         return "redirect:/products";
     }

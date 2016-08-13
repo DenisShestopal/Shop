@@ -42,37 +42,46 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
 
+        User user = null;
+
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        //TODO get user by id and user's authority. if admin ? next : exception
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can get the list of users");
+            return "products";
+        }
 
-        User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+//        User user = new User(req.getParameter("login"), req.getParameter("password"),
+//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUsers());
 
-        //return reference to the page "users"
         return "users";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
 
+        User user = null;
+
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        //TODO get user by id and user's authority. if admin ? next : exception
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can add new user");
+            return "products";
+        }
 
-        User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
-        String strUserId = req.getParameter("id");
+//        User user = new User(req.getParameter("login"), req.getParameter("password"),
+//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+//        String strUserId = req.getParameter("id");
         this.userService.add(user);
 
         return "redirect:/users";
@@ -81,15 +90,21 @@ public class UserController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
 
+        User user = null;
+
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
-        //TODO get user by id and user's authority. if admin ? next : exception
 
-        User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can manage users");
+            return "products";
+        }
+
+//        User user = new User(req.getParameter("login"), req.getParameter("password"),
+//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
 
         user.setId(Integer.valueOf(strUserId));
@@ -100,15 +115,21 @@ public class UserController {
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
+        User user = null;
+
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        //TODO get user by id and user's authority. if admin ? next : exception
-        User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can manage users");
+            return "products";
+        }
+
+//        User user = new User(req.getParameter("login"), req.getParameter("password"),
+//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
         req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
@@ -122,52 +143,64 @@ public class UserController {
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public String blackList(HttpServletRequest req, HttpServletResponse resp) {
 
+        User user = null;
+
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        //TODO get user by id and user's authority. if admin ? next : exception
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can see the blacklist");
+            return "products";
+        }
 
-        User user = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+//        User user = new User(req.getParameter("login"), req.getParameter("password"),
+//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUnpaidUsers());
 
-        //return reference to the page "products"
         return "users";
     }
 
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
     public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws PermissionException {
 
+        User user = null;
+
         try {
-            getSecurityService().authenticate(request, response);
+            user = getSecurityService().authenticate(request, response);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        //TODO get user by id and user's authority. if admin ? next : exception
+        if (!user.getAdmin()) {
+            request.setAttribute("exception", "Only admin can add users to the blacklist");
+            return "products";
+        }
 
         int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
-
         User admin = new LoggedUserMock();
-
         getUserService().addUserToBlackList(admin, userId);
 
         return "redirect:/users";
-
     }
 
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
-        //TODO get user by id and user's authority. if admin ? next : exception
+
+        User user = null;
 
         try {
-            getSecurityService().authenticate(req, resp);
+            user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
+        }
+
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can manage users");
+            return "products";
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("users/remove/")[1]);
@@ -178,6 +211,21 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
+
+        User user = null;
+
+        try {
+            user = securityService.authorization(req, resp);
+        } catch (AuthorizationException e) {
+            req.setAttribute("authorizationException", "Please get authorized first");
+            return "authorization";
+        }
+
+        if (!user.getAdmin()) {
+            req.setAttribute("exception", "Only admin can see users data");
+            return "products";
+        }
+
         int userId = Integer.valueOf(req.getRequestURI().split("users/")[1]);
         req.setAttribute("user", this.userService.getById(userId));
 
@@ -212,13 +260,13 @@ public class UserController {
         try {
             userService.add(user);
         } catch (Exception e) {
-            req.setAttribute("exception", "LoginAlreadyUsed");
+            req.setAttribute("exception", "Login Already Used");
             return "authorization";
         }
         try {
             securityService.authorization(req, resp);
         } catch (AuthorizationException e) {
-            e.printStackTrace();
+            req.setAttribute("exception", "Authorization failed");
         }
         return "redirect:/products";
     }

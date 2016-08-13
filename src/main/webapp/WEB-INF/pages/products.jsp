@@ -50,12 +50,16 @@
     </style>
 </head>
 <body>
-<a href="../../users">Back to Users table</a>
 
 <br/>
 <br/>
 
 <h1>Products List</h1>
+
+<%--<table class="tg">--%>
+    <%--<th width="80">ERROR</th>--%>
+    <%--<td>${exception}</td>--%>
+<%--</table>--%>
 
 <c:if test="${!empty listProducts}">
     <table class="tg">
@@ -69,7 +73,8 @@
                 <th width="60">Delete</th>
             </c:if>
             <c:if test="${!empty user.login}">
-                <th width="120">Order Product</th>
+                <th width="120">Order product</th>
+                <%--<th width="60">Product status</th>--%>
             </c:if>
         </tr>
         <c:forEach items="${listProducts}" var="product">
@@ -86,6 +91,9 @@
                 </c:if>
                 <c:if test="${!empty user.login}">
                     <td><a href="<c:url value='/products/addtoorder/${product.id}'/>" onclick="">Add to Basket</a></td>
+                    <%--<c:if test="${!empty product.result}">--%>
+                    <%--<td>${product.result}</td>--%>
+                    <%--</c:if>--%>
                 </c:if>
             </tr>
         </c:forEach>
@@ -152,5 +160,10 @@
         </tr>
     </table>
 </form:form>
+
+<br><br><a href="../../orders">My orders</a>
+<%--<form action="/orders" method="get">--%>
+<%--<input type="submit" value="My orders">--%>
+<%--</form>--%>
 </body>
 </html>

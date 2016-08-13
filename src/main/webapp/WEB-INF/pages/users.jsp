@@ -63,12 +63,12 @@
             <th width="80">ID</th>
             <th width="120">Login</th>
             <th width="120">Password</th>
-            <th width="120">Admin</th>
-            <th width="120">Blocked</th>
+            <th width="60">Admin</th>
+            <th width="60">Blocked</th>
             <th width="60">Edit</th>
             <th width="60">Delete</th>
-            <th width="60">Add user to black list</th>
-            <th width="60">Form order</th>
+            <th width="180">Add user to black list</th>
+            <%--<th width="60">Form order</th>--%>
 
         </tr>
         <c:forEach items="${listUsers}" var="user">
@@ -87,7 +87,7 @@
                         <c:url value='/users/addtoblacklist/${user.id}'/>">Remove</c:if></a></td>
 
 
-                <td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>
+                <%--<td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>--%>
             </tr>
         </c:forEach>
     </table>
@@ -141,7 +141,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="password" required = "true" maxlength="16"/>
+                <form:input path="password" type="password" required = "true" maxlength="16"/>
             </td>
         </tr>
         <tr>
@@ -178,6 +178,8 @@
         </tr>
     </table>
 </form:form>
+
+<br><a href="<c:url value="/products"/>" target="_blank">Products list</a>
 
 </body>
 </html>
