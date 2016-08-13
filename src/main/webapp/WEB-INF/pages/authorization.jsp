@@ -75,13 +75,13 @@
         <c:set var="actionType" value="${signupAction}"/>
     </c:if>
 
-    <form:form action="${actionType}" commandName="user">
+    <form:form action="${actionType}" modelAttribute="user">
     <table>
         <h2>Please enter your login and password</h2>
         <tr>
             <td>
                 <form:label path="login">
-                    <spring:message text="Enter you login"/>
+                    <spring:message text="Enter your login"/>
                 </form:label>
             </td>
             <td>
@@ -95,7 +95,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="password" required = "true"/>
+                <form:input path="password"/>
             </td>
         </tr>
         <c:if test="<%=tf%>">

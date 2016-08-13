@@ -37,38 +37,65 @@ public class OrderController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String userOrder(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException, AuthorizationException {
+    public String userOrder(HttpServletRequest req, HttpServletResponse resp){
+
+        User user = null;
+        try {
+            user = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
         req.setAttribute("order", new Order());
         req.setAttribute("listOrders", this.orderService.listOrders());
-        //TODO DONE?? using HttpServletRequest take userId and return to Response methods: getOrderByUserId
-//        User user = getSecurityService().authenticate(req, resp);
-        User user = new LoggedUserMock();
+        //User user = getSecurityService().authenticate(req, resp);
         req.setAttribute("userOrder", user.getOrderList());
 
-
-        //return reference to the page "oreders"
         return "orders";
     }
 
     @RequestMapping(value = "confirm/{orderId}")
-    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, NoOrdersException, PermissionException, AuthorizationException {
-        //TODO DONE take id and read user if orderId->user ? next : exception
-//        int loggedUserId = userService.getUserIdFromRequest(request);
-        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        User user = getSecurityService().authenticate(request, response);
+    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws NoOrdersException{
 
-        getOrderService().confirmOrder(user, orderId);
+        User user = null;
+        try {
+            user = getSecurityService().authenticate(request, response);//TODO Check authorization if correct
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+
+        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+        //User user = getSecurityService().authenticate(request, response);
+
+        try {
+            getOrderService().confirmOrder(user, orderId);
+        } catch (PermissionException e) {
+            return "orders";
+            //TODO set attribute with permission exception text for user
+        }
         return "redirect:/orders";
     }
 
     @RequestMapping(value = "pay/{orderId}")
-    public String payOrder(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, NoOrdersException, PermissionException, AuthorizationException {
-        //TODO DONE take id and read user if orderId->user ? next : exception
-//        int loggedUserId = userService.getUserIdFromRequest(request);
-        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
-        User user = getSecurityService().authenticate(request, response);
+    public String payOrder(HttpServletRequest request, HttpServletResponse response) throws NoOrdersException {
 
-        getOrderService().confirmOrder(user, orderId);
+        User user = null;
+        try {
+            user = getSecurityService().authenticate(request, response);//TODO Check authorization if correct
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+
+        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+//        User user = getSecurityService().authenticate(request, response);
+
+        try {
+            getOrderService().payOrder(user, orderId);
+        } catch (PermissionException e) {
+            return "orders"; //TODO set attribute with permission exception text for user
+        }
         return "redirect:/orders";
     }
 }

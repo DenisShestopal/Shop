@@ -2,6 +2,7 @@ package net.shop.controller;
 
 import lombok.Getter;
 import net.shop.model.User;
+import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Base64;
 import java.util.HashSet;
 
 @Controller
@@ -31,15 +33,17 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @Autowired(required = true)
-//    @Qualifier(value = "securityService")
-//    public void setSecurityService(SecurityService securityService) {
-//        this.securityService = securityService;
-//    }
-
-
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        //TODO get user by id and user's authority. if admin ? next : exception
+
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
@@ -51,6 +55,15 @@ public class UserController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        //TODO get user by id and user's authority. if admin ? next : exception
+
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
@@ -61,6 +74,14 @@ public class UserController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+        //TODO get user by id and user's authority. if admin ? next : exception
+
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
@@ -72,12 +93,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        //TODO get user by id and user's authority. if admin ? next : exception
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
-        //String strUserId = req.getParameter("id");
         req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
 
@@ -89,6 +115,15 @@ public class UserController {
 
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public String blackList(HttpServletRequest req, HttpServletResponse resp) {
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        //TODO get user by id and user's authority. if admin ? next : exception
+
         User user = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
@@ -99,13 +134,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws AuthenticateException, PermissionException, AuthorizationException {
-//        int loggedUserId = userService.getUserIdFromRequest(request);
-//        User loggedUser = userService.getById(loggedUserId);
+    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws PermissionException {
+
+        try {
+            getSecurityService().authenticate(request, response);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        //TODO get user by id and user's authority. if admin ? next : exception
+
         int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
-//        String[] strUri = request.getRequestURI().split("userId=");
-//        int userId = Integer.valueOf(strUri[1]);
-        User admin = getSecurityService().authenticate(request, response);//TODO admin verification??
+
+        User admin = new LoggedUserMock();
 
         getUserService().addUserToBlackList(admin, userId);
 
@@ -116,6 +157,13 @@ public class UserController {
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
         //TODO get user by id and user's authority. if admin ? next : exception
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
         int userId = Integer.valueOf(req.getRequestURI().split("users/remove/")[1]);
         this.userService.remove(userId);
 
@@ -131,7 +179,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
-    public String authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+    public String authorization(HttpServletRequest req, HttpServletResponse resp) {
         String password = req.getParameter("password");
 
         try {
@@ -145,6 +193,49 @@ public class UserController {
 
     @RequestMapping(value = "/authorization", method = RequestMethod.GET)
     public String authorizationView(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+        return "authorization";
+    }
+
+    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    public String signIn(HttpServletRequest req, HttpServletResponse resp) {
+
+        String login = req.getParameter("login");
+
+        String password = Base64.getEncoder().encodeToString((login + ":" + req.getParameter("password")).getBytes());
+
+        for (User user : userService.listUsers()) {
+            if (user.getLogin().equals(login))
+                if (user.getPassword().equals(password)) //TODO is correct?
+                    return "redirect:/products";
+                else {
+                    return "authorization";
+                    //TODO add message to user that log/pass is incorrect
+                }
+        }
+        return "authorization";
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signUp(HttpServletRequest req, HttpServletResponse resp) {
+
+        String login = req.getParameter("login");
+        String password = Base64.getEncoder().encodeToString((login + ":" + req.getParameter("password")).getBytes());
+
+        for (User iterUser : userService.listUsers()) {
+            if (iterUser.getLogin().equals(login)) {
+                return "authorization";
+                //TODO add message to user that login already exists
+            } else {
+                User user = new User(req.getParameter("login"),
+                        Base64.getEncoder().encodeToString((login + ":" + req.getParameter("password")).getBytes()),
+                        false,
+                        false,
+                        new HashSet<>());
+                userService.add(user);
+
+                return "redirect:/products";
+            }
+        }
         return "authorization";
     }
 

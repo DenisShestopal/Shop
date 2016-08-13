@@ -84,9 +84,14 @@ public class ProductController {
         Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
         String strProductId = req.getParameter("id");
         //TODO get user by id and user's authority. if admin ? next : exception
-        //TODO DONE divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
 
-            this.productService.add(product);
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        this.productService.add(product);
 
         return "redirect:/products";
     }
@@ -97,7 +102,12 @@ public class ProductController {
         Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
         String strProductId = req.getParameter("id");
         //TODO get user by id and user's authority. if admin ? next : exception
-        //TODO DONE divide operations to 'add' + 'update'. Relocate update operation invocation to "/edit" controller.
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
 
         product.setId(Integer.valueOf(strProductId));
         this.productService.update(product);
@@ -108,6 +118,13 @@ public class ProductController {
     @RequestMapping(value= "edit/{id}", method = RequestMethod.GET)
     //TODO get user by id and user's authority. if admin ? next : exception
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
         int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
         req.setAttribute("product", this.productService.getById(productId));
         req.setAttribute("listProducts", this.productService.listProducts());
@@ -118,6 +135,13 @@ public class ProductController {
     @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
         //TODO get user by id and user's authority. if admin ? next : exception
+
+        try {
+            getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
         int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
         this.productService.remove(productId);
 
