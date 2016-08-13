@@ -74,6 +74,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         String token = UUID.randomUUID().toString();
         usersTokenMap.put(token, user.getId());
         Cookie cookie = new Cookie(TOKEN, token);
+        cookie.setPath("/");
         resp.addCookie(cookie);
         return user;
     }

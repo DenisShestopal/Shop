@@ -53,10 +53,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
-    public boolean addToOrder(int userId, int productId) {
-//        User user = userDao.getById(userId);// Dao null !
-        User user = new LoggedUserMock();
+    public boolean addToOrder(User user, int productId) {
+
+//        User user = new LoggedUserMock();
         Product product = productDao.getById(productId);
+        int userId = user.getId();
 
         List<Order> orderList = orderDao.getOrdersByUserId(userId);
 

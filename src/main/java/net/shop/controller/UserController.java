@@ -185,7 +185,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.GET)
-    public String authorizationView(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
+    public String authorizationView(HttpServletRequest req, HttpServletResponse resp) {
         return "authorization";
     }
 

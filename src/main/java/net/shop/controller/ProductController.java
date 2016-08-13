@@ -70,7 +70,7 @@ public class ProductController {
 
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
 
-        boolean result = getProductService().addToOrder(userId, productId);
+        boolean result = getProductService().addToOrder(user, productId);
 
         req.setAttribute("result", result);
 
