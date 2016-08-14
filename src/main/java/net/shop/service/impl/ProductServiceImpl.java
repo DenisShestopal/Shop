@@ -56,7 +56,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         Product product = productDao.getById(productId);
         int userId = user.getId();
 
-        Order order = orderDao.getOrderByUserId(userId);
+        Order order = orderDao.getUnorderedOrderByUserId(userId);
 
 //        Order order = null;
 //        for (Order iterOrder : order) {

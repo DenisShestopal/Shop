@@ -35,14 +35,14 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
         Session session = getSessionFactory().getCurrentSession();
         List<Order> orderList = session.createQuery("from Order").list();
 
-        for (Order order : orderList) {
-            logger.info("Orders list: " + order);
-        }
+//        for (Order order : orderList) {
+//            logger.info("Orders list: " + order);
+//        }
 
         return orderList;
     }
 
-    public Order getOrderByUserId(int userId){
+    public Order getUnorderedOrderByUserId(int userId){
         Session session = getSessionFactory().getCurrentSession();
 
         Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
@@ -57,5 +57,38 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
 
         return order;
     }
+
+    public Order getOrderedOrderByUserId(int userId){
+        Session session = getSessionFactory().getCurrentSession();
+
+        Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
+                .setParameter("userId", userId)
+                .setParameter("status", OrderStatus.ORDERED)
+                .uniqueResult();
+
+
+//        for (Order order : orderList) {
+//            logger.info("Orders list: " + order);
+//        }
+
+        return order;
+    }
+
+    public Order getPaidOrderByUserId(int userId){
+        Session session = getSessionFactory().getCurrentSession();
+
+        Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
+                .setParameter("userId", userId)
+                .setParameter("status", OrderStatus.PAID)
+                .uniqueResult();
+
+
+//        for (Order order : orderList) {
+//            logger.info("Orders list: " + order);
+//        }
+
+        return order;
+    }
+
 }
 

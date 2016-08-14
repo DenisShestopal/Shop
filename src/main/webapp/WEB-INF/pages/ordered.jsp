@@ -8,7 +8,7 @@
 
 
 <head>
-    <title>Orders Page</title>
+    <title>Confirmed orders page</title>
 
     <style type="text/css">
         .tg {
@@ -55,7 +55,7 @@
 <br/>
 <br/>
 
-<h1>Orders List</h1>
+<h1>Confirmed orders list</h1>
 
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public Long totalPrice = 0L;%>
@@ -65,9 +65,9 @@
     <br><th>${userOrder.status}</th></h3>
 
 
-    <br><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>
-    <a href="<c:url value='orders/pay/${userOrder.id}'/>">Pay</a>
-    <a href="<c:url value='orders/remove/${userOrder.id}'/>">Delete</a><br><br>
+    <%--<br><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>--%>
+    <a href="<c:url value='ordered/pay/${userOrder.id}'/>">Pay</a>
+    <a href="<c:url value='oredred/remove/${userOrder.id}'/>">Delete all products</a><br><br>
     <table class="tg">
         <tr>
             <th width="120">Product</th>
@@ -82,8 +82,8 @@
             <tr>
                 <td>${entry.key.name}</td>
                 <td>${entry.key.price/100}</td>
-                    <td><c:if test="${userOrder.status == 'UNORDERED'}">
-                        <form:form action="${'/orders/changeQuantity'}">
+                    <td><c:if test="${userOrder.status == 'ORDERED'}">
+                        <form:form action="${'/ordered/changeQuantity'}">
                             <input name="productId" type="hidden" value="${entry.key.id}">
                             <input name="quantity" type="number" value = "1" required min="0"
                                    max="1000"/> <%--onselect="&quantity${}"--%>
@@ -92,7 +92,7 @@
                         </form:form>
                     </c:if></td>
                 <td>
-                    <a href="<c:url value='orders/removeProduct/${entry.key.id}'/>">Delete</a></td>
+                    <a href="<c:url value='ordered/removeProduct/${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <tr>

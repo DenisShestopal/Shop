@@ -11,5 +11,11 @@ public interface OrderDao extends BaseDao<Order> {
 
     List<Order> listOrders();
 
-    Order getOrderByUserId(int userId);
+//    Order getOrderByUserId(int userId);
+
+    Order getUnorderedOrderByUserId(int userId);
+
+    Order getOrderedOrderByUserId(int userId);
+
+    Order getPaidOrderByUserId(int userId);
 }

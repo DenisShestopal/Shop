@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping(value = "orders")
+//@RequestMapping(value = "orders")
 @Getter
 public class OrderController {
 
@@ -46,8 +46,8 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String userOrder(HttpServletRequest req, HttpServletResponse resp){
+    @RequestMapping(value = "unordered", method = RequestMethod.GET)
+    public String unorderedOrders(HttpServletRequest req, HttpServletResponse resp){
 
         User loggedUser = null;
 
@@ -58,14 +58,46 @@ public class OrderController {
         }
 
         req.setAttribute("order", new Order());
-//        req.setAttribute("listProducts", orderService.getUnorderedOrderByUserId(loggedUser).getProductList());
         req.setAttribute("userOrder", orderService.getUnorderedOrderByUserId(loggedUser));
 
-
-        return "orders";
+        return "unordered";
     }
 
-    @RequestMapping(value = "confirm/{orderId}")
+    @RequestMapping(value = "ordered", method = RequestMethod.GET)
+    public String orderedOrders(HttpServletRequest req, HttpServletResponse resp){
+
+        User loggedUser = null;
+
+        try {
+            loggedUser = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        req.setAttribute("order", new Order());
+        req.setAttribute("userOrder", orderService.getOrderedOrderByUserId(loggedUser));
+
+        return "ordered";
+    }
+
+    @RequestMapping(value = "paid", method = RequestMethod.GET)
+    public String paidOrders(HttpServletRequest req, HttpServletResponse resp){
+
+        User loggedUser = null;
+
+        try {
+            loggedUser = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        req.setAttribute("order", new Order());
+        req.setAttribute("userOrder", orderService.getPaidOrderByUserId(loggedUser));
+
+        return "paid";
+    }
+
+    @RequestMapping(value = "unordered/confirm/{orderId}", method = RequestMethod.GET)
     public String confirmOrder(HttpServletRequest req, HttpServletResponse resp) throws NoOrdersException{
 
         User loggedUser = null;
@@ -76,38 +108,57 @@ public class OrderController {
             return "authorization";
         }
 
-        int orderId = Integer.valueOf(req.getRequestURI().split("orders/confirm/")[1]);
+        int orderId = Integer.valueOf(req.getRequestURI().split("unordered/confirm/")[1]);
 
         try {
             getOrderService().confirmOrder(loggedUser, orderId);
         } catch (PermissionException e) {
             req.setAttribute("exception", "You don't have access to this user's orders");
-            return "orders";
+            return "unordered";
 
         }
-        req.setAttribute("order", new Order());
-        req.setAttribute("userOrder", orderService.getUnorderedOrderByUserId(loggedUser));
-        return "redirect:/orders";
+//        req.setAttribute("order", new Order());
+//        req.setAttribute("userOrder", orderService.getOrderedOrderByUserId(loggedUser));
+        return "redirect:/ordered";
     }
 
-    @RequestMapping(value = "pay/{orderId}")
-    public String payOrder(HttpServletRequest request, HttpServletResponse response) throws NoOrdersException {
+    @RequestMapping(value = "ordered/pay/{orderId}", method = RequestMethod.GET)
+    public String payOrder(HttpServletRequest req, HttpServletResponse resp) throws NoOrdersException {
 
-        User user = null;
+        User loggedUser = null;
         try {
-            user = getSecurityService().authenticate(request, response);//TODO Check authorization if correct
+            loggedUser = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        int orderId = Integer.valueOf(request.getRequestURI().split("orders/pay/")[1]);
+        int orderId = Integer.valueOf(req.getRequestURI().split("ordered/pay/")[1]);
 
         try {
-            getOrderService().payOrder(user, orderId);
+            getOrderService().payOrder(loggedUser, orderId);
         } catch (PermissionException e) {
-            request.setAttribute("exception", "You don't have access to this user's orders");
-            return "orders";
+            req.setAttribute("exception", "You don't have access to this user's orders");
+            return "unordered";
         }
-        return "redirect:/orders";
+
+        return "redirect:/paid";
+    }
+
+    @RequestMapping(value = "/unordered/changeQuantity", method = RequestMethod.POST)
+    public String getQuantityFromUnordered(HttpServletRequest req, HttpServletResponse resp) {
+
+        User loggedUser = null;
+
+        try {
+            loggedUser = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+        Integer quantity = Integer.parseInt(req.getAttribute("quantity").toString());
+        Integer productId = Integer.parseInt(req.getAttribute("productId").toString());
+
+        orderService.changeQuantity(loggedUser, productId, quantity);
+
+        return "redirect:/unordered";
     }
 }

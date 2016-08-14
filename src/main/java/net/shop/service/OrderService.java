@@ -17,7 +17,13 @@ public interface OrderService extends BaseService<Order> {
 
     Order getUnorderedOrderByUserId(User user);
 
+    Order getOrderedOrderByUserId(User user);
+
+    Order getPaidOrderByUserId(User user);
+
     List<Product> getOrdersProductsList(int orderId);
+
+    boolean changeQuantity(User user, Integer productId, Integer quantity);
 
 
 }

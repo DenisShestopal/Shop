@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -50,10 +51,8 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
     @Override
     public boolean confirmOrder(User user, int orderId) throws PermissionException {
-        Order order = orderDao.getById(orderId);
-//        if (!(order.getOwner().getId() == user.getId()) || !user.getAdmin()) {
-//            throw new PermissionException("User is not appropriative");
-//        }
+        Order order = orderDao.getUnorderedOrderByUserId(user.getId());
+
         order.setStatus(OrderStatus.ORDERED);
         orderDao.update(order);
         return true;
@@ -61,23 +60,45 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
     @Override
     public boolean payOrder(User user, int orderId) throws PermissionException {
-        Order order = orderDao.getById(orderId);
-//        if (!(order.getOwner().getId() == user.getId()) || !user.getAdmin()) {
-//            throw new PermissionException("User is not appropriative");
-//        }
+        Order order = orderDao.getOrderedOrderByUserId(user.getId());
+
         order.setStatus(OrderStatus.PAID);
         orderDao.update(order);
         return true;
     }
 
+    @Override
+    public boolean changeQuantity(User user, Integer productId, Integer quantity) {
+        Order order = orderDao.getUnorderedOrderByUserId(user.getId());
+
+        Map<Product, Integer> products = order.getProductList();
+        for (Product product : products.keySet()) {
+            if(product.getId().equals(productId))
+                products.put(product, quantity);
+        }
+
+        orderDao.update(order);
+        return true;
+    }
+
     //TODO CONFIRMED? add a method returning a products list of this order
-    public List<Product> getOrdersProductsList(int orderId){
+    public List<Product> getOrdersProductsList(int orderId) {
         return getProductDao().listProducts();
     }
 
 
     @Override
     public Order getUnorderedOrderByUserId(User user) {
-        return orderDao.getOrderByUserId(user.getId());
+        return orderDao.getUnorderedOrderByUserId(user.getId());
+    }
+
+    @Override
+    public Order getOrderedOrderByUserId(User user) {
+        return orderDao.getOrderedOrderByUserId(user.getId());
+    }
+
+    @Override
+    public Order getPaidOrderByUserId(User user) {
+        return orderDao.getPaidOrderByUserId(user.getId());
     }
 }

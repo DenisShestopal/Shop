@@ -163,7 +163,7 @@
     </form:form>
 </c:if>
 
-<br><br><a href="../../orders">My orders</a>
+<br><br><a href="../../unordered">My orders</a>
 <c:if test="${user.admin==true}">
     <br><br><a href="../../users">Manage users</a>
 </c:if>
