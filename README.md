@@ -1,7 +1,7 @@
 # Task:
 <br>Система Интернет-магазин. 
 <br>+ 1. Администратор осуществляет ведение каталога Товаров.
-<br>- 2. Клиент делает и оплачивает Заказ на Товары.
+<br>+ 2. Клиент делает и оплачивает Заказ на Товары.
 <br>+ 3. Администратор может занести неплательщиков в “черный список”.
 
 #Done
@@ -11,15 +11,15 @@
 
 #Todo
 <br>+ Fix addToOrder (basket) aspect
-<br>Complete orders.jsp
+<br>+ Complete orders.jsp
 <br>+ Divide 'add' and 'update' functional in add method in Controllers
 <br>+ Authorization
+<br>Implement own TAG which will include regular expressions for entered data.
 <br>Add Logging
 <br>Add Tests
 <br>Write comments
 
 #Extra Todo
-<br>Implement own TAG which will include regular expressions for entered data.
 <br>+ Change id type from int to Integer in the Base Entity
 <br>Add exceptions
 <br>Blacklist create management .jsp
@@ -36,9 +36,9 @@
 <br>+ 6. Архитектура приложения должна соответствовать шаблону Model-View-Controller.
 <br>- 7. При реализации алгоритмов бизнес-логики использовать
 <br> шаблоны GoF: Factory Method, Command, Builder, Strategy, State, Observer etc.
-<br>+- 8. Используя сервлеты и JSP, реализовать функциональности, предложенные в постановке конкретной задачи.
+<br>+ 8. Используя сервлеты и JSP, реализовать функциональности, предложенные в постановке конкретной задачи.
 <br>+- 9. В страницах JSP применять библиотеку JSTL и разработать собственные теги.
-<br>+- 10. При разработке бизнес логики использовать сессии и фильтры.
+<br>+ 10. При разработке бизнес логики использовать сессии и фильтры.
 <br>- 11. Выполнить журналирование событий, то есть информацию о возникающих исключениях и событиях в системе обрабатывать с помощью Log4j.
 <br>- 12.	Код должен содержать комментарии.
 
