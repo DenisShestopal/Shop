@@ -61,47 +61,45 @@
     public Long totalPrice = 0L;%>
 
 <c:if test="${!empty userOrder}">
-    <br>Order status
-    <br>${userOrder.status}
-    <a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>
+    <h3>Order status:
+    <br><th>${userOrder.status}</th></h3>
+
+
+    <br><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>
     <a href="<c:url value='orders/pay/${userOrder.id}'/>">Pay</a>
-    <a href="<c:url value='orders/remove/${userOrder.id}'/>">Delete</a>
+    <a href="<c:url value='orders/remove/${userOrder.id}'/>">Delete</a><br><br>
     <table class="tg">
         <tr>
             <th width="120">Product</th>
             <th width="120">Price</th>
             <th width="60">Quantity</th>
-            <th width="60">Delete</th>
+            <th width="60">Action</th>
         </tr>
 
-        <c:forEach items="${userOrder.productList}" var="product">
-            <%--<% totalPrice += Long.valueOf("${product.price}"); %>--%>
+        <c:forEach items="${userOrder.productList}" var="entry">
+            <%--<% totalPrice += Long.parseLong("${entry.key.price}"); %>--%>
+            <%--<% totalPrice += 1; %>--%>
             <tr>
-                <td>${userOrder.productList.product.name}</td>
-                <td>${userOrder.productList.product.price/100}</td>
-                <td>${userOrder.productList.product.quantity}</td>
-                <c:if test="${userOrder.status == 'UNORDERED'}">
-                    <form:form action="${'/orders/changeQuantity'}" commandName="user">
-                        <input name="productId" type="hidden" value="${userOrder.productList.product.id}">
-                        <input name="quantity" type="number" required min="0"
-                               max="1000"/> <%--onselect="&quantity${}"--%>
-                        <input type="submit"
-                               value="<spring:message text="accept"/>"/>
-                    </form:form>
-                </c:if>
-
-
+                <td>${entry.key.name}</td>
+                <td>${entry.key.price/100}</td>
+                    <td><c:if test="${userOrder.status == 'UNORDERED'}">
+                        <form:form action="${'/orders/changeQuantity'}">
+                            <input name="productId" type="hidden" value="${entry.key.id}">
+                            <input name="quantity" type="number" value = "1" required min="0"
+                                   max="1000"/> <%--onselect="&quantity${}"--%>
+                            <input type="submit"
+                                   value="<spring:message text="accept"/>"/>
+                        </form:form>
+                    </c:if></td>
                 <td>
-                    <a href="<c:url value='orders/removeProduct/${userOrder.productList.product.id}'/>">Delete</a></td>
+                    <a href="<c:url value='orders/removeProduct/${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <tr>
             <td></td>
-            <td>Total price : <%=totalPrice%>
-            </td>
-            <td></td>
-            <td></td>
-            <td><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a></td>
+            <td>Total price : <%=totalPrice%></td>
+            <td>Total quantity : <%=totalPrice%></td>
+            <%--<td><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a></td>--%>
         </tr>
     </table>
 </c:if>

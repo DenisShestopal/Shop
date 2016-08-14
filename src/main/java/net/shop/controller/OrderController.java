@@ -3,12 +3,10 @@ package net.shop.controller;
 import lombok.Getter;
 import net.shop.model.Order;
 import net.shop.model.User;
-import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.OrderService;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
-import net.shop.util.AuthorizationException;
 import net.shop.util.NoOrdersException;
 import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,32 +58,35 @@ public class OrderController {
         }
 
         req.setAttribute("order", new Order());
-//        req.setAttribute("listOrders", this.orderService.listOrders());
+//        req.setAttribute("listProducts", orderService.getUnorderedOrderByUserId(loggedUser).getProductList());
         req.setAttribute("userOrder", orderService.getUnorderedOrderByUserId(loggedUser));
+
 
         return "orders";
     }
 
     @RequestMapping(value = "confirm/{orderId}")
-    public String confirmOrder(HttpServletRequest request, HttpServletResponse response) throws NoOrdersException{
+    public String confirmOrder(HttpServletRequest req, HttpServletResponse resp) throws NoOrdersException{
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(request, response);//TODO Check authorization if correct
+            loggedUser = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+        int orderId = Integer.valueOf(req.getRequestURI().split("orders/confirm/")[1]);
 
         try {
-            getOrderService().confirmOrder(user, orderId);
+            getOrderService().confirmOrder(loggedUser, orderId);
         } catch (PermissionException e) {
-            request.setAttribute("exception", "You don't have access to this user's orders");
+            req.setAttribute("exception", "You don't have access to this user's orders");
             return "orders";
 
         }
+        req.setAttribute("order", new Order());
+        req.setAttribute("userOrder", orderService.getUnorderedOrderByUserId(loggedUser));
         return "redirect:/orders";
     }
 
@@ -99,7 +100,7 @@ public class OrderController {
             return "authorization";
         }
 
-        int orderId = Integer.valueOf(request.getRequestURI().split("orderId=")[1]);
+        int orderId = Integer.valueOf(request.getRequestURI().split("orders/pay/")[1]);
 
         try {
             getOrderService().payOrder(user, orderId);

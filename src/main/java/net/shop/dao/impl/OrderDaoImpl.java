@@ -44,10 +44,12 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
 
     public Order getOrderByUserId(int userId){
         Session session = getSessionFactory().getCurrentSession();
+
         Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
                 .setParameter("userId", userId)
                 .setParameter("status", OrderStatus.UNORDERED)
                 .uniqueResult();
+
 
 //        for (Order order : orderList) {
 //            logger.info("Orders list: " + order);

@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.shop.dao.BaseDao;
 import net.shop.dao.OrderDao;
 
+import net.shop.dao.ProductDao;
 import net.shop.model.Order;
 import net.shop.model.OrderStatus;
 import net.shop.model.Product;
@@ -25,6 +26,11 @@ import java.util.List;
 public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderService {
 
     private OrderDao orderDao;
+    private ProductDao productDao;
+
+    public ProductDao getProductDao() {
+        return productDao;
+    }
 
     @Override
     public BaseDao<Order> getDao() {
@@ -45,9 +51,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     @Override
     public boolean confirmOrder(User user, int orderId) throws PermissionException {
         Order order = orderDao.getById(orderId);
-        if (!(order.getOwner().getId() == user.getId()) || !user.getAdmin()) {
-            throw new PermissionException("User is not appropriative");
-        }
+//        if (!(order.getOwner().getId() == user.getId()) || !user.getAdmin()) {
+//            throw new PermissionException("User is not appropriative");
+//        }
         order.setStatus(OrderStatus.ORDERED);
         orderDao.update(order);
         return true;
@@ -56,20 +62,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     @Override
     public boolean payOrder(User user, int orderId) throws PermissionException {
         Order order = orderDao.getById(orderId);
-        if (!(order.getOwner().getId() == user.getId()) || !user.getAdmin()) {
-            throw new PermissionException("User is not appropriative");
-        }
+//        if (!(order.getOwner().getId() == user.getId()) || !user.getAdmin()) {
+//            throw new PermissionException("User is not appropriative");
+//        }
         order.setStatus(OrderStatus.PAID);
         orderDao.update(order);
         return true;
     }
 
-
-
     //TODO CONFIRMED? add a method returning a products list of this order
-//    public List<Product> getOrdersProductsList(int orderId){
-//
-//    }
+    public List<Product> getOrdersProductsList(int orderId){
+        return getProductDao().listProducts();
+    }
 
 
     @Override
