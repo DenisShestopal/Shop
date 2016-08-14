@@ -50,12 +50,14 @@
     </style>
 </head>
 <body>
-<a href="../../index.jsp">Back to main menu</a>
-
-<br/>
-<br/>
 
 <h1>Users List</h1>
+
+<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+
+<c:if test="${!empty exception}">
+    <p style="color:red;">${exception}</p>
+</c:if>
 
 <c:if test="${!empty listUsers}">
     <table class="tg">
@@ -181,6 +183,8 @@
 
 <br><a href="<c:url value="/products"/>" target="_blank">Products list</a>
 <br><br><a href="../../users/authorization">Authorization page</a>
+<br><br><a href="../../index.jsp">Back to main menu</a>
+<br><br><a href="../../products.jsp">Products list</a>
 
 </body>
 </html>

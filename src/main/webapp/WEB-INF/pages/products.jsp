@@ -49,17 +49,27 @@
         }
     </style>
 </head>
-<body>
+<p>
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
 <h1>Products List</h1>
+
+<p align="center">
+<h3>Welcome, ${loggedUser}!</h3></p>
 
 <%--<table class="tg">--%>
 <%--<th width="80">ERROR</th>--%>
 <%--<td>${exception}</td>--%>
 <%--</table>--%>
+
+<c:if test="${!loggedUser == 'Unsigned User'}">
+<c:if test="${!empty exception}">
+    <p style="color:red;">${exception}</p>
+</c:if>
+</c:if>
+
 
 <c:if test="${!empty listProducts}">
     <table class="tg">
@@ -74,7 +84,9 @@
             </c:if>
             <c:if test="${!empty user.login}">
                 <th width="120">Order product</th>
-                <%--<th width="60">Product status</th>--%>
+                <c:if test="${!empty result}">
+                    <th width="60">Product status</th>
+                </c:if>
             </c:if>
         </tr>
         <c:forEach items="${listProducts}" var="product">
@@ -91,9 +103,9 @@
                 </c:if>
                 <c:if test="${!empty user.login}">
                     <td><a href="<c:url value='/products/addtoorder/${product.id}'/>" onclick="">Add to Basket</a></td>
-                    <%--<c:if test="${!empty product.result}">--%>
-                    <%--<td>${product.result}</td>--%>
-                    <%--</c:if>--%>
+                    <c:if test="${!empty result}">
+                        <td>${result}</td>
+                    </c:if>
                 </c:if>
             </tr>
         </c:forEach>
@@ -110,7 +122,7 @@
     <c:set var="actionType" value="${editAction}"/>
 </c:if>
 
-<c:if test="${user.admin==true}">
+<%--<c:if test="${user.admin==true}">--%>
     <form:form action="${actionType}" commandName="product">
         <table>
             <c:if test="${!empty product.name}">
@@ -161,7 +173,7 @@
             </tr>
         </table>
     </form:form>
-</c:if>
+<%--</c:if>--%>
 
 <br><br><a href="../../unordered">My orders</a>
 <c:if test="${user.admin==true}">

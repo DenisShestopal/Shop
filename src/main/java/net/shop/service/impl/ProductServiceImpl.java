@@ -10,11 +10,13 @@ import net.shop.model.OrderStatus;
 import net.shop.model.Product;
 import net.shop.model.User;
 import net.shop.service.ProductService;
+import net.shop.util.NoOrdersException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +29,11 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     private OrderDao orderDao;
 
     private UserDao userDao;
+
+    @Override
+    public Product add(Product entity) {
+        return super.add(entity);
+    }
 
     @Autowired
     @Qualifier(value = "productDao")
@@ -57,6 +64,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         int userId = user.getId();
 
         Order order = orderDao.getUnorderedOrderByUserId(userId);
+
+//        if (order == null ) {
+//            if (orderDao.getOrderedOrderByUserId(userId) == null)
+//            {
+//                throw new NoOrdersException();
+//            }
+////            order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());
+//        }
 
 //        Order order = null;
 //        for (Order iterOrder : order) {

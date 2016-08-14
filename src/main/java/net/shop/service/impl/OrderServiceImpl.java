@@ -68,12 +68,17 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     }
 
     @Override
-    public boolean changeQuantity(User user, Integer productId, Integer quantity) {
-        Order order = orderDao.getUnorderedOrderByUserId(user.getId());
+    public boolean changeQuantity(User user, Integer productId, Integer quantity, String status) {
+
+        Order order = null;
+        if (status.equals("UNORDERED"))
+            order = orderDao.getUnorderedOrderByUserId(user.getId());
+        else
+            order = orderDao.getOrderedOrderByUserId(user.getId());
 
         Map<Product, Integer> products = order.getProductList();
         for (Product product : products.keySet()) {
-            if(product.getId().equals(productId))
+            if (product.getId().equals(productId))
                 products.put(product, quantity);
         }
 
@@ -81,11 +86,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return true;
     }
 
-    //TODO CONFIRMED? add a method returning a products list of this order
     public List<Product> getOrdersProductsList(int orderId) {
         return getProductDao().listProducts();
     }
-
 
     @Override
     public Order getUnorderedOrderByUserId(User user) {
@@ -100,5 +103,53 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     @Override
     public Order getPaidOrderByUserId(User user) {
         return orderDao.getPaidOrderByUserId(user.getId());
+    }
+
+    @Override
+    public boolean removeProductFromUnorderedOrder(User user, Integer productId) {
+
+        Order order = getUnorderedOrderByUserId(user);
+        Map<Product, Integer> products = order.getProductList();
+        Product delProduct = null;
+        for (Product product : products.keySet()) {
+            if (product.getId().equals(productId))
+                delProduct = product;
+        }
+        if (delProduct != null)
+            products.remove(delProduct);
+
+        return true;
+    }
+
+    @Override
+    public boolean removeProductFromOrderedOrder(User user, Integer productId) {
+
+        Order order = getOrderedOrderByUserId(user);
+        Map<Product, Integer> products = order.getProductList();
+        Product delProduct = null;
+        for (Product product : products.keySet()) {
+            if (product.getId().equals(productId))
+                delProduct = product;
+        }
+        if (delProduct != null)
+            products.remove(delProduct);
+
+        return true;
+    }
+
+    @Override
+    public boolean removeAllProductsFromUnorderedOrder(User user, Integer orderId) {
+        Order order = getUnorderedOrderByUserId(user);
+        Map<Product, Integer> products = order.getProductList();
+        products.clear();
+        return true;
+    }
+
+    @Override
+    public boolean removeAllProductsFromOrderedOrder(User user, Integer orderId) {
+        Order order = getOrderedOrderByUserId(user);
+        Map<Product, Integer> products = order.getProductList();
+        products.clear();
+        return true;
     }
 }

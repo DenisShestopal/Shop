@@ -1,6 +1,5 @@
 package net.shop.controller;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import lombok.Getter;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Base64;
 import java.util.HashSet;
 
 @Controller
@@ -44,20 +42,21 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can get the list of users");
             return "redirect:/products";
         }
 
-        user = new User(req.getParameter("login"), req.getParameter("password"),
+        loggedUser = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUsers());
@@ -72,6 +71,7 @@ public class UserController {
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
             return "authorization";
         }
@@ -87,7 +87,7 @@ public class UserController {
 
         try {
             this.userService.add(creatingUser);
-        } catch (ConstraintViolationException e) { //TODO ConstraintViolationException while adding existing user (login = unique field)
+        } catch (ConstraintViolationException e) {
             req.setAttribute("exception", "User already exists");
             req.setAttribute("user", new User());
             req.setAttribute("listUsers", this.userService.listUsers());
@@ -104,6 +104,7 @@ public class UserController {
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
             return "authorization";
         }
@@ -129,7 +130,9 @@ public class UserController {
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "You need to get authorized first");
             return "authorization";
         }
 
@@ -153,20 +156,21 @@ public class UserController {
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public String blackList(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "You need to get authorized first");
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can see the blacklist");
             return "redirect:/products";
         }
 
-        user = new User(req.getParameter("login"), req.getParameter("password"),
+        loggedUser = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUnpaidUsers());
@@ -175,22 +179,22 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addUserToBlackList(HttpServletRequest request, HttpServletResponse response) throws PermissionException {
+    public String addUserToBlackList(HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(request, response);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
-            request.setAttribute("exception", "Only admin can add users to the blacklist");
+        if (!loggedUser.getAdmin()) {
+            req.setAttribute("exception", "Only admin can add users to the blacklist");
             return "redirect:/products";
         }
 
-        int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
+        int userId = Integer.valueOf(req.getRequestURI().split("addtoblacklist/")[1]);
         User admin = new LoggedUserMock();
         getUserService().addUserToBlackList(admin, userId);
 
@@ -200,15 +204,15 @@ public class UserController {
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage users");
             return "redirect:/products";
         }
@@ -222,16 +226,15 @@ public class UserController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = securityService.authorization(req, resp);
+            loggedUser = securityService.authorization(req, resp);
         } catch (AuthorizationException e) {
-            req.setAttribute("authorizationException", "Please get authorized first");
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can see users data");
             return "redirect:/products";
         }
@@ -247,13 +250,18 @@ public class UserController {
         return "authorization";
     }
 
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    public String registrationView(HttpServletRequest req, HttpServletResponse resp) {
+        return "registration";
+    }
+
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public String authorization(HttpServletRequest req, HttpServletResponse resp) {
 
         try {
             securityService.authorization(req, resp);
         } catch (AuthorizationException e) {
-            req.setAttribute("authorizationException", "Wrong login or password");
+            req.setAttribute("exception", "Wrong login or password");
             return "authorization";
         }
 
@@ -265,13 +273,20 @@ public class UserController {
 
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        String passwordCheck = req.getParameter("passwordCheck");
+
+        if (!password.equals(passwordCheck)) {
+            req.setAttribute("exception", "Passwords don't match");
+            return "registration";
+        }
+
         User user = new User(login, password, false, false, new HashSet<>());
 
         try {
             userService.add(user);
         } catch (Exception e) {
             req.setAttribute("exception", "Login Already Used");
-            return "authorization";
+            return "registration";
         }
         try {
             securityService.authorization(req, resp);
@@ -279,6 +294,24 @@ public class UserController {
             req.setAttribute("exception", "Authorization failed");
         }
         return "redirect:/products";
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest req, HttpServletResponse resp) {
+        User loggedUser = null;
+
+        try {
+            loggedUser = securityService.authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        try {
+            securityService.logout(req, resp, loggedUser);
+        } catch (AuthorizationException e) {
+            return "authorization";
+        }
+        return "authorization";
     }
 
 }

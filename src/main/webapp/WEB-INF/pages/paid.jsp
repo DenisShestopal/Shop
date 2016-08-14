@@ -50,15 +50,18 @@
     </style>
 </head>
 <body>
-<a href="../../products">Back to the Products table</a>
 
-<br/>
-<br/>
 
 <h1>Paid orders list</h1>
 
+<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public Long totalPrice = 0L;%>
+
+<c:if test="${!empty exception}">
+    <p style="color:red;">${exception}</p>
+</c:if>
 
 <c:if test="${!empty userOrder}">
     <h3>Order status:
@@ -78,21 +81,13 @@
         <c:forEach items="${userOrder.productList}" var="entry">
             <%--<% totalPrice += Long.parseLong("${entry.key.price}"); %>--%>
             <%--<% totalPrice += 1; %>--%>
+            <c:if test="${userOrder.status == 'PAID'}">
             <tr>
                 <td>${entry.key.name}</td>
                 <td>${entry.key.price/100}</td>
-                    <td><c:if test="${userOrder.status == 'PAID'}">
-                        <form:form action="${'/paid/changeQuantity'}">
-                            <input name="productId" type="hidden" value="${entry.key.id}">
-                            <input name="quantity" type="number" value = "1" required min="0"
-                                   max="1000"/> <%--onselect="&quantity${}"--%>
-                            <input type="submit"
-                                   value="<spring:message text="accept"/>"/>
-                        </form:form>
-                    </c:if></td>
-                <%--<td>--%>
-                    <%--<a href="<c:url value='ordered/removeProduct/${entry.key.id}'/>">Delete</a></td>--%>
+                <td>${entry.value}</td>
             </tr>
+            </c:if>
         </c:forEach>
         <tr>
             <td></td>
@@ -103,7 +98,9 @@
     </table>
 </c:if>
 
+<br><br><a href="../../unordered">Back to unconfirmed orders</a>
+<br><br><a href="../../ordered">Back to confirmed orders</a>
+<br><br><a href="../../products">Back to products list</a>
 <br><br><a href="../../users/authorization">Authorization page</a>
-<br><a href="../../products">Products page</a>
 </body>
 </html>

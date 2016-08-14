@@ -10,6 +10,7 @@ import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -49,13 +50,16 @@ public class ProductController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
-        User user = null;
+
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
-            req.setAttribute("user", user);
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("user", loggedUser);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
             req.setAttribute("user", new User());
+            req.setAttribute("loggedUser", "Unsigned user");
         }
 
         req.setAttribute("product", new Product());
@@ -66,18 +70,22 @@ public class ProductController {
 
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
     public String addToOrder(HttpServletRequest req, HttpServletResponse resp) {
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "You need to get authorized first");
             return "authorization";
         }
 
-        int userId = user.getId();
+        int userId = loggedUser.getId();
         int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
-        boolean result = getProductService().addToOrder(user, productId);
-        req.setAttribute("result", result);
+        boolean result = getProductService().addToOrder(loggedUser, productId);
+//        if (result)
+//            req.setAttribute("result", "product added");
+//        else
+//            req.setAttribute("result", "product was not added");
 
         return "redirect:/products";
     }
@@ -92,22 +100,34 @@ public class ProductController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
-        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
-        String strProductId = req.getParameter("id");
-        User user = null;
+        Product creatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "Please, get authorized first");
             return "authorization";
         }
 
-        if(!user.getAdmin()){
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage products list");
             return "redirect:/products";
         }
 
-        this.productService.add(product);
+//        this.productService.add(product);
+
+//        Product creatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
+
+        try {
+            this.productService.add(creatingProduct);
+        } catch (ConstraintViolationException e) {
+            req.setAttribute("exception", "Product already exists");
+            req.setAttribute("product", new Product());
+            req.setAttribute("listUsers", this.productService.listProducts());
+            return "products";
+        }
 
         return "redirect:/products";
     }
@@ -115,39 +135,46 @@ public class ProductController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
-        Product product = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")),"USD");
+        Product updatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
         String strProductId = req.getParameter("id");
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "You need to get authorized first ");
             return "authorization";
         }
 
-        if(!user.getAdmin()){
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage products list");
             return "redirect:/products";
         }
 
-        product.setId(Integer.valueOf(strProductId));
-        this.productService.update(product);
+//        Product updatingProduct = new Product(req.getParameter("name"),
+//                Long.parseLong(req.getParameter("price")), "USD");
+
+        updatingProduct.setId(Integer.valueOf(strProductId));
+        this.productService.update(updatingProduct);
 
         return "redirect:/products";
     }
 
-    @RequestMapping(value= "edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "Please, get authorized first ");
             return "authorization";
         }
 
-        if(!user.getAdmin()){
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage products list");
             return "redirect:/products";
         }
@@ -159,7 +186,7 @@ public class ProductController {
         return "products";
     }
 
-    @RequestMapping(value= "/remove/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
 
         User user = null;
@@ -167,15 +194,17 @@ public class ProductController {
         try {
             user = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
+            req.setAttribute("exception", "Please, get authorized first");
             return "authorization";
         }
 
-        if(!user.getAdmin()){
+        if (!user.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage products list");
             return "redirect:/products";
         }
 
-        int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;
+        int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);
+        ;
         this.productService.remove(productId);
 
         return "redirect:/products";

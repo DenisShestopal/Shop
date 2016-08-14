@@ -56,7 +56,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
                     user = userDao.getById(usersTokenMap.get(cookie.getValue()));
         }
         if (user == null){
-            req.setAttribute("exception", "Not authorized yet");
+            req.setAttribute("exception", "Please get authorized!");
             throw new AuthenticateException();
         }
 
@@ -85,5 +85,14 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         cookie.setPath("/");
         resp.addCookie(cookie);
         return user;
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user) throws AuthorizationException {
+        usersTokenMap.entrySet().remove(user.getId());
+        Cookie cookie = new Cookie(TOKEN , "deleted");
+        cookie.setPath("/");
+        resp.addCookie(cookie);
+        return true;
     }
 }

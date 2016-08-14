@@ -50,15 +50,17 @@
     </style>
 </head>
 <body>
-<a href="../../products">Back to the Products table</a>
-
-<br/>
-<br/>
 
 <h1>Confirmed orders list</h1>
 
+<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public Long totalPrice = 0L;%>
+
+<c:if test="${!empty exception}">
+    <p style="color:red;">${exception}</p>
+</c:if>
 
 <c:if test="${!empty userOrder}">
     <h3>Order status:
@@ -67,7 +69,7 @@
 
     <%--<br><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>--%>
     <a href="<c:url value='ordered/pay/${userOrder.id}'/>">Pay</a>
-    <a href="<c:url value='oredred/remove/${userOrder.id}'/>">Delete all products</a><br><br>
+    <a href="<c:url value='ordered/remove/${userOrder.id}'/>">Delete all products</a><br><br>
     <table class="tg">
         <tr>
             <th width="120">Product</th>
@@ -82,15 +84,17 @@
             <tr>
                 <td>${entry.key.name}</td>
                 <td>${entry.key.price/100}</td>
-                    <td><c:if test="${userOrder.status == 'ORDERED'}">
+                    <td>
+                        <c:if test="${userOrder.status == 'ORDERED'}">
                         <form:form action="${'/ordered/changeQuantity'}">
                             <input name="productId" type="hidden" value="${entry.key.id}">
-                            <input name="quantity" type="number" value = "1" required min="0"
+                            <input name="quantity" type="number" value = "${entry.value}" required min="0"
                                    max="1000"/> <%--onselect="&quantity${}"--%>
                             <input type="submit"
                                    value="<spring:message text="accept"/>"/>
                         </form:form>
-                    </c:if></td>
+                    </c:if>
+                    </td>
                 <td>
                     <a href="<c:url value='ordered/removeProduct/${entry.key.id}'/>">Delete</a></td>
             </tr>
@@ -104,6 +108,10 @@
     </table>
 </c:if>
 
+
+<br><br><a href="../../paid">My paid orders</a>
+<br><br><a href="../../unordered">Back to unconfirmed orders</a>
+<br><br><a href="../../products">Back to products list</a>
 <br><br><a href="../../users/authorization">Authorization page</a>
 </body>
 </html>

@@ -50,15 +50,17 @@
     </style>
 </head>
 <body>
-<a href="../../products">Back to the Products table</a>
-
-<br/>
-<br/>
 
 <h1>Unordered orders list</h1>
 
+<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public Long totalPrice = 0L;%>
+
+<c:if test="${!empty exception}">
+    <p style="color:red;">${exception}</p>
+</c:if>
 
 <c:if test="${!empty userOrder}">
     <h3>Order status:
@@ -67,7 +69,7 @@
 
     <br><a href="<c:url value='unordered/confirm/${userOrder.id}'/>">Confirm</a>
     <%--<a href="<c:url value='orders/pay/${userOrder.id}'/>">Pay</a>--%>
-    <a href="<c:url value='orders/remove/${userOrder.id}'/>">Delete all products</a><br><br>
+    <a href="<c:url value='unordered/remove/${userOrder.id}'/>">Delete all products</a><br><br>
     <table class="tg">
         <tr>
             <th width="120">Product</th>
@@ -82,17 +84,19 @@
             <tr>
                 <td>${entry.key.name}</td>
                 <td>${entry.key.price/100}</td>
-                    <td><c:if test="${userOrder.status == 'UNORDERED'}">
+                    <td>
+                        <c:if test="${userOrder.status == 'UNORDERED'}">
                         <form:form action="${'/unordered/changeQuantity'}">
                             <input name="productId" type="hidden" value="${entry.key.id}">
-                            <input name="quantity" type="number" value = "1" required min="0"
+                            <input name="quantity" type="number" value = "${entry.value}" required min="0"
                                    max="1000"/> <%--onselect="&quantity${}"--%>
                             <input type="submit"
                                    value="<spring:message text="accept"/>"/>
                         </form:form>
-                    </c:if></td>
+                    </c:if>
+                    </td>
                 <td>
-                    <a href="<c:url value='unordered/removeProduct/${entry.key.id}'/>">Delete</a></td>
+                    <a href="<c:url value='/unordered/removeProduct/${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <tr>
@@ -104,7 +108,9 @@
     </table>
 </c:if>
 
-
+<br><br><a href="../../ordered">My confirmed orders</a>
+<br><br><a href="../../products">Back to products list</a>
 <br><br><a href="../../users/authorization">Authorization page</a>
+
 </body>
 </html>

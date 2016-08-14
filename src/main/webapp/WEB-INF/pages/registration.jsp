@@ -8,7 +8,7 @@
 
 
 <head>
-    <title>Authorization page</title>
+    <title>Registration page</title>
 
     <style type="text/css">
         .tg {
@@ -52,44 +52,14 @@
 <body>
 
 
-<h1>Authorization</h1>
+<h1>Registration</h1>
 
 <h2>Please enter your login and password</h2>
 
 <%! public boolean tf = false;%>
 
-<c:if test="${!empty exception}">
-    <p style="color:red;">${exception}</p>
-</c:if>
 
-
-<form action="/users/signin" method="post">
-    <table>
-        <tr>
-            <td>Login:<br></td>
-            <td><input type="text" required="true" maxlength="16" name="login"></td>
-        </tr>
-        <tr>
-            <td>Password:<br></td>
-            <td><input type="password" required="true" maxlength="16" name="password"></td>
-        </tr>
-        <tr>
-            <td><br><input type="submit" value="Sign In"></td>
-        </tr>
-    </table>
-</form>
-
-<table class="tg">
-    <tr>
-        <br><a href="../users/registration">I have no account yet</a><br><br><br>
-    </tr>
-</table>
-
-<form action="/users/logout" method="get">
-    <input type="submit" value="Logout"></td>
-</form>
-
-<%--<form action="/users/signup" method="post">--%>
+<%--<form action="/users/signin" method="post">--%>
     <%--<table>--%>
         <%--<tr>--%>
             <%--<td>Login:<br></td>--%>
@@ -100,14 +70,39 @@
             <%--<td><input type="password" required="true" maxlength="16" name="password"></td>--%>
         <%--</tr>--%>
         <%--<tr>--%>
-            <%--<td>Password check:<br></td>--%>
-            <%--<td><input type="password" required="true" maxlength="16" name="passwordCheck"></td>--%>
-        <%--</tr>--%>
-        <%--<tr>--%>
-            <%--<td><br><input type="submit" value="Sign Up"></td>--%>
+            <%--<td><br><input type="submit" value="Sign In"></td>--%>
         <%--</tr>--%>
     <%--</table>--%>
 <%--</form>--%>
+
+<%--<table class="tg">--%>
+    <%--<tr>--%>
+        <%--<br><a href="<c:url value='/users/signup'/>" onclick="<%tf=true;%>">I have no account yet</a><br><br><br>--%>
+    <%--</tr>--%>
+<%--</table>--%>
+
+<form action="/users/signup" method="post">
+    <table>
+        <tr>
+            <td>Login:<br></td>
+            <td><input type="text" required="true" maxlength="16" name="login"></td>
+        </tr>
+        <tr>
+            <td>Password:<br></td>
+            <td><input type="password" required="true" maxlength="16" name="password"></td>
+        </tr>
+        <tr>
+            <td>Password check:<br></td>
+            <td><input type="password" required="true" maxlength="16" name="passwordCheck"></td>
+        </tr>
+        <tr>
+            <td><br><input type="submit" value="Sign Up"></td>
+        </tr>
+        <c:if test="${!empty exception}">
+            <p style="color:red;">${exception}</p>
+        </c:if>
+    </table>
+</form>
 
 <br><br><a href="../../">Back to Main</a>
 
