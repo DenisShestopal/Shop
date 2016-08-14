@@ -27,7 +27,7 @@ public class User extends BaseEntity {
     @Column(name = "BLOCKED")
     private Boolean blocked;
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner") //TODO add to OrderDao getOrdersByUserId
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner") //TODO add to OrderDao getOrderByUserId
 //    @JoinTable(name = "USER_ORDERS",
 //            joinColumns = @JoinColumn(name = "USER_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "ORDER_ID"))

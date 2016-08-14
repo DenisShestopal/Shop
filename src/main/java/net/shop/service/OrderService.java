@@ -14,5 +14,7 @@ public interface OrderService extends BaseService<Order> {
 
     boolean confirmOrder(User user, int orderId) throws PermissionException;
 
+    Order getUnorderedOrderByUserId(User user);
+
 
 }

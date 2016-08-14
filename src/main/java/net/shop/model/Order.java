@@ -2,6 +2,8 @@ package net.shop.model;
 
 
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Map;
@@ -27,6 +29,7 @@ public class Order extends BaseEntity {
     private User owner;
 
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     @MapKeyJoinColumn(name = "PRODUCT_ID")
     @CollectionTable(name = "ORDER_PRODUCTS",
             joinColumns = @JoinColumn(name = "ORDER_ID")

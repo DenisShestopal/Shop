@@ -50,7 +50,7 @@
     </style>
 </head>
 <body>
-<a href="../../products">Back to Products table</a>
+<a href="../../products">Back to the Products table</a>
 
 <br/>
 <br/>
@@ -75,14 +75,14 @@
         </tr>
 
         <c:forEach items="${userOrder.productList}" var="product">
-            <% totalPrice += Long.valueOf("${product.price}"); %>
+            <%--<% totalPrice += Long.valueOf("${product.price}"); %>--%>
             <tr>
-                <td>${product.name}</td>
-                <td>${product.price/100}${product.price%100}</td>
-                <td>${product.quantity}</td>
+                <td>${userOrder.productList.product.name}</td>
+                <td>${userOrder.productList.product.price/100}</td>
+                <td>${userOrder.productList.product.quantity}</td>
                 <c:if test="${userOrder.status == 'UNORDERED'}">
                     <form:form action="${'/orders/changeQuantity'}" commandName="user">
-                        <input name="productId" type="hidden" value="${product.id}">
+                        <input name="productId" type="hidden" value="${userOrder.productList.product.id}">
                         <input name="quantity" type="number" required min="0"
                                max="1000"/> <%--onselect="&quantity${}"--%>
                         <input type="submit"
@@ -92,7 +92,7 @@
 
 
                 <td>
-                    <a href="<c:url value='orders/removeProduct/${product.id}'/>">Delete</a></td>
+                    <a href="<c:url value='orders/removeProduct/${userOrder.productList.product.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <tr>
@@ -106,6 +106,6 @@
     </table>
 </c:if>
 
-
+<br><br><a href="../../users/authorization">Authorization page</a>
 </body>
 </html>

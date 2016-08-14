@@ -9,7 +9,6 @@ import net.shop.model.Order;
 import net.shop.model.OrderStatus;
 import net.shop.model.Product;
 import net.shop.model.User;
-import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -58,14 +56,14 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         Product product = productDao.getById(productId);
         int userId = user.getId();
 
-        List<Order> orderList = orderDao.getOrdersByUserId(userId);
+        Order order = orderDao.getOrderByUserId(userId);
 
-        Order order = null;
-        for (Order iterOrder : orderList) {
-            if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
-                order = iterOrder;
-            }
-        }
+//        Order order = null;
+//        for (Order iterOrder : order) {
+//            if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
+//                order = iterOrder;
+//            }
+//        }
 
         if (order == null) {
             order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());

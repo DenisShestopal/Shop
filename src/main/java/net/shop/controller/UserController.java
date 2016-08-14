@@ -1,5 +1,6 @@
 package net.shop.controller;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import lombok.Getter;
 import net.shop.model.User;
 import net.shop.model.mock.LoggedUserMock;
@@ -8,6 +9,7 @@ import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
 import net.shop.util.PermissionException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -52,11 +54,11 @@ public class UserController {
 
         if (!user.getAdmin()) {
             req.setAttribute("exception", "Only admin can get the list of users");
-            return "products";
+            return "redirect:/products";
         }
 
-//        User user = new User(req.getParameter("login"), req.getParameter("password"),
-//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUsers());
 
@@ -66,23 +68,31 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can add new user");
-            return "products";
+            return "redirect:/products";
         }
 
-//        User user = new User(req.getParameter("login"), req.getParameter("password"),
-//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
-//        String strUserId = req.getParameter("id");
-        this.userService.add(user);
+        User creatingUser = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")),
+                Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+
+        try {
+            this.userService.add(creatingUser);
+        } catch (ConstraintViolationException e) { //TODO ConstraintViolationException while adding existing user (login = unique field)
+            req.setAttribute("exception", "User already exists");
+            req.setAttribute("user", new User());
+            req.setAttribute("listUsers", this.userService.listUsers());
+            return "users";
+        }
 
         return "redirect:/users";
     }
@@ -90,52 +100,52 @@ public class UserController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage users");
-            return "products";
+            return "redirect:/products";
         }
 
-//        User user = new User(req.getParameter("login"), req.getParameter("password"),
-//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        User updatingUser = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         String strUserId = req.getParameter("id");
 
-        user.setId(Integer.valueOf(strUserId));
-        this.userService.update(user);
+        updatingUser.setId(Integer.valueOf(strUserId));
+        this.userService.update(updatingUser);
 
         return "redirect:/users";
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String edit(HttpServletRequest req, HttpServletResponse resp) {
-        User user = null;
+    public String getUserForEdit(HttpServletRequest req, HttpServletResponse resp) {
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage users");
-            return "products";
+            return "redirect:/products";
         }
 
-//        User user = new User(req.getParameter("login"), req.getParameter("password"),
-//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        User updatingUser = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
         req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
 
-        user.setId(Integer.valueOf(userId));
-        this.userService.update(user);
+//        updatingUser.setId(Integer.valueOf(userId));
+//        this.userService.update(user);
 
         return "users";
     }
@@ -153,11 +163,11 @@ public class UserController {
 
         if (!user.getAdmin()) {
             req.setAttribute("exception", "Only admin can see the blacklist");
-            return "products";
+            return "redirect:/products";
         }
 
-//        User user = new User(req.getParameter("login"), req.getParameter("password"),
-//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUnpaidUsers());
 
@@ -177,7 +187,7 @@ public class UserController {
 
         if (!user.getAdmin()) {
             request.setAttribute("exception", "Only admin can add users to the blacklist");
-            return "products";
+            return "redirect:/products";
         }
 
         int userId = Integer.valueOf(request.getRequestURI().split("addtoblacklist/")[1]);
@@ -200,7 +210,7 @@ public class UserController {
 
         if (!user.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage users");
-            return "products";
+            return "redirect:/products";
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("users/remove/")[1]);
@@ -223,7 +233,7 @@ public class UserController {
 
         if (!user.getAdmin()) {
             req.setAttribute("exception", "Only admin can see users data");
-            return "products";
+            return "redirect:/products";
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("users/")[1]);

@@ -51,17 +51,17 @@ public class OrderController {
     @RequestMapping(method = RequestMethod.GET)
     public String userOrder(HttpServletRequest req, HttpServletResponse resp){
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
+            loggedUser = getSecurityService().authenticate(req, resp);//TODO Check authorization if correct
         } catch (AuthenticateException e) {
             return "authorization";
         }
 
         req.setAttribute("order", new Order());
-        req.setAttribute("listOrders", this.orderService.listOrders());
-        req.setAttribute("userOrder", user.getOrderList());
+//        req.setAttribute("listOrders", this.orderService.listOrders());
+        req.setAttribute("userOrder", orderService.getUnorderedOrderByUserId(loggedUser));
 
         return "orders";
     }

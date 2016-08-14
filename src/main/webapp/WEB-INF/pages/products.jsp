@@ -57,8 +57,8 @@
 <h1>Products List</h1>
 
 <%--<table class="tg">--%>
-    <%--<th width="80">ERROR</th>--%>
-    <%--<td>${exception}</td>--%>
+<%--<th width="80">ERROR</th>--%>
+<%--<td>${exception}</td>--%>
 <%--</table>--%>
 
 <c:if test="${!empty listProducts}">
@@ -110,58 +110,64 @@
     <c:set var="actionType" value="${editAction}"/>
 </c:if>
 
-<form:form action="${actionType}" commandName="product">
-    <table>
-        <c:if test="${!empty product.name}">
+<c:if test="${user.admin==true}">
+    <form:form action="${actionType}" commandName="product">
+        <table>
+            <c:if test="${!empty product.name}">
+                <tr>
+                    <td>
+                        <form:label path="id">
+                            <spring:message text="Product ID"/>
+                        </form:label>
+                    </td>
+                    <td>
+                        <form:input path="id" readonly="true" size="8" disabled="true"/>
+                        <form:hidden path="id"/>
+                    </td>
+                </tr>
+            </c:if>
+            <h2>Product data</h2>
             <tr>
                 <td>
-                    <form:label path="id">
-                        <spring:message text="Product ID"/>
+                    <form:label path="name">
+                        <spring:message text="Name"/>
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="id" readonly="true" size="8" disabled="true"/>
-                    <form:hidden path="id"/>
+                    <form:input path="name" maxlength="16" required="true"/>
                 </td>
             </tr>
-        </c:if>
-        <h2>Product data</h2>
-        <tr>
-            <td>
-                <form:label path="name">
-                    <spring:message text="Name"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input path="name" maxlength="16" required="true"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form:label path="price">
-                    <spring:message text="Price"/>
-                </form:label>
-            </td>
-            <td>
-                <form:input type="number" min="0" max="10000" step="1" path="price" required="true"/>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <c:if test="${!empty product.name}">
-                    <input type="submit"
-                           value="<spring:message text="Edit Product"/>"/>
-                </c:if>
-                <c:if test="${empty product.name}">
-                    <input type="submit"
-                           value="<spring:message text="Add Product"/>"/>
-                </c:if>
-            </td>
-        </tr>
-    </table>
-</form:form>
+            <tr>
+                <td>
+                    <form:label path="price">
+                        <spring:message text="Price"/>
+                    </form:label>
+                </td>
+                <td>
+                    <form:input type="number" min="0" max="10000" step="1" path="price" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <c:if test="${!empty product.name}">
+                        <input type="submit"
+                               value="<spring:message text="Edit Product"/>"/>
+                    </c:if>
+                    <c:if test="${empty product.name}">
+                        <input type="submit"
+                               value="<spring:message text="Add Product"/>"/>
+                    </c:if>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+</c:if>
 
 <br><br><a href="../../orders">My orders</a>
+<c:if test="${user.admin==true}">
+    <br><br><a href="../../users">Manage users</a>
+</c:if>
+<br><br><a href="../../users/authorization">Authorization page</a>
 <%--<form action="/orders" method="get">--%>
 <%--<input type="submit" value="My orders">--%>
 <%--</form>--%>

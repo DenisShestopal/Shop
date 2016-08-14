@@ -180,6 +180,7 @@
 </form:form>
 
 <br><a href="<c:url value="/products"/>" target="_blank">Products list</a>
+<br><br><a href="../../users/authorization">Authorization page</a>
 
 </body>
 </html>

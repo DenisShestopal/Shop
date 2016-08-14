@@ -2,6 +2,7 @@ package net.shop.dao.impl;
 
 import net.shop.dao.OrderDao;
 import net.shop.model.Order;
+import net.shop.model.OrderStatus;
 import net.shop.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -41,16 +42,18 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
         return orderList;
     }
 
-    public List<Order> getOrdersByUserId(int userId){
+    public Order getOrderByUserId(int userId){
         Session session = getSessionFactory().getCurrentSession();
-        List<Order> orderList = session.createQuery("from net.shop.model.Order o where o.owner.id = :userId")
-                .setParameter("userId", userId).list();
+        Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
+                .setParameter("userId", userId)
+                .setParameter("status", OrderStatus.UNORDERED)
+                .uniqueResult();
 
 //        for (Order order : orderList) {
 //            logger.info("Orders list: " + order);
 //        }
 
-        return orderList;
+        return order;
     }
 }
 

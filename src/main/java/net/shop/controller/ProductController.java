@@ -104,7 +104,7 @@ public class ProductController {
 
         if(!user.getAdmin()){
             req.setAttribute("exception", "Only admin can manage products list");
-            return "products";
+            return "redirect:/products";
         }
 
         this.productService.add(product);
@@ -127,7 +127,7 @@ public class ProductController {
 
         if(!user.getAdmin()){
             req.setAttribute("exception", "Only admin can manage products list");
-            return "products";
+            return "redirect:/products";
         }
 
         product.setId(Integer.valueOf(strProductId));
@@ -149,7 +149,7 @@ public class ProductController {
 
         if(!user.getAdmin()){
             req.setAttribute("exception", "Only admin can manage products list");
-            return "products";
+            return "redirect:/products";
         }
 
         int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
@@ -172,7 +172,7 @@ public class ProductController {
 
         if(!user.getAdmin()){
             req.setAttribute("exception", "Only admin can manage products list");
-            return "products";
+            return "redirect:/products";
         }
 
         int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);;

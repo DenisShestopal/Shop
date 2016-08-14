@@ -64,9 +64,16 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return true;
     }
 
+
+
     //TODO CONFIRMED? add a method returning a products list of this order
 //    public List<Product> getOrdersProductsList(int orderId){
 //
 //    }
 
+
+    @Override
+    public Order getUnorderedOrderByUserId(User user) {
+        return orderDao.getOrderByUserId(user.getId());
+    }
 }
