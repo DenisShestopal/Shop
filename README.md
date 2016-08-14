@@ -13,7 +13,7 @@
 <br>+ Fix addToOrder (basket) aspect
 <br>Complete orders.jsp
 <br>+ Divide 'add' and 'update' functional in add method in Controllers
-<br>Authorization
+<br>+ Authorization
 <br>Add Logging
 <br>Add Tests
 <br>Write comments
@@ -22,7 +22,8 @@
 <br>Implement own TAG which will include regular expressions for entered data.
 <br>+ Change id type from int to Integer in the Base Entity
 <br>Add exceptions
-<br>Blacklist create management .jsp 
+<br>Blacklist create management .jsp
+
 
 #Requirements
 <br>+ 1. На основе сущностей предметной области создать классы их описывающие.
