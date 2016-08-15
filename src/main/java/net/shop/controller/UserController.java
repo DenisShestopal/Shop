@@ -40,6 +40,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users page with users list
+     */
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -65,6 +71,12 @@ public class UserController {
         return "users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users page with added user
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -98,6 +110,12 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users page with edited user
+     */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -125,6 +143,12 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users page with user edit form
+     */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String getUserForEdit(HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
@@ -154,6 +178,12 @@ public class UserController {
         return "users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return blacklist page
+     */
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public String blackList(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -179,6 +209,12 @@ public class UserController {
         return "users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users page with added to blacklist or removed from blacklist user
+     */
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
     public String addUserToBlackList(HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
@@ -196,12 +232,18 @@ public class UserController {
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("addtoblacklist/")[1]);
-        User admin = new LoggedUserMock();
-        getUserService().addUserToBlackList(admin, userId);
+        User editedUser = userService.getById(userId);
+        getUserService().addUserToBlackList(editedUser, userId);
 
         return "redirect:/users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users page without deleted user
+     */
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -224,6 +266,12 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return users details page
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -231,6 +279,8 @@ public class UserController {
 
         try {
             loggedUser = securityService.authorization(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
+            Hello.userLogin = loggedUser.getLogin();
         } catch (AuthorizationException e) {
             return "authorization";
         }
@@ -246,16 +296,34 @@ public class UserController {
         return "userdata";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return authorization page
+     */
     @RequestMapping(value = "/authorization", method = RequestMethod.GET)
     public String authorizationView(HttpServletRequest req, HttpServletResponse resp) {
         return "authorization";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return registration page
+     */
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registrationView(HttpServletRequest req, HttpServletResponse resp) {
         return "registration";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page after successful authorization or authorization page if failed
+     */
     @RequestMapping(value = "/signin", method = RequestMethod.POST)
     public String authorization(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -269,6 +337,12 @@ public class UserController {
         return "redirect:/products";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page after successful registration or registration page if failed
+     */
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String registration(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -297,6 +371,12 @@ public class UserController {
         return "redirect:/products";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return authorization page
+     */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;

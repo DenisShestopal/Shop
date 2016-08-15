@@ -46,6 +46,12 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with unconfirmed user's orders
+     */
     @RequestMapping(value = "unordered", method = RequestMethod.GET)
     public String unorderedOrders(HttpServletRequest req, HttpServletResponse resp){
 
@@ -64,6 +70,12 @@ public class OrderController {
         return "unordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with confirmed user's orders
+     */
     @RequestMapping(value = "ordered", method = RequestMethod.GET)
     public String orderedOrders(HttpServletRequest req, HttpServletResponse resp){
 
@@ -82,6 +94,12 @@ public class OrderController {
         return "ordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with paid user's orders
+     */
     @RequestMapping(value = "paid", method = RequestMethod.GET)
     public String paidOrders(HttpServletRequest req, HttpServletResponse resp){
 
@@ -100,8 +118,14 @@ public class OrderController {
         return "paid";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with confirmed user's orders
+     */
     @RequestMapping(value = "unordered/confirm/{orderId}", method = RequestMethod.GET)
-    public String confirmOrder(HttpServletRequest req, HttpServletResponse resp) throws NoOrdersException{
+    public String confirmOrder(HttpServletRequest req, HttpServletResponse resp){
 
         User loggedUser = null;
 
@@ -120,13 +144,17 @@ public class OrderController {
             return "unordered";
 
         }
-//        req.setAttribute("order", new Order());
-//        req.setAttribute("userOrder", orderService.getOrderedOrderByUserId(loggedUser));
         return "redirect:/ordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with paid user's orders
+     */
     @RequestMapping(value = "ordered/pay/{orderId}", method = RequestMethod.GET)
-    public String payOrder(HttpServletRequest req, HttpServletResponse resp) throws NoOrdersException {
+    public String payOrder(HttpServletRequest req, HttpServletResponse resp){
 
         User loggedUser = null;
         try {
@@ -147,6 +175,12 @@ public class OrderController {
         return "redirect:/paid";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with unconfirmed user's orders and changed quantity
+     */
     @RequestMapping(value = "/unordered/changeQuantity", method = RequestMethod.POST)
     public String changeQuantityInUnordered(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -166,6 +200,12 @@ public class OrderController {
         return "redirect:/unordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with confirmed user's orders and changed quantity
+     */
     @RequestMapping(value = "/ordered/changeQuantity", method = RequestMethod.POST)
     public String changeQuantityInOrdered(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -184,6 +224,12 @@ public class OrderController {
         return "redirect:/ordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with unconfirmed user's orders and removed product by product Id
+     */
     @RequestMapping(value = "unordered/removeProduct/{id}", method = RequestMethod.GET)
     public String removeProductFromUnorderedOrder(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -199,6 +245,12 @@ public class OrderController {
         return "redirect:/unordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with confirmed user's orders and removed product by product Id
+     */
     @RequestMapping(value = "ordered/removeProduct/{id}", method = RequestMethod.GET)
     public String removeProductFromOrderedOrder(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -215,6 +267,12 @@ public class OrderController {
         return "redirect:/ordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with unconfirmed user's orders and removed all products
+     */
     @RequestMapping(value = "unordered/remove/{id}", method = RequestMethod.GET)
     public String removeAllProductsFromUnorderedOrder(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -230,6 +288,12 @@ public class OrderController {
         return "redirect:/unordered";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return Page with confirmed user's orders and removed all products
+     */
     @RequestMapping(value = "ordered/remove/{id}", method = RequestMethod.GET)
     public String removeAllProductsFromOrderedOrder(HttpServletRequest req, HttpServletResponse resp) {
 

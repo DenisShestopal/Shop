@@ -80,10 +80,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     @Override
-    public boolean addUserToBlackList(User loggedUser, int userId) throws PermissionException {
+    public boolean addUserToBlackList(User loggedUser, int userId){
         if (loggedUser.getAdmin()) {
-            //TODO validate if user has permission if loggedUser ? next : exception
-            //TODO change method -> change status
             User user = userDao.getById(userId);
             if (user.getBlocked()) {
                 user.setBlocked(false);
@@ -91,11 +89,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
                 user.setBlocked(true);
             }
             userDao.update(user);
-            return true;
-        } else {
-            throw new PermissionException();
-        }
-    }
 
+        }
+        return true;
+    }
 
 }

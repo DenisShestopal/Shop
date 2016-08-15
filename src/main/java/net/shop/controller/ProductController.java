@@ -50,6 +50,12 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page
+     */
     @RequestMapping(method = RequestMethod.GET)
     public String listProducts(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -71,6 +77,12 @@ public class ProductController {
         return "products";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page with added to order product
+     */
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
     public String addToOrder(HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
@@ -93,14 +105,36 @@ public class ProductController {
         return "redirect:/products";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return product details page
+     */
     @RequestMapping("/{id}")
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
         int productId = Integer.valueOf(req.getRequestURI().split("products/")[1]);
         req.setAttribute("product", this.productService.getById(productId));
 
+        User loggedUser = null;
+
+        try {
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
+            Hello.userLogin = loggedUser.getLogin();
+        } catch (AuthenticateException e) {
+            req.setAttribute("user", new User());
+        }
+
         return "productdata";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page with added product
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(HttpServletRequest req, HttpServletResponse resp) {
         Product creatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
@@ -135,7 +169,12 @@ public class ProductController {
         return "redirect:/products";
     }
 
-
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page with edited product
+     */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
         Product updatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
@@ -164,6 +203,12 @@ public class ProductController {
         return "redirect:/products";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page with product edit form
+     */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String edit(HttpServletRequest req, HttpServletResponse resp) {
 
@@ -189,6 +234,12 @@ public class ProductController {
         return "products";
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return products page without deleted product
+     */
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
 

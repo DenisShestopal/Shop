@@ -15,7 +15,6 @@ public interface UserService extends BaseService<User> {
 
     int getUserIdFromRequest(HttpServletRequest request) throws AuthenticateException;
 
-    boolean addUserToBlackList (User loggedUser, int userId) throws PermissionException;
+    boolean addUserToBlackList (User loggedUser, int userId);
 
-//    boolean removeUserToBlackList(User loggedUser, int userId)  throws PermissionException ;
 }

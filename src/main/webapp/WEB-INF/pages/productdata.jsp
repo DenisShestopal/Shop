@@ -4,6 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page session="false" %>
+<%@ taglib uri="/WEB-INF/helloTag.tld" prefix="tag"%>
 
 
 <html>
@@ -52,6 +53,8 @@
 </head>
 <body>
 <h1>Product Details</h1>
+
+<p><h3><tag:hello /></h3></p>
 
 <table class="tg">
     <tr>
