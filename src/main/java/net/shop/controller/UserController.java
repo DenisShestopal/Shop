@@ -278,10 +278,10 @@ public class UserController {
         User loggedUser = null;
 
         try {
-            loggedUser = securityService.authorization(req, resp);
+            loggedUser = securityService.authenticate(req, resp);
             req.setAttribute("loggedUser", loggedUser.getLogin());
             Hello.userLogin = loggedUser.getLogin();
-        } catch (AuthorizationException e) {
+        } catch (AuthenticateException e) {
             return "authorization";
         }
 
