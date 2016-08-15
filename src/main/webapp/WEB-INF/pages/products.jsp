@@ -73,6 +73,7 @@
         <tr>
             <th width="80">ID</th>
             <th width="120">Name</th>
+            <th width="60">Code</th>
             <th width="120">Price</th>
             <th width="120">Currency</th>
             <c:if test="${user.admin==true}">
@@ -90,6 +91,7 @@
             <tr>
                 <td>${product.id}</td>
                 <td><a href="products/${product.id}">${product.name}</a></td>
+                <td>${product.code}</td>
                 <td>${product.price/100}</td>
                 <td>${product.currency}</td>
                 <c:if test="${user.admin==true}">

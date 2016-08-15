@@ -32,6 +32,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
 
     @Override
     public Product add(Product entity) {
+        if(productDao.getProductByCode(entity.getCode()) != null) return null;
         return super.add(entity);
     }
 
@@ -64,21 +65,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         int userId = user.getId();
 
         Order order = orderDao.getUnorderedOrderByUserId(userId);
-
-//        if (order == null ) {
-//            if (orderDao.getOrderedOrderByUserId(userId) == null)
-//            {
-//                throw new NoOrdersException();
-//            }
-////            order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());
-//        }
-
-//        Order order = null;
-//        for (Order iterOrder : order) {
-//            if (iterOrder.getStatus().equals(OrderStatus.UNORDERED)) {
-//                order = iterOrder;
-//            }
-//        }
 
         if (order == null) {
             order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());

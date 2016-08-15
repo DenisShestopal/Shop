@@ -12,6 +12,7 @@ import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -138,7 +139,9 @@ public class OrderController {
         Integer orderId = Integer.valueOf(req.getRequestURI().split("unordered/confirm/")[1]);
 
         try {
-            getOrderService().confirmOrder(loggedUser, orderId);
+            if(!(getOrderService().confirmOrder(loggedUser, orderId))){
+                req.setAttribute("exception", "You can not confirm confirmed or paid order");
+                return "unordered";}
         } catch (PermissionException e) {
             req.setAttribute("exception", "You don't have access to this user's orders");
             return "unordered";
@@ -166,7 +169,11 @@ public class OrderController {
         Integer orderId = Integer.valueOf(req.getRequestURI().split("ordered/pay/")[1]);
 
         try {
-            getOrderService().payOrder(loggedUser, orderId);
+            if(!(getOrderService().payOrder(loggedUser, orderId))){
+                req.setAttribute("exception", "You can not confirm unconfirmed or paid order");
+                return "ordered";
+            }
+
         } catch (PermissionException e) {
             req.setAttribute("exception", "You don't have access to this user's orders");
             return "unordered";
@@ -274,7 +281,8 @@ public class OrderController {
      * @return Page with unconfirmed user's orders and removed all products
      */
     @RequestMapping(value = "unordered/remove/{id}", method = RequestMethod.GET)
-    public String removeAllProductsFromUnorderedOrder(HttpServletRequest req, HttpServletResponse resp) {
+    public String removeAllProductsFromUnorderedOrder(@PathVariable("id") Integer orderId,
+                                                      HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
         try {
@@ -283,7 +291,7 @@ public class OrderController {
             return "authorization";
         }
 
-        Integer orderId = Integer.valueOf(req.getRequestURI().split("unordered/remove/")[1]);
+//        Integer orderId = Integer.valueOf(req.getRequestURI().split("unordered/remove/")[1]);
         orderService.removeAllProductsFromUnorderedOrder(loggedUser, orderId);
         return "redirect:/unordered";
     }

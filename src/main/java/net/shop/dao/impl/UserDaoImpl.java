@@ -44,16 +44,12 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) throws AuthorizationException {
+    public User getUserByLogin(String login) {
         Session session = getSessionFactory().getCurrentSession();
 
-        User user = (User) session.createQuery("from net.shop.model.User u where u.login = :login")
+        return (User) session.createQuery("from net.shop.model.User u where u.login = :login")
                 .setParameter("login", login)
                 .uniqueResult();
-        if (user != null)
-            return user;
-        else
-            throw new AuthorizationException("Login or/and password are incorrect");
 
     }
 }

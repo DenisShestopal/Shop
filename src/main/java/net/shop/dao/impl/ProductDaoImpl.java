@@ -41,4 +41,14 @@ public class ProductDaoImpl extends BaseDaoImpl<Product> implements ProductDao {
 
         return productList;
     }
+
+    @Override
+    public Product getProductByCode(String code) {
+        Session session = getSessionFactory().getCurrentSession();
+
+        return (Product) session.createQuery("from net.shop.model.Product u where u.code = :code")
+                .setParameter("code", code)
+                .uniqueResult();
+
+    }
 }

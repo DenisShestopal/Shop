@@ -53,6 +53,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     public boolean confirmOrder(User user, int orderId) throws PermissionException {
         Order order = orderDao.getUnorderedOrderByUserId(user.getId());
 
+        if(!order.getStatus().equals(OrderStatus.UNORDERED)) return false;
         order.setStatus(OrderStatus.ORDERED);
         orderDao.update(order);
         return true;
@@ -62,6 +63,7 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     public boolean payOrder(User user, int orderId) throws PermissionException {
         Order order = orderDao.getOrderedOrderByUserId(user.getId());
 
+        if(!order.getStatus().equals(OrderStatus.ORDERED)) return false;
         order.setStatus(OrderStatus.PAID);
         orderDao.update(order);
         return true;

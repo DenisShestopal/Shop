@@ -28,10 +28,18 @@ public class User extends BaseEntity {
     private Boolean blocked;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner") //TODO add to OrderDao getOrderByUserId
-//    @JoinTable(name = "USER_ORDERS",
-//            joinColumns = @JoinColumn(name = "USER_ID"),
-//            inverseJoinColumns = @JoinColumn(name = "ORDER_ID"))
     private Set<Order> orderList;//TODO see composition
+
+    /**
+     * Some secure cloning of user, giving a "shallow clone" of user without secure data.
+     *
+     */
+    public User(User user) {
+        setId(user.getId());
+        login = user.login;
+        admin = user.admin;
+        blocked = user.blocked;
+    }
 
     public void setBlocked(Boolean isBlocked) {
         this.blocked = isBlocked;

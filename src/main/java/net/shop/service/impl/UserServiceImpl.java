@@ -6,16 +6,11 @@ import net.shop.model.Order;
 import net.shop.model.OrderStatus;
 import net.shop.model.User;
 import net.shop.service.UserService;
-import net.shop.util.AuthenticateException;
-import net.shop.util.LoggedUserUtil;
-import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -28,6 +23,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     @Override
     public User add(User entity) {
+        if(userDao.getUserByLogin(entity.getLogin()) != null) return null;
         entity.setPassword(Base64.getEncoder()
                 .encodeToString((entity.getLogin() + ":" + entity.getPassword()).getBytes()));
         return super.add(entity);
@@ -57,22 +53,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
             }
         }
         return resultList;
-    }
-
-    @Override
-    public int getUserIdFromRequest(HttpServletRequest request) throws AuthenticateException {
-        Cookie[] cookies = request.getCookies();
-        String sId = "J_SESSION_ID";
-        String userSessionId = "";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(sId)) {
-                userSessionId = cookie.getValue();
-            }
-        }
-        if (LoggedUserUtil.getSessionUserIdMap().containsKey(userSessionId)) {
-            return LoggedUserUtil.getSessionUserIdMap().get(userSessionId);
-        }
-        throw new AuthenticateException();
     }
 
     public List<User> listUsers() {

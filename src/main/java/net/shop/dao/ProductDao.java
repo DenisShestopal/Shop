@@ -9,4 +9,6 @@ public interface ProductDao extends BaseDao<Product> {
 
     List<Product> listProducts();
 
+    Product getProductByCode(String code);
+
 }

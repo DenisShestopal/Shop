@@ -4,17 +4,16 @@ package net.shop.controller;
 import lombok.Getter;
 import net.shop.model.Product;
 import net.shop.model.User;
-import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.ProductService;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
-import net.shop.util.AuthorizationException;
 import net.shop.util.Hello;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -51,7 +50,6 @@ public class ProductController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page
@@ -78,7 +76,6 @@ public class ProductController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page with added to order product
@@ -106,7 +103,6 @@ public class ProductController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return product details page
@@ -130,14 +126,12 @@ public class ProductController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page with added product
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(HttpServletRequest req, HttpServletResponse resp) {
-        Product creatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
+    public String add(@RequestBody Product product, HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -153,13 +147,9 @@ public class ProductController {
             return "redirect:/products";
         }
 
-//        this.productService.add(product);
+        Product createdProduct = this.productService.add(product);
 
-//        Product creatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
-
-        try {
-            this.productService.add(creatingProduct);
-        } catch (ConstraintViolationException e) {
+        if (createdProduct == null) {
             req.setAttribute("exception", "Product already exists");
             req.setAttribute("product", new Product());
             req.setAttribute("listUsers", this.productService.listProducts());
@@ -170,15 +160,12 @@ public class ProductController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page with edited product
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String update(HttpServletRequest req, HttpServletResponse resp) {
-        Product updatingProduct = new Product(req.getParameter("name"), Long.parseLong(req.getParameter("price")), "USD");
-        String strProductId = req.getParameter("id");
+    public String update(@RequestBody Product product, HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -194,17 +181,12 @@ public class ProductController {
             return "redirect:/products";
         }
 
-//        Product updatingProduct = new Product(req.getParameter("name"),
-//                Long.parseLong(req.getParameter("price")), "USD");
-
-        updatingProduct.setId(Integer.valueOf(strProductId));
-        this.productService.update(updatingProduct);
+        this.productService.update(product);
 
         return "redirect:/products";
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page with product edit form
@@ -235,7 +217,6 @@ public class ProductController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page without deleted product

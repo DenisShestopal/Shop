@@ -16,6 +16,9 @@ public class Product extends BaseEntity {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "CODE", unique = true)
+    private String code;
+
     @Column(name = "PRICE")
     private Long price;
 

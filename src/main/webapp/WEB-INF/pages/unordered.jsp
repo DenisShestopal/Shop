@@ -111,8 +111,8 @@
         <tr>
             <td><p><b>TOTAL:</b></p></td>
             <td></td>
-            <td><%=totalQuantity%></td>
-            <td><%=totalPrice/100%>.<%=totalPrice%100%></td>
+            <td><p><b><%=totalQuantity%></b><p/></td>
+            <td><p><b><%=totalPrice/100%>.<%=totalPrice%100%></b><p/></td>
             <td></td>
         </tr>
     </table>

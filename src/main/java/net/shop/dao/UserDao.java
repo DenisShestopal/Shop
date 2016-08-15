@@ -9,5 +9,5 @@ import java.util.List;
 public interface UserDao extends BaseDao<User> {
     List<User> listUsers();
 
-    User getUserByLogin(String login) throws AuthorizationException;
+    User getUserByLogin(String login);
 }

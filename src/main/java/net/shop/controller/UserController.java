@@ -2,17 +2,16 @@ package net.shop.controller;
 
 import lombok.Getter;
 import net.shop.model.User;
-import net.shop.model.mock.LoggedUserMock;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
 import net.shop.util.Hello;
 import net.shop.util.PermissionException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -49,7 +48,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public String listUsers(HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -72,13 +71,12 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users page with added user
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(HttpServletRequest req, HttpServletResponse resp) {
+    public String add(@RequestBody User user, HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 
@@ -90,20 +88,16 @@ public class UserController {
         }
 
         if (!loggedUser.getAdmin()) {
-            req.setAttribute("exception", "Only admin can add new user");
+            req.setAttribute("exception", "Only admin can manually add new user");
             return "redirect:/products";
         }
 
-        User creatingUser = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")),
-                Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
-
-        try {
-            this.userService.add(creatingUser);
-        } catch (ConstraintViolationException e) {
-            req.setAttribute("exception", "User already exists");
-            req.setAttribute("user", new User());
+        User createdUser = this.userService.add(user);
+        if (createdUser == null) {
             req.setAttribute("listUsers", this.userService.listUsers());
+            req.setAttribute("user", new User());
+            req.setAttribute("exception", "User already exists");
+
             return "users";
         }
 
@@ -171,9 +165,6 @@ public class UserController {
         int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
         req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
-
-//        updatingUser.setId(Integer.valueOf(userId));
-//        this.userService.update(user);
 
         return "users";
     }

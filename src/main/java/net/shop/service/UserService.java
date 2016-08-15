@@ -13,8 +13,6 @@ public interface UserService extends BaseService<User> {
 
     List<User> listUsers();
 
-    int getUserIdFromRequest(HttpServletRequest request) throws AuthenticateException;
-
     boolean addUserToBlackList (User loggedUser, int userId);
 
 }

@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class InMemorySecurityServiceImpl implements SecurityService {
 
-
     private UserDao userDao;
 
     private Map<String, Integer> usersTokenMap = new ConcurrentHashMap<>();
@@ -31,12 +30,6 @@ public class InMemorySecurityServiceImpl implements SecurityService {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
-
-//    @Autowired
-//    @Qualifier(value = "usersTokenMap")
-//    public void setUsersTokenMap(Map<String, Integer> usersTokenMap) {
-//        this.usersTokenMap = usersTokenMap;
-//    }
 
     @Override
     @Transactional
@@ -61,7 +54,6 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         }
 
         //erase credentials after authentication fo security
-        //TODO realize correctly user.setPassword("");
         return user;
     }
 
