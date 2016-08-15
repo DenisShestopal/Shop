@@ -7,6 +7,7 @@ import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
+import net.shop.util.Hello;
 import net.shop.util.PermissionException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -308,6 +309,7 @@ public class UserController {
 
         try {
             securityService.logout(req, resp, loggedUser);
+            Hello.userLogin = "you can <a href=\"../../users/authorization\">SignIn</a> and get an account!";
         } catch (AuthorizationException e) {
             return "authorization";
         }

@@ -10,6 +10,7 @@ import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
+import net.shop.util.Hello;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
 
 
 @Controller
@@ -57,6 +59,7 @@ public class ProductController {
             loggedUser = getSecurityService().authenticate(req, resp);
             req.setAttribute("user", loggedUser);
             req.setAttribute("loggedUser", loggedUser.getLogin());
+            Hello.userLogin = loggedUser.getLogin();
         } catch (AuthenticateException e) {
             req.setAttribute("user", new User());
             req.setAttribute("loggedUser", "Unsigned user");

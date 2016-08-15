@@ -6,7 +6,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
 <head>
     <title>Authorization page</title>
 
@@ -49,7 +48,7 @@
         }
     </style>
 </head>
-<body>
+<p>
 
 
 <h1>Authorization</h1>
@@ -88,26 +87,6 @@
 <form action="/users/logout" method="get">
     <input type="submit" value="Logout"></td>
 </form>
-
-<%--<form action="/users/signup" method="post">--%>
-    <%--<table>--%>
-        <%--<tr>--%>
-            <%--<td>Login:<br></td>--%>
-            <%--<td><input type="text" required="true" maxlength="16" name="login"></td>--%>
-        <%--</tr>--%>
-        <%--<tr>--%>
-            <%--<td>Password:<br></td>--%>
-            <%--<td><input type="password" required="true" maxlength="16" name="password"></td>--%>
-        <%--</tr>--%>
-        <%--<tr>--%>
-            <%--<td>Password check:<br></td>--%>
-            <%--<td><input type="password" required="true" maxlength="16" name="passwordCheck"></td>--%>
-        <%--</tr>--%>
-        <%--<tr>--%>
-            <%--<td><br><input type="submit" value="Sign Up"></td>--%>
-        <%--</tr>--%>
-    <%--</table>--%>
-<%--</form>--%>
 
 <br><br><a href="../../">Back to Main</a>
 

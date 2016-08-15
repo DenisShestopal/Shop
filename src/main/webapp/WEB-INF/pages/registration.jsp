@@ -58,29 +58,6 @@
 
 <%! public boolean tf = false;%>
 
-
-<%--<form action="/users/signin" method="post">--%>
-    <%--<table>--%>
-        <%--<tr>--%>
-            <%--<td>Login:<br></td>--%>
-            <%--<td><input type="text" required="true" maxlength="16" name="login"></td>--%>
-        <%--</tr>--%>
-        <%--<tr>--%>
-            <%--<td>Password:<br></td>--%>
-            <%--<td><input type="password" required="true" maxlength="16" name="password"></td>--%>
-        <%--</tr>--%>
-        <%--<tr>--%>
-            <%--<td><br><input type="submit" value="Sign In"></td>--%>
-        <%--</tr>--%>
-    <%--</table>--%>
-<%--</form>--%>
-
-<%--<table class="tg">--%>
-    <%--<tr>--%>
-        <%--<br><a href="<c:url value='/users/signup'/>" onclick="<%tf=true;%>">I have no account yet</a><br><br><br>--%>
-    <%--</tr>--%>
-<%--</table>--%>
-
 <form action="/users/signup" method="post">
     <table>
         <tr>

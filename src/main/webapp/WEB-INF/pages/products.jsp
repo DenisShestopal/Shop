@@ -5,7 +5,7 @@
 <%@ page session="false" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib uri="/WEB-INF/helloTag.tld" prefix="tag"%>
 
 <head>
     <title>Products Page</title>
@@ -56,13 +56,10 @@
 
 <h1>Products List</h1>
 
-<p align="center">
-<h3>Welcome, ${loggedUser}!</h3></p>
+<%--<p align="center">--%>
+<%--<h3>Welcome, ${loggedUser}!</h3></p>--%>
 
-<%--<table class="tg">--%>
-<%--<th width="80">ERROR</th>--%>
-<%--<td>${exception}</td>--%>
-<%--</table>--%>
+<p><h3><tag:hello /></h3></p>
 
 <c:if test="${!loggedUser == 'Unsigned User'}">
 <c:if test="${!empty exception}">
@@ -122,7 +119,7 @@
     <c:set var="actionType" value="${editAction}"/>
 </c:if>
 
-<%--<c:if test="${user.admin==true}">--%>
+<c:if test="${user.admin==true}">
     <form:form action="${actionType}" commandName="product">
         <table>
             <c:if test="${!empty product.name}">
@@ -173,7 +170,7 @@
             </tr>
         </table>
     </form:form>
-<%--</c:if>--%>
+</c:if>
 
 <br><br><a href="../../unordered">My orders</a>
 <c:if test="${user.admin==true}">
