@@ -40,7 +40,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users page with users list
@@ -105,7 +104,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users page with edited user
@@ -138,7 +136,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users page with user edit form
@@ -170,7 +167,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return blacklist page
@@ -201,7 +197,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users page with added to blacklist or removed from blacklist user
@@ -230,7 +225,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users page without deleted user
@@ -258,7 +252,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return users details page
@@ -288,7 +281,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return authorization page
@@ -299,7 +291,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return registration page
@@ -310,7 +301,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page after successful authorization or authorization page if failed
@@ -329,7 +319,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return products page after successful registration or registration page if failed
@@ -348,12 +337,13 @@ public class UserController {
 
         User user = new User(login, password, false, false, new HashSet<>());
 
-        try {
-            userService.add(user);
-        } catch (Exception e) {
+
+        User addingUser = userService.add(user);
+        if (addingUser == null) {
             req.setAttribute("exception", "Login Already Used");
             return "registration";
         }
+
         try {
             securityService.authorization(req, resp);
         } catch (AuthorizationException e) {
@@ -363,7 +353,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return authorization page

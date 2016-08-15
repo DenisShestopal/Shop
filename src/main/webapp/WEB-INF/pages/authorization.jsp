@@ -80,7 +80,7 @@
 
 <table class="tg">
     <tr>
-        <br><a href="../users/registration">I have no account yet</a><br><br><br>
+        <br><a href="/users/registration">I have no account yet</a><br><br><br>
     </tr>
 </table>
 
@@ -88,7 +88,7 @@
     <input type="submit" value="Logout"></td>
 </form>
 
-<br><br><a href="../../">Back to Main</a>
+<br><br><a href="/">Back to Main</a>
 
 
 </body>
