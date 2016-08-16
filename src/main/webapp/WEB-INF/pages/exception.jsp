@@ -66,7 +66,8 @@
         <p style="color:red;">${exception}</p>
     </c:if>
 
-<br><br><a href="../../users/authorization">Authorization page</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
+<br><br><a href="<c:url value="/index.jsp"/>">Back to Main</a>
 
 </body>
 </html>

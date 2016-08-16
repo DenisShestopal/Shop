@@ -182,10 +182,9 @@
 </form:form>
 
 
-<br><a href="<c:url value="/products"/>" target="_blank">Products list</a>
-<br><br><a href="users/authorization">Authorization page</a>
-<br><br><a href="index">Back to main menu</a>
-<br><br><a href="products">Products list</a>
+<br><a href="<c:url value="/products"/>">Products list</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
+<br><br><a href="<c:url value="/index.jsp"/>">Back to main menu</a>
 
 </body>
 </html>

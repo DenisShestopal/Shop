@@ -119,10 +119,10 @@
 </c:if>
 
 <c:set var="orderStatus" value="unordered"/>
-<br><br><a href="../../ordered">My confirmed orders</a>
-<br><br><a href="../../paid">My paid orders</a>
-<br><br><a href="../../products">Back to products list</a>
-<br><br><a href="../../users/authorization">Authorization page</a>
+<br><br><a href="<c:url value="/ordered"/>">Back to confirmed orders</a>
+<br><br><a href="<c:url value="/paid"/>">My paid orders</a>
+<br><br><a href="<c:url value="/products"/>">Back to products list</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
 
 </body>
 </html>

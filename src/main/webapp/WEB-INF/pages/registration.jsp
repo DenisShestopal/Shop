@@ -81,7 +81,7 @@
     </table>
 </form>
 
-<br><br><a href="../../">Back to Main</a>
+<br><br><a href="<c:url value="/index.jsp"/>">Back to Main</a>
 
 
 </body>

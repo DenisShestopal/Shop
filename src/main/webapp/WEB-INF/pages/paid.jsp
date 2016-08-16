@@ -99,9 +99,9 @@
 </c:if>
 
 <c:set var="orderStatus" value="paid"/>
-<br><br><a href="../../unordered">Back to unconfirmed orders</a>
-<br><br><a href="../../ordered">Back to confirmed orders</a>
-<br><br><a href="../../products">Back to products list</a>
-<br><br><a href="../../users/authorization">Authorization page</a>
+<br><br><a href="<c:url value="/unordered"/>">Back to unconfirmed orders</a>
+<br><br><a href="<c:url value="/ordered"/>">Back to confirmed orders</a>
+<br><br><a href="<c:url value="/products"/>">Back to products list</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
 </body>
 </html>

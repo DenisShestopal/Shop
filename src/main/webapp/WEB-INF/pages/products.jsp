@@ -165,9 +165,9 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input type="number"  min="0" max="10000" step="1" path="price" required="true"/>
+                    <form:input type="number" min="0" max="10000" step="1" path="price" required="true"
+                                placeholder="10.00" title="format: 44.50"/>
                 </td>
-                <td>cents</td>
             </tr>
             <tr>
                 <td colspan="2">
@@ -189,9 +189,7 @@
 <c:if test="${user.admin==true}">
     <br><br><a href="../../users">Manage users</a>
 </c:if>
-<br><br><a href="../../users/authorization">Authorization page</a>
-<%--<form action="/orders" method="get">--%>
-<%--<input type="submit" value="My orders">--%>
-<%--</form>--%>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
+
 </body>
 </html>
