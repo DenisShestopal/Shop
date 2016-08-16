@@ -118,7 +118,9 @@
     </table>
 </c:if>
 
+<c:set var="orderStatus" value="unordered"/>
 <br><br><a href="../../ordered">My confirmed orders</a>
+<br><br><a href="../../paid">My paid orders</a>
 <br><br><a href="../../products">Back to products list</a>
 <br><br><a href="../../users/authorization">Authorization page</a>
 

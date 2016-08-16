@@ -145,7 +145,7 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="name" maxlength="16" required="true"/>
+                    <form:input path="name" maxlength="16" required="true" size="20px"/>
                 </td>
             </tr>
             <tr>
@@ -155,7 +155,7 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input path="code" maxlength="16" required="true"/>
+                    <form:input path="code" maxlength="16" required="true" size="20px"/>
                 </td>
             </tr>
             <tr>
@@ -165,8 +165,9 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input type="number" min="0" max="10000" step="1" path="price" required="true"/>
+                    <form:input type="number"  min="0" max="10000" step="1" path="price" required="true"/>
                 </td>
+                <td>cents</td>
             </tr>
             <tr>
                 <td colspan="2">

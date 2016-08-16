@@ -9,18 +9,13 @@ import net.shop.service.SecurityService;
 import net.shop.service.UserService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.Hello;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
 
 
 @Controller
@@ -154,7 +149,7 @@ public class ProductController {
             req.setAttribute("exception", "Product already exists");
             req.setAttribute("product", new Product());
             req.setAttribute("listUsers", this.productService.listProducts());
-            return "products";
+            return "exception";
         }
 
         return "redirect:/products";
@@ -166,7 +161,8 @@ public class ProductController {
      * @return products page with edited product
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String update(@ModelAttribute Product product, HttpServletRequest req, HttpServletResponse resp) {
+    public String update(@ModelAttribute Product product,
+                         HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -182,7 +178,12 @@ public class ProductController {
             return "redirect:/products";
         }
 
-        this.productService.update(product);
+        Product updatingProduct = new Product(req.getParameter("name"), req.getParameter("code"),
+                Long.parseLong(req.getParameter("price")), "USD");
+        String strProductId = req.getParameter("id");
+
+        updatingProduct.setId(Integer.valueOf(strProductId));
+        this.productService.update(updatingProduct);
 
         return "redirect:/products";
     }
@@ -193,7 +194,8 @@ public class ProductController {
      * @return products page with product edit form
      */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String edit(HttpServletRequest req, HttpServletResponse resp) {
+    public String edit(@PathVariable ("id") Integer productId,
+                       HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 
@@ -210,7 +212,8 @@ public class ProductController {
             return "redirect:/products";
         }
 
-        int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
+//        int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
+        req.setAttribute("user", loggedUser);
         req.setAttribute("product", this.productService.getById(productId));
         req.setAttribute("listProducts", this.productService.listProducts());
 

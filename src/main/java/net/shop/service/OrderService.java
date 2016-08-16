@@ -25,11 +25,7 @@ public interface OrderService extends BaseService<Order> {
 
     boolean changeQuantity(User user, Integer productId, Integer quantity, String status);
 
-    boolean removeProductFromOrderedOrder(User user, Integer productId);
-
     boolean removeProductFromUnorderedOrder(User user, Integer productId);
-
-    boolean removeAllProductsFromOrderedOrder(User user, Integer orderId);
 
     boolean removeAllProductsFromUnorderedOrder(User user, Integer orderId);
 

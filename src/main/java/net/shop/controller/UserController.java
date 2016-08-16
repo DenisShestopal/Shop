@@ -11,10 +11,7 @@ import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -97,8 +94,7 @@ public class UserController {
             req.setAttribute("listUsers", this.userService.listUsers());
             req.setAttribute("user", new User());
             req.setAttribute("exception", "User already exists");
-
-            return "users";
+            return "exception";
         }
 
         return "redirect:/users";
@@ -142,7 +138,8 @@ public class UserController {
      * @return users page with user edit form
      */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String getUserForEdit(HttpServletRequest req, HttpServletResponse resp) {
+    public String getUserForEdit(@PathVariable("id") Integer userId,
+                                 HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -158,9 +155,9 @@ public class UserController {
             return "redirect:/products";
         }
 
-        User updatingUser = new User(req.getParameter("login"), req.getParameter("password"),
-                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
-        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
+//        User updatingUser = new User(req.getParameter("login"), req.getParameter("password"),
+//                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+//        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
         req.setAttribute("user", this.userService.getById(userId));
         req.setAttribute("listUsers", this.userService.listUsers());
 
@@ -375,6 +372,11 @@ public class UserController {
             return "authorization";
         }
         return "authorization";
+    }
+
+    @RequestMapping(value = "/exception", method = RequestMethod.GET)
+    public String exceptionView(HttpServletRequest req, HttpServletResponse resp) {
+        return "exception";
     }
 
 }

@@ -5,6 +5,7 @@ import net.shop.model.User;
 import net.shop.service.SecurityService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
+import net.shop.util.Hello;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,8 @@ public class InMemorySecurityServiceImpl implements SecurityService {
             throw new AuthenticateException();
         }
 
+
+        Hello.userLogin = user.getLogin();
         //erase credentials after authentication fo security
         return new User(user);
     }

@@ -124,22 +124,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     }
 
     @Override
-    public boolean removeProductFromOrderedOrder(User user, Integer productId) {
-
-        Order order = getOrderedOrderByUserId(user);
-        Map<Product, Integer> products = order.getProductList();
-        Product delProduct = null;
-        for (Product product : products.keySet()) {
-            if (product.getId().equals(productId))
-                delProduct = product;
-        }
-        if (delProduct != null)
-            products.remove(delProduct);
-
-        return true;
-    }
-
-    @Override
     public boolean removeAllProductsFromUnorderedOrder(User user, Integer orderId) {
         Order order = getUnorderedOrderByUserId(user);
         Map<Product, Integer> products = order.getProductList();
@@ -147,11 +131,4 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return true;
     }
 
-    @Override
-    public boolean removeAllProductsFromOrderedOrder(User user, Integer orderId) {
-        Order order = getOrderedOrderByUserId(user);
-        Map<Product, Integer> products = order.getProductList();
-        products.clear();
-        return true;
-    }
 }
