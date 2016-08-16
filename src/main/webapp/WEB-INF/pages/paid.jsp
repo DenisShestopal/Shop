@@ -51,8 +51,7 @@
 </head>
 <body>
 
-
-<h1>Paid orders list</h1>
+<h1>Last paid order</h1>
 
 <p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
 
@@ -67,10 +66,6 @@
     <h3>Order status:
     <br><th>${userOrder.status}</th></h3>
 
-
-    <%--<br><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a>--%>
-    <%--<a href="<c:url value='ordered/pay/${userOrder.id}'/>">Pay</a>--%>
-    <%--<a href="<c:url value='oredred/remove/${userOrder.id}'/>">Delete all products</a><br><br>--%>
     <table class="tg">
         <tr>
             <th width="120">Product</th>
@@ -79,8 +74,6 @@
         </tr>
 
         <c:forEach items="${userOrder.productList}" var="entry">
-            <%--<% totalPrice += Long.parseLong("${entry.key.price}"); %>--%>
-            <%--<% totalPrice += 1; %>--%>
             <c:if test="${userOrder.status == 'PAID'}">
             <tr>
                 <td>${entry.key.name}</td>
@@ -102,6 +95,10 @@
 <br><br><a href="<c:url value="/unordered"/>">Back to unconfirmed orders</a>
 <br><br><a href="<c:url value="/ordered"/>">Back to confirmed orders</a>
 <br><br><a href="<c:url value="/products"/>">Back to products list</a>
-<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a><br><br>
+
+<form action="/users/logout" method="get">
+    <input type="submit" value="Logout"></td>
+</form>
 </body>
 </html>

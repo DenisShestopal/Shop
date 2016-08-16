@@ -62,7 +62,7 @@ public class UserController {
         loggedUser = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
-        req.setAttribute("listUsers", this.userService.listUsers());
+        req.setAttribute("listUsers", this.userService.listUsers(loggedUser));
 
         return "users";
     }
@@ -89,9 +89,9 @@ public class UserController {
             return "redirect:/products";
         }
 
-        User createdUser = this.userService.add(user);
+        User createdUser = this.userService.add(loggedUser, user);
         if (createdUser == null) {
-            req.setAttribute("listUsers", this.userService.listUsers());
+            req.setAttribute("listUsers", this.userService.listUsers(loggedUser));
             req.setAttribute("user", new User());
             req.setAttribute("exception", "User already exists");
             return "exception";
@@ -127,7 +127,7 @@ public class UserController {
         String strUserId = req.getParameter("id");
 
         updatingUser.setId(Integer.valueOf(strUserId));
-        this.userService.update(updatingUser);
+        this.userService.update(loggedUser, updatingUser);
 
         return "redirect:/users";
     }
@@ -138,7 +138,7 @@ public class UserController {
      * @return users page with user edit form
      */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String getUserForEdit(@PathVariable("id") Integer userId,
+    public String getForEdit(@PathVariable("id") Integer userId,
                                  HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
@@ -158,8 +158,8 @@ public class UserController {
 //        User updatingUser = new User(req.getParameter("login"), req.getParameter("password"),
 //                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
 //        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
-        req.setAttribute("user", this.userService.getById(userId));
-        req.setAttribute("listUsers", this.userService.listUsers());
+        req.setAttribute("user", this.userService.getById(loggedUser, userId));
+        req.setAttribute("listUsers", this.userService.listUsers(loggedUser));
 
         return "users";
     }
@@ -189,7 +189,7 @@ public class UserController {
         loggedUser = new User(req.getParameter("login"), req.getParameter("password"),
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
-        req.setAttribute("listUsers", this.userService.listUnpaidUsers());
+        req.setAttribute("listUsers", this.userService.listUnpaidUsers(loggedUser));
 
         return "users";
     }
@@ -200,7 +200,7 @@ public class UserController {
      * @return users page with added to blacklist or removed from blacklist user
      */
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addUserToBlackList(HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
+    public String addToBlackList(HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
         User loggedUser = null;
 
@@ -216,8 +216,29 @@ public class UserController {
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("addtoblacklist/")[1]);
-        User editedUser = userService.getById(userId);
-        getUserService().addUserToBlackList(editedUser, userId);
+        getUserService().addUserToBlackList(loggedUser, userId);
+
+        return "redirect:/users";
+    }
+
+    @RequestMapping(value = "/removefromblacklist/{id}", method = RequestMethod.GET)
+    public String removeFromBlackList(@PathVariable ("id") Integer userId,
+                                      HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
+
+        User loggedUser = null;
+
+        try {
+            loggedUser = getSecurityService().authenticate(req, resp);
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        if (!loggedUser.getAdmin()) {
+            req.setAttribute("exception", "Only admin can add users to the blacklist");
+            return "redirect:/products";
+        }
+
+        getUserService().removeUserFromBlackList(loggedUser, userId);
 
         return "redirect:/users";
     }
@@ -244,7 +265,7 @@ public class UserController {
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("users/remove/")[1]);
-        this.userService.remove(userId);
+        this.userService.remove(loggedUser, userId);
 
         return "redirect:/users";
     }
@@ -273,7 +294,7 @@ public class UserController {
         }
 
         int userId = Integer.valueOf(req.getRequestURI().split("users/")[1]);
-        req.setAttribute("user", this.userService.getById(userId));
+        req.setAttribute("user", this.userService.getById(loggedUser, userId));
 
         return "userdata";
     }
@@ -336,7 +357,7 @@ public class UserController {
         User user = new User(login, password, false, false, new HashSet<>());
 
 
-        User addingUser = userService.add(user);
+        User addingUser = userService.add(new User(), user);
         if (addingUser == null) {
             req.setAttribute("exception", "Login Already Used");
             return "registration";
@@ -365,12 +386,8 @@ public class UserController {
             return "authorization";
         }
 
-        try {
-            securityService.logout(req, resp, loggedUser);
-            Hello.userLogin = "you can <a href=\"../../users/authorization\">SignIn</a> and get an account!";
-        } catch (AuthorizationException e) {
-            return "authorization";
-        }
+        securityService.logout(req, resp, loggedUser);
+        Hello.userLogin = "you can <a href=\"../../users/authorization\">SignIn</a> and get an account!";
         return "authorization";
     }
 

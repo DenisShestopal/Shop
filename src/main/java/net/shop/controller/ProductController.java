@@ -66,7 +66,7 @@ public class ProductController {
         }
 
         req.setAttribute("product", new Product());
-        req.setAttribute("listProducts", this.productService.listProducts());
+        req.setAttribute("listProducts", this.productService.listProducts(loggedUser));
 
         return "products";
     }
@@ -106,7 +106,6 @@ public class ProductController {
     @RequestMapping("/{id}")
     public String productData(HttpServletRequest req, HttpServletResponse resp) {
         int productId = Integer.valueOf(req.getRequestURI().split("products/")[1]);
-        req.setAttribute("product", this.productService.getById(productId));
 
         User loggedUser = null;
 
@@ -118,6 +117,7 @@ public class ProductController {
             req.setAttribute("user", new User());
         }
 
+        req.setAttribute("product", this.productService.getById(loggedUser, productId));
         return "productdata";
     }
 
@@ -143,12 +143,12 @@ public class ProductController {
             return "redirect:/products";
         }
 
-        Product createdProduct = this.productService.add(product);
+        Product createdProduct = this.productService.add(loggedUser, product);
 
         if (createdProduct == null) {
             req.setAttribute("exception", "Product already exists");
             req.setAttribute("product", new Product());
-            req.setAttribute("listUsers", this.productService.listProducts());
+            req.setAttribute("listUsers", this.productService.listProducts(loggedUser));
             return "exception";
         }
 
@@ -183,7 +183,7 @@ public class ProductController {
         String strProductId = req.getParameter("id");
 
         updatingProduct.setId(Integer.valueOf(strProductId));
-        this.productService.update(updatingProduct);
+        this.productService.update(loggedUser, updatingProduct);
 
         return "redirect:/products";
     }
@@ -194,8 +194,8 @@ public class ProductController {
      * @return products page with product edit form
      */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable ("id") Integer productId,
-                       HttpServletRequest req, HttpServletResponse resp) {
+    public String getProductForEdit(@PathVariable ("id") Integer productId,
+                       HttpServletRequest req, HttpServletResponse resp){
 
         User loggedUser = null;
 
@@ -212,10 +212,9 @@ public class ProductController {
             return "redirect:/products";
         }
 
-//        int productId = Integer.valueOf(req.getRequestURI().split("products/edit/")[1]);
         req.setAttribute("user", loggedUser);
-        req.setAttribute("product", this.productService.getById(productId));
-        req.setAttribute("listProducts", this.productService.listProducts());
+        req.setAttribute("product", this.productService.getById(loggedUser, productId));
+        req.setAttribute("listProducts", this.productService.listProducts(loggedUser));
 
         return "products";
     }
@@ -228,23 +227,23 @@ public class ProductController {
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
     public String remove(HttpServletRequest req, HttpServletResponse resp) {
 
-        User user = null;
+        User loggedUser = null;
 
         try {
-            user = getSecurityService().authenticate(req, resp);
+            loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
             req.setAttribute("exception", "Please, get authorized first");
             return "authorization";
         }
 
-        if (!user.getAdmin()) {
+        if (!loggedUser.getAdmin()) {
             req.setAttribute("exception", "Only admin can manage products list");
             return "redirect:/products";
         }
 
         int productId = Integer.valueOf(req.getRequestURI().split("products/remove/")[1]);
-        ;
-        this.productService.remove(productId);
+
+        this.productService.remove(loggedUser, productId);
 
         return "redirect:/products";
     }

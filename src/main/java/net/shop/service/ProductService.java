@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProductService extends BaseService<Product> {
 
-    List<Product> listProducts();
+    List<Product> listProducts(User loggedUser);
 
-    boolean addToOrder(User user, int productId);
+    boolean addToOrder(User loggedUser, int productId);
 }

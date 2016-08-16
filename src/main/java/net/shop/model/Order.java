@@ -23,9 +23,7 @@ public class Order extends BaseEntity {
     private OrderStatus status;
 
     @ManyToOne
-    @JoinTable(name = "USER_ORDERS",
-            joinColumns = @JoinColumn(name = "ORDER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "USER_ID"))
+    @JoinColumn(name = "USER_ID")
     private User owner;
 
     @ElementCollection

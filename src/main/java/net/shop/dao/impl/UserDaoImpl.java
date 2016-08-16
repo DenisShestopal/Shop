@@ -2,6 +2,7 @@ package net.shop.dao.impl;
 
 import net.shop.dao.UserDao;
 import net.shop.model.User;
+import net.shop.model.UserDTO;
 import net.shop.util.AuthorizationException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -32,11 +33,12 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<User> listUsers() {
+    public List<UserDTO> listUsers() {
         Session session = getSessionFactory().getCurrentSession();
-        List<User> userList = session.createQuery("from User").list();
+        List<UserDTO> userList = session.createQuery("select new net.shop.model.UserDTO(id, login, admin, blocked) " +
+                "from net.shop.model.User").list();
 
-        for (User user : userList) {
+        for (UserDTO user : userList) {
             logger.info("Users list: " + user);
         }
 

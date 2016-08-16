@@ -30,12 +30,6 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
 
     private UserDao userDao;
 
-    @Override
-    public Product add(Product entity) {
-        if(productDao.getProductByCode(entity.getCode()) != null) return null;
-        return super.add(entity);
-    }
-
     @Autowired
     @Qualifier(value = "productDao")
     public void setProductDao(ProductDao productDao) {
@@ -54,21 +48,25 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
-    public List<Product> listProducts() {
+    public Product add(User loggedUser, Product entity) {
+        if(productDao.getProductByCode(entity.getCode()) != null) return null;
+        return super.add(loggedUser, entity);
+    }
+
+    @Override
+    public List<Product> listProducts(User loggedUser) {
         return this.productDao.listProducts();
     }
 
     @Override
-    public boolean addToOrder(User user, int productId) {
+    public boolean addToOrder(User loggedUser, int productId) {
 
         Product product = productDao.getById(productId);
-        int userId = user.getId();
-
-        Order order = orderDao.getUnorderedOrderByUserId(userId);
-
-        if (order == null) {
-            order = new Order(OrderStatus.UNORDERED, user, new HashMap<>());
-        }
+        List<Order> orders = orderDao.getOrderByUserIdAndStatus(loggedUser.getId(), OrderStatus.UNORDERED);
+        Order order;
+        if (orders.size() == 0) {
+            order = new Order(OrderStatus.UNORDERED, loggedUser, new HashMap<>());
+        } else order = orders.get(0);
 
         if (!order.getProductList().containsKey(product))
             order.getProductList().put(product, 1);

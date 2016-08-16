@@ -6,6 +6,7 @@ import net.shop.service.SecurityService;
 import net.shop.util.AuthenticateException;
 import net.shop.util.AuthorizationException;
 import net.shop.util.Hello;
+import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Base64;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -57,7 +56,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
 
         Hello.userLogin = user.getLogin();
         //erase credentials after authentication fo security
-        return new User(user);
+        return InMemorySecurityServiceImpl.getShallowCloneWithoutSecureData(user);
     }
 
     @Override
@@ -79,16 +78,42 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         Cookie cookie = new Cookie(TOKEN, token);
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return new User(user);
+        return InMemorySecurityServiceImpl.getShallowCloneWithoutSecureData(user);
     }
 
     @Override
-    public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user) throws AuthorizationException {
-        usersTokenMap.entrySet().remove(user.getId());
+    public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user){
+        Cookie[] cookies = req.getCookies();
+        String userToken = "";
+        for (Cookie cookie : cookies)
+            if (cookie.getName().equals(TOKEN)) userToken = cookie.getValue();
+        usersTokenMap.remove(userToken);
         Cookie cookie = new Cookie(TOKEN, "deleted");
         cookie.setPath("/");
         cookie.setMaxAge(0);
         resp.addCookie(cookie);
         return true;
     }
+
+    private static User getShallowCloneWithoutSecureData(User user){
+        User result = new User();
+        result.setId(user.getId());
+        result.setAdmin(user.getAdmin());
+        result.setBlocked(user.getBlocked());
+        result.setLogin(user.getLogin());
+        return result;
+    }
+
+    @Override
+    public boolean deleteUserTokens(User loggedUser, User user) throws PermissionException {
+        if (loggedUser.getAdmin()) {
+            for (Map.Entry<String, Integer> entry : usersTokenMap.entrySet()) {
+                if (user.getId().equals(entry.getValue())) {
+                    usersTokenMap.remove(entry.getKey());
+                }
+            }
+        } else throw new PermissionException();
+        return true;
+    }
+
 }

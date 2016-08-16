@@ -42,53 +42,33 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
         return orderList;
     }
 
-    public Order getUnorderedOrderByUserId(int userId){
+    /**
+     * look if comming order presents in users orders list
+      * @param userId
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Integer> listOrdersIdsByUser(Integer userId) {
         Session session = getSessionFactory().getCurrentSession();
 
-        Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
+        return session.createQuery("select id from net.shop.model.Order o where o.owner.id = :userId")
                 .setParameter("userId", userId)
-                .setParameter("status", OrderStatus.UNORDERED)
-                .uniqueResult();
-
-
-//        for (Order order : orderList) {
-//            logger.info("Orders list: " + order);
-//        }
-
-        return order;
+                .list();
     }
 
-    public Order getOrderedOrderByUserId(int userId){
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Order> getOrderByUserIdAndStatus(int userId, OrderStatus status) {
         Session session = getSessionFactory().getCurrentSession();
 
-        Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
+
+        return session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
                 .setParameter("userId", userId)
-                .setParameter("status", OrderStatus.ORDERED)
-                .uniqueResult();
-
-
-//        for (Order order : orderList) {
-//            logger.info("Orders list: " + order);
-//        }
-
-        return order;
+                .setParameter("status", status)
+                .list();
     }
 
-    public Order getPaidOrderByUserId(int userId){
-        Session session = getSessionFactory().getCurrentSession();
-
-        Order order = (Order) session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
-                .setParameter("userId", userId)
-                .setParameter("status", OrderStatus.PAID)
-                .uniqueResult();
-
-
-//        for (Order order : orderList) {
-//            logger.info("Orders list: " + order);
-//        }
-
-        return order;
-    }
 
 }
 

@@ -30,17 +30,6 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner") //TODO add to OrderDao getOrderByUserId
     private Set<Order> orderList;//TODO see composition
 
-    /**
-     * Some secure cloning of user, giving a "shallow clone" of user without secure data.
-     *
-     */
-    public User(User user) {
-        this.setId(user.getId());
-        this.login = user.getLogin();
-        this.admin = user.getAdmin();
-        this.blocked = user.getBlocked();
-    }
-
     public void setBlocked(Boolean isBlocked) {
         this.blocked = isBlocked;
     }

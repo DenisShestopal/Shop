@@ -51,7 +51,7 @@
 </head>
 <body>
 
-<h1>Unordered orders list</h1>
+<h1>Unordered order</h1>
 
 <p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
 
@@ -83,6 +83,8 @@
         </tr>
 
         <c:forEach items="${userOrder.productList}" var="entry">
+            <% totalPrice =0L; %>
+            <% totalQuantity =0; %>
             <c:set var="price" value="${entry.key.price}"/>
             <c:set var="quantity" value="${entry.value}"/>
             <% price = Long.valueOf(pageContext.getAttribute("price").toString())
@@ -105,7 +107,7 @@
                     </c:if>
                     </td>
                 <td><%=price/100%>.<%=price%100%></td>
-                <td><a href="<c:url value='/unordered/removeProduct/${entry.key.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='/unordered/removeProduct?orderId=${userOrder.id}&productId=${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <tr>
@@ -122,7 +124,10 @@
 <br><br><a href="<c:url value="/ordered"/>">Back to confirmed orders</a>
 <br><br><a href="<c:url value="/paid"/>">My paid orders</a>
 <br><br><a href="<c:url value="/products"/>">Back to products list</a>
-<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a><br><br>
 
+<form action="/users/logout" method="get">
+    <input type="submit" value="Logout"></td>
+</form>
 </body>
 </html>

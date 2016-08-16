@@ -53,7 +53,8 @@
 
 <h1>Users List</h1>
 
-<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+<p align="center">
+<h3>Welcome, ${loggedUser}!</h3></p>
 
 <c:if test="${!empty exception}">
     <p style="color:red;">${exception}</p>
@@ -64,37 +65,34 @@
         <tr>
             <th width="80">ID</th>
             <th width="120">Login</th>
-            <th width="120">Password</th>
             <th width="60">Admin</th>
             <th width="60">Blocked</th>
-            <th width="60">Edit</th>
-            <th width="60">Delete</th>
-            <th width="180">Add user to black list</th>
-            <%--<th width="60">Form order</th>--%>
+            <th width="60"></th>
+            <th width="60"></th>
+            <th width="180"></th>
+                <%--<th width="60">Form order</th>--%>
 
         </tr>
         <c:forEach items="${listUsers}" var="user">
             <tr>
                 <td>${user.id}</td>
                 <td><a href="users/${user.id}">${user.login}</a></td>
-                <td>${user.password}</td>
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>
                 <td><a href="<c:url value='/users/edit/${user.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/users/remove/${user.id}'/>">Delete</a>
 
                 <td><a href="<c:if test="${!user.blocked}">
-                <c:url value='/users/addtoblacklist/${user.id}'/>">Add</c:if>
+                <c:url value='/users/addtoblacklist/${user.id}'/>">Add to blacklist</c:if>
                     <c:if test="${user.blocked}">
-                        <c:url value='/users/addtoblacklist/${user.id}'/>">Remove</c:if></a></td>
+                        <c:url value='/users/removefromblacklist/${user.id}'/>">Remove from blacklist</c:if></a></td>
 
 
-                <%--<td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>--%>
+                    <%--<td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>--%>
             </tr>
         </c:forEach>
     </table>
 </c:if>
-
 
 
 <c:url var="addAction" value="/users/add"/>
@@ -133,7 +131,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="login" required = "true" maxlength="16"/>
+                <form:input path="login" required="true" maxlength="16"/>
             </td>
         </tr>
         <tr>
@@ -143,7 +141,7 @@
                 </form:label>
             </td>
             <td>
-                <form:input path="password" type="password" required = "true" maxlength="16"/>
+                <form:input path="password" type="password" required="true" maxlength="16"/>
             </td>
         </tr>
         <tr>
@@ -153,7 +151,7 @@
                 </form:label>
             </td>
             <td>
-                <form:select path="admin" items = "<%=tf%>"/>
+                <form:select path="admin" items="<%=tf%>"/>
             </td>
         </tr>
         <tr>
@@ -163,7 +161,7 @@
                 </form:label>
             </td>
             <td>
-                <form:select path="blocked" items = "<%=tf%>"/>
+                <form:select path="blocked" items="<%=tf%>"/>
             </td>
         </tr>
         <tr>
@@ -184,7 +182,10 @@
 
 <br><a href="<c:url value="/products"/>">Products list</a>
 <br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
-<br><br><a href="<c:url value="/index.jsp"/>">Back to main menu</a>
+<br><br><a href="<c:url value="/index.jsp"/>">Back to main menu</a><br><br>
 
+<form action="/users/logout" method="get">
+    <input type="submit" value="Logout"></td>
+</form>
 </body>
 </html>

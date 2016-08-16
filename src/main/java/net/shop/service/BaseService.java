@@ -2,15 +2,16 @@ package net.shop.service;
 
 import net.shop.model.BaseEntity;
 import net.shop.model.Product;
+import net.shop.model.User;
 import org.springframework.stereotype.Service;
 
 public interface BaseService<T extends BaseEntity> {
 
-    public T add(T entity);
+    T add(User loggedUser, T entity);
 
-    public T update(T entity);
+    T update(User loggedUser, T entity);
 
-    public boolean remove(int id);
+    boolean remove(User loggedUser, Integer id);
 
-    public T getById(int id);
+    T getById(User loggedUser, Integer id);
 }

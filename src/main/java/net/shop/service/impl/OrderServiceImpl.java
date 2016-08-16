@@ -29,8 +29,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     private OrderDao orderDao;
     private ProductDao productDao;
 
-    public ProductDao getProductDao() {
-        return productDao;
+    @Autowired
+    @Qualifier(value = "productDao")
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
     }
 
     @Override
@@ -45,15 +47,15 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     }
 
     @Override
-    public List<Order> listOrders() {
+    public List<Order> listOrders(User loggedUser) {
         return this.orderDao.listOrders();
     }
 
     @Override
-    public boolean confirmOrder(User user, int orderId) throws PermissionException {
-        Order order = orderDao.getUnorderedOrderByUserId(user.getId());
-
-        if(!order.getStatus().equals(OrderStatus.UNORDERED)) return false;
+    public boolean confirmOrder(User loggedUser, int orderId) throws PermissionException {
+        Order order = orderDao.getOrderByUserIdAndStatus(loggedUser.getId(), OrderStatus.UNORDERED).get(0);
+//TODO check
+        if (!order.getStatus().equals(OrderStatus.UNORDERED)) return false;
         order.setStatus(OrderStatus.ORDERED);
         orderDao.update(order);
         return true;
@@ -61,22 +63,18 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
     @Override
     public boolean payOrder(User user, int orderId) throws PermissionException {
-        Order order = orderDao.getOrderedOrderByUserId(user.getId());
-
-        if(!order.getStatus().equals(OrderStatus.ORDERED)) return false;
+        Order order = orderDao.getOrderByUserIdAndStatus(user.getId(), OrderStatus.ORDERED).get(0);
+//TODO check
+        if (!order.getStatus().equals(OrderStatus.ORDERED)) return false;
         order.setStatus(OrderStatus.PAID);
         orderDao.update(order);
         return true;
     }
 
     @Override
-    public boolean changeQuantity(User user, Integer productId, Integer quantity, String status) {
+    public boolean changeQuantity(User loggedUser, Integer productId, Integer quantity) {
 
-        Order order = null;
-        if (status.equals("UNORDERED"))
-            order = orderDao.getUnorderedOrderByUserId(user.getId());
-        else
-            order = orderDao.getOrderedOrderByUserId(user.getId());
+        Order order = orderDao.getOrderByUserIdAndStatus(loggedUser.getId(), OrderStatus.UNORDERED).get(0);
 
         Map<Product, Integer> products = order.getProductList();
         for (Product product : products.keySet()) {
@@ -88,47 +86,34 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return true;
     }
 
-    public List<Product> getOrdersProductsList(int orderId) {
-        return getProductDao().listProducts();
+//    public List<Product> getOrderProductsList(int orderId) {
+//        return getProductDao().listProducts();
+//    }
+
+    @Override
+    public List<Order> getOrderByUserIdAndStatus(User loggedUser, OrderStatus status) {
+        return orderDao.getOrderByUserIdAndStatus(loggedUser.getId(), status);
     }
 
     @Override
-    public Order getUnorderedOrderByUserId(User user) {
-        return orderDao.getUnorderedOrderByUserId(user.getId());
-    }
+    public boolean removeProduct(User loggedUser, Integer orderId, Integer productId) {
 
-    @Override
-    public Order getOrderedOrderByUserId(User user) {
-        return orderDao.getOrderedOrderByUserId(user.getId());
-    }
-
-    @Override
-    public Order getPaidOrderByUserId(User user) {
-        return orderDao.getPaidOrderByUserId(user.getId());
-    }
-
-    @Override
-    public boolean removeProductFromUnorderedOrder(User user, Integer productId) {
-
-        Order order = getUnorderedOrderByUserId(user);
-        Map<Product, Integer> products = order.getProductList();
-        Product delProduct = null;
-        for (Product product : products.keySet()) {
-            if (product.getId().equals(productId))
-                delProduct = product;
+        List<Integer> ordersId = orderDao.listOrdersIdsByUser(loggedUser.getId());
+        if (ordersId.contains(orderId)) {
+            Order order = orderDao.getById(orderId);
+            order.getProductList().remove(productDao.getById(productId));
+            orderDao.update(order);
+            return true;
         }
-        if (delProduct != null)
-            products.remove(delProduct);
-
-        return true;
+        return false;
     }
 
     @Override
-    public boolean removeAllProductsFromUnorderedOrder(User user, Integer orderId) {
-        Order order = getUnorderedOrderByUserId(user);
-        Map<Product, Integer> products = order.getProductList();
-        products.clear();
-        return true;
+    public boolean remove(User loggedUser, Integer orderId) {
+        List<Integer> userOrdersId = orderDao.listOrdersIdsByUser(loggedUser.getId());
+        if (userOrdersId.contains(orderId))
+            return super.remove(loggedUser, orderId);
+        throw new RuntimeException();//TODO add own exception implementation. PermissionDenied
     }
 
 }

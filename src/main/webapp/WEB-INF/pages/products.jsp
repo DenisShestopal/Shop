@@ -189,7 +189,9 @@
 <c:if test="${user.admin==true}">
     <br><br><a href="../../users">Manage users</a>
 </c:if>
-<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
-
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a><br><br>
+<form action="/users/logout" method="get">
+    <input type="submit" value="Logout"></td>
+</form>
 </body>
 </html>

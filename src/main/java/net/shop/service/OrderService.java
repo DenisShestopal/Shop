@@ -1,6 +1,7 @@
 package net.shop.service;
 
 import net.shop.model.Order;
+import net.shop.model.OrderStatus;
 import net.shop.model.Product;
 import net.shop.model.User;
 import net.shop.util.PermissionException;
@@ -9,25 +10,15 @@ import java.util.List;
 
 
 public interface OrderService extends BaseService<Order> {
-    List<Order> listOrders();
+    List<Order> listOrders(User loggedUser);
 
-    boolean payOrder(User user, int orderId) throws PermissionException;
+    boolean payOrder(User loggedUser, int orderId) throws PermissionException;
 
-    boolean confirmOrder(User user, int orderId) throws PermissionException;
+    boolean confirmOrder(User loggedUser, int orderId) throws PermissionException;
 
-    Order getUnorderedOrderByUserId(User user);
+    List<Order> getOrderByUserIdAndStatus(User loggedUser, OrderStatus status);
 
-    Order getOrderedOrderByUserId(User user);
+    boolean changeQuantity(User loggedUser, Integer productId, Integer quantity);
 
-    Order getPaidOrderByUserId(User user);
-
-    List<Product> getOrdersProductsList(int orderId);
-
-    boolean changeQuantity(User user, Integer productId, Integer quantity, String status);
-
-    boolean removeProductFromUnorderedOrder(User user, Integer productId);
-
-    boolean removeAllProductsFromUnorderedOrder(User user, Integer orderId);
-
-
+    boolean removeProduct(User loggedUser, Integer orderId, Integer productId);
 }

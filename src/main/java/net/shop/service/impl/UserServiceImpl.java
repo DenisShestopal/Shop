@@ -5,7 +5,10 @@ import net.shop.dao.UserDao;
 import net.shop.model.Order;
 import net.shop.model.OrderStatus;
 import net.shop.model.User;
+import net.shop.model.UserDTO;
+import net.shop.service.SecurityService;
 import net.shop.service.UserService;
+import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,13 +23,12 @@ import java.util.List;
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
     private UserDao userDao;
+    private SecurityService securityService;
 
-    @Override
-    public User add(User entity) {
-        if(userDao.getUserByLogin(entity.getLogin()) != null) return null;
-        entity.setPassword(Base64.getEncoder()
-                .encodeToString((entity.getLogin() + ":" + entity.getPassword()).getBytes()));
-        return super.add(entity);
+    @Autowired(required = true)
+    @Qualifier(value = "securityService")
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @Autowired(required = true)
@@ -41,35 +43,51 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     @Override
-    public List<User> listUnpaidUsers() {
-        List<User> usersList = userDao.listUsers();
-        List<User> resultList = new ArrayList<>();
-        for (User user : usersList) {
-            for (Order order : user.getOrderList()) {
-                if (order.getStatus().equals(OrderStatus.ORDERED)) {
-                    resultList.add(user);
-                    break;
-                }
-            }
-        }
-        return resultList;
+    public User add(User loggedUser, User entity) {
+        if (userDao.getUserByLogin(entity.getLogin()) != null) return null;
+        entity.setPassword(Base64.getEncoder()
+                .encodeToString((entity.getLogin() + ":" + entity.getPassword()).getBytes()));
+        return super.add(loggedUser, entity);
     }
 
-    public List<User> listUsers() {
+    @Override
+    public List<UserDTO> listUnpaidUsers(User loggedUser) {
+//        List<User> usersList = userDao.listUsers();
+//        List<User> resultList = new ArrayList<>();
+//        for (User user : usersList) {
+//            for (Order order : user.getOrderList()) {
+//                if (order.getStatus().equals(OrderStatus.ORDERED)) {
+//                    resultList.add(user);
+//                    break;
+//                }
+//            }
+//        }
+        return new ArrayList<>();//resultList;
+    }
+
+    @Override
+    public List<UserDTO> listUsers(User loggedUser) {
+        //TODO check isAdmin
         return this.userDao.listUsers();
     }
 
     @Override
-    public boolean addUserToBlackList(User loggedUser, int userId){
+    public boolean addUserToBlackList(User loggedUser, int userId) throws PermissionException {
         if (loggedUser.getAdmin()) {
             User user = userDao.getById(userId);
-            if (user.getBlocked()) {
-                user.setBlocked(false);
-            } else {
-                user.setBlocked(true);
-            }
+            user.setBlocked(true);
             userDao.update(user);
+            securityService.deleteUserTokens(loggedUser, user);
+        }
+        return true;
+    }
 
+    @Override
+    public boolean removeUserFromBlackList(User loggedUser, int userId) {
+        if (loggedUser.getAdmin()) {
+            User user = userDao.getById(userId);
+            user.setBlocked(false);
+            userDao.update(user);
         }
         return true;
     }

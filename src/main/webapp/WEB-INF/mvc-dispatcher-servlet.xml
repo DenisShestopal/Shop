@@ -63,6 +63,7 @@
 
     <bean id="orderService" class="net.shop.service.impl.OrderServiceImpl">
         <property name="orderDao" ref="orderDao"/>
+        <property name="productDao" ref="productDao"/>
     </bean>
 
     <!--UserDao and UserService beans-->
@@ -72,6 +73,7 @@
 
     <bean id="userService" class="net.shop.service.impl.UserServiceImpl">
         <property name="userDao" ref="userDao"/>
+        <property name="securityService" ref="securityService"/>
     </bean>
 
     <!--SecurityService beans-->

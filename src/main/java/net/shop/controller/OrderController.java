@@ -2,6 +2,7 @@ package net.shop.controller;
 
 import lombok.Getter;
 import net.shop.model.Order;
+import net.shop.model.OrderStatus;
 import net.shop.model.User;
 import net.shop.service.OrderService;
 import net.shop.service.SecurityService;
@@ -15,9 +16,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 //@RequestMapping(value = "orders")
@@ -48,13 +51,12 @@ public class OrderController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with unconfirmed user's orders
      */
     @RequestMapping(value = "unordered", method = RequestMethod.GET)
-    public String unorderedOrders(HttpServletRequest req, HttpServletResponse resp){
+    public String unorderedOrders(HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 
@@ -65,20 +67,22 @@ public class OrderController {
             return "authorization";
         }
 
+        List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.UNORDERED);
+        if (orderList.size() != 0)
+            req.setAttribute("userOrder", orderList.get(0));
+        else req.setAttribute("userOrder", new Order());
         req.setAttribute("order", new Order());
-        req.setAttribute("userOrder", orderService.getUnorderedOrderByUserId(loggedUser));
 
         return "unordered";
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with confirmed user's orders
      */
     @RequestMapping(value = "ordered", method = RequestMethod.GET)
-    public String orderedOrders(HttpServletRequest req, HttpServletResponse resp){
+    public String orderedOrders(HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 
@@ -89,20 +93,21 @@ public class OrderController {
             return "authorization";
         }
 
+        List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.ORDERED);
+        if (orderList.size() != 0)
+            req.setAttribute("userOrder", orderList.get(0));
+        else req.setAttribute("userOrder", new Order());
         req.setAttribute("order", new Order());
-        req.setAttribute("userOrder", orderService.getOrderedOrderByUserId(loggedUser));
-
         return "ordered";
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with paid user's orders
      */
     @RequestMapping(value = "paid", method = RequestMethod.GET)
-    public String paidOrders(HttpServletRequest req, HttpServletResponse resp){
+    public String paidOrders(HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 
@@ -113,21 +118,22 @@ public class OrderController {
             return "authorization";
         }
 
+        List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.PAID);
+        if (orderList.size() != 0)
+            req.setAttribute("userOrder", orderList.get(orderList.size()-1));
+        else req.setAttribute("userOrder", new Order());
         req.setAttribute("order", new Order());
-        req.setAttribute("userOrder", orderService.getPaidOrderByUserId(loggedUser));
-
         return "paid";
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with confirmed user's orders
      */
     @RequestMapping(value = "unordered/confirm/{orderId}", method = RequestMethod.GET)
     public String confirmOrder(@PathVariable("orderId") Integer orderId,
-                               HttpServletRequest req, HttpServletResponse resp){
+                               HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser;
 
@@ -140,9 +146,10 @@ public class OrderController {
 //        Integer orderId = Integer.valueOf(req.getRequestURI().split("unordered/confirm/")[1]);
 
         try {
-            if(!(getOrderService().confirmOrder(loggedUser, orderId))){
+            if (!(getOrderService().confirmOrder(loggedUser, orderId))) {
                 req.setAttribute("exception", "You can not confirm confirmed or paid order");
-                return "unordered";}
+                return "unordered";
+            }
         } catch (PermissionException e) {
             req.setAttribute("exception", "You don't have access to this user's orders");
             return "unordered";
@@ -151,15 +158,9 @@ public class OrderController {
         return "redirect:/ordered";
     }
 
-    /**
-     *
-     * @param req
-     * @param resp
-     * @return Page with paid user's orders
-     */
     @RequestMapping(value = "ordered/pay/{orderId}", method = RequestMethod.GET)
     public String payOrder(@PathVariable("orderId") Integer orderId,
-                           HttpServletRequest req, HttpServletResponse resp){
+                           HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
         try {
@@ -168,10 +169,8 @@ public class OrderController {
             return "authorization";
         }
 
-//        Integer orderId = Integer.valueOf(req.getRequestURI().split("ordered/pay/")[1]);
-
         try {
-            if(!(getOrderService().payOrder(loggedUser, orderId))){
+            if (!(getOrderService().payOrder(loggedUser, orderId))) {
                 req.setAttribute("exception", "You can not confirm unconfirmed or paid order");
                 return "ordered";
             }
@@ -185,7 +184,6 @@ public class OrderController {
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with unconfirmed user's orders and changed quantity
@@ -203,21 +201,20 @@ public class OrderController {
 
         Integer quantity = Integer.valueOf(req.getParameter("quantity"));
         Integer productId = Integer.valueOf(req.getParameter("productId"));
-        String status = "UNORDERED";
-        orderService.changeQuantity(loggedUser, productId, quantity, status);
+        orderService.changeQuantity(loggedUser, productId, quantity);
 
         return "redirect:/unordered";
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with unconfirmed user's orders and removed product by product Id
      */
-    @RequestMapping(value = "unordered/removeProduct/{id}", method = RequestMethod.GET)
-    public String removeProduct(@PathVariable("id") Integer productId,
-                                                  HttpServletRequest req, HttpServletResponse resp) {
+    @RequestMapping(value = "unordered/removeProduct", method = RequestMethod.GET)
+    public String removeProduct(@RequestParam(value = "productId") Integer productId,
+                                @RequestParam(value = "orderId") Integer orderId,
+                                HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
         try {
@@ -225,21 +222,19 @@ public class OrderController {
         } catch (AuthenticateException e) {
             return "authorization";
         }
-//        Integer productId = Integer.valueOf(req.getRequestURI().split("unordered/removeProduct/")[1]);
-        orderService.removeProductFromUnorderedOrder(loggedUser, productId);
+        orderService.removeProduct(loggedUser, orderId, productId);
 
         return "redirect:/unordered";
     }
 
     /**
-     *
      * @param req
      * @param resp
      * @return Page with unconfirmed user's orders and removed all products
      */
     @RequestMapping(value = "unordered/remove/{id}", method = RequestMethod.GET)
     public String removeAllProductsFromOrder(@PathVariable("id") Integer orderId,
-                                                      HttpServletRequest req, HttpServletResponse resp) {
+                                             HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
         try {
@@ -248,7 +243,7 @@ public class OrderController {
             return "authorization";
         }
 
-        orderService.removeAllProductsFromUnorderedOrder(loggedUser, orderId);
+        orderService.remove(loggedUser, orderId);
         return "redirect:/unordered";
     }
 

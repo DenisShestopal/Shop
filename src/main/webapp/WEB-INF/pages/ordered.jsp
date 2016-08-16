@@ -51,7 +51,7 @@
 </head>
 <body>
 
-<h1>Confirmed orders list</h1>
+<h1>Confirmed order</h1>
 
 <p align="center">
 <h3>Welcome, ${loggedUser}!</h3></p>
@@ -109,6 +109,10 @@
 <br><br><a href="<c:url value="/paid"/>">My paid orders</a>
 <br><br><a href="<c:url value="/unordered"/>">Back to unconfirmed orders</a>
 <br><br><a href="<c:url value="/products"/>">Back to products list</a>
-<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a>
+<br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a><br><br>
+
+<form action="/users/logout" method="get">
+    <input type="submit" value="Logout"></td>
+</form>
 </body>
 </html>

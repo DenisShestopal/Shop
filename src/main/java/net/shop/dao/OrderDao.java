@@ -2,8 +2,8 @@ package net.shop.dao;
 
 
 import net.shop.model.Order;
-import net.shop.model.User;
-import org.springframework.stereotype.Repository;
+import net.shop.model.OrderStatus;
+
 
 import java.util.List;
 
@@ -13,9 +13,8 @@ public interface OrderDao extends BaseDao<Order> {
 
 //    Order getOrderByUserId(int userId);
 
-    Order getUnorderedOrderByUserId(int userId);
+    List<Integer> listOrdersIdsByUser(Integer userId);
 
-    Order getOrderedOrderByUserId(int userId);
+    List<Order> getOrderByUserIdAndStatus(int userId, OrderStatus status);
 
-    Order getPaidOrderByUserId(int userId);
 }
