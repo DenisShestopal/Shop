@@ -11,6 +11,7 @@ import net.shop.util.PermissionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,7 +76,7 @@ public class UserController {
      * @return users page with added user
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(@RequestBody User user, HttpServletRequest req, HttpServletResponse resp) {
+    public String add(@ModelAttribute User user, HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 

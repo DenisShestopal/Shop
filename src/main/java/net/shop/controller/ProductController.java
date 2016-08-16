@@ -13,6 +13,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -131,7 +132,7 @@ public class ProductController {
      * @return products page with added product
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(@RequestBody Product product, HttpServletRequest req, HttpServletResponse resp) {
+    public String add(@ModelAttribute Product product, HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -165,7 +166,7 @@ public class ProductController {
      * @return products page with edited product
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String update(@RequestBody Product product, HttpServletRequest req, HttpServletResponse resp) {
+    public String update(@ModelAttribute Product product, HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {

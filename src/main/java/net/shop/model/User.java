@@ -35,10 +35,10 @@ public class User extends BaseEntity {
      *
      */
     public User(User user) {
-        setId(user.getId());
-        login = user.login;
-        admin = user.admin;
-        blocked = user.blocked;
+        this.setId(user.getId());
+        this.login = user.getLogin();
+        this.admin = user.getAdmin();
+        this.blocked = user.getBlocked();
     }
 
     public void setBlocked(Boolean isBlocked) {

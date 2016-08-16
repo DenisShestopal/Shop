@@ -150,6 +150,16 @@
             </tr>
             <tr>
                 <td>
+                    <form:label path="code">
+                        <spring:message text="Article"/>
+                    </form:label>
+                </td>
+                <td>
+                    <form:input path="code" maxlength="16" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <form:label path="price">
                         <spring:message text="Price"/>
                     </form:label>

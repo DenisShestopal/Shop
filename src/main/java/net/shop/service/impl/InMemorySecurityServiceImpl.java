@@ -48,13 +48,13 @@ public class InMemorySecurityServiceImpl implements SecurityService {
                 if (usersTokenMap.containsKey(cookie.getValue()))
                     user = userDao.getById(usersTokenMap.get(cookie.getValue()));
         }
-        if (user == null){
+        if (user == null) {
             req.setAttribute("exception", "Please get authorized!");
             throw new AuthenticateException();
         }
 
         //erase credentials after authentication fo security
-        return user;
+        return new User(user);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         User user = userDao.getUserByLogin(login);
         password = Base64.getEncoder().encodeToString((login + ":" + password).getBytes());
 
-        if (!user.getPassword().equals(password)){
+        if (!user.getPassword().equals(password)) {
             req.setAttribute("exception", "Login or/and password are incorrect");
             throw new AuthorizationException("Login or/and password are incorrect");
         }
@@ -76,14 +76,15 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         Cookie cookie = new Cookie(TOKEN, token);
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return user;
+        return new User(user);
     }
 
     @Override
     public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user) throws AuthorizationException {
         usersTokenMap.entrySet().remove(user.getId());
-        Cookie cookie = new Cookie(TOKEN , "deleted");
+        Cookie cookie = new Cookie(TOKEN, "deleted");
         cookie.setPath("/");
+        cookie.setMaxAge(0);
         resp.addCookie(cookie);
         return true;
     }
