@@ -108,8 +108,8 @@ public class ProductController {
      * @return product details page
      */
     @RequestMapping("/{id}")
-    public String productData(HttpServletRequest req, HttpServletResponse resp) {
-        int productId = Integer.valueOf(req.getRequestURI().split("products/")[1]);
+    public String productData(@PathVariable("id") Integer productId,
+                              HttpServletRequest req, HttpServletResponse resp) {
 
         User loggedUser = null;
 

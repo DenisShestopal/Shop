@@ -16,7 +16,7 @@ public interface SecurityService {
 
     User authenticate(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException;
 
-    User authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException;
+    void authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException;
 
     boolean logout(HttpServletRequest req, HttpServletResponse resp, User user);
 
