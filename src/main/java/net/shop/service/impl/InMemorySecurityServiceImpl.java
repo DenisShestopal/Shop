@@ -68,10 +68,13 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         User user = userDao.getUserByLogin(login);
         password = Base64.getEncoder().encodeToString((login + ":" + password).getBytes());
 
-        if (!user.getPassword().equals(password)) {
+        if ((user == null)||(!user.getPassword().equals(password))) {
             req.setAttribute("exception", "Login or/and password are incorrect");
             throw new AuthorizationException("Login or/and password are incorrect");
         }
+
+        if (user.getBlocked())
+            throw new AuthorizationException("Your account is blocked. Please contact administration.");
 
         String token = UUID.randomUUID().toString();
         usersTokenMap.put(token, user.getId());
@@ -82,7 +85,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user){
+    public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user) {
         Cookie[] cookies = req.getCookies();
         String userToken = "";
         for (Cookie cookie : cookies)
@@ -95,7 +98,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         return true;
     }
 
-    private static User getShallowCloneWithoutSecureData(User user){
+    private static User getShallowCloneWithoutSecureData(User user) {
         User result = new User();
         result.setId(user.getId());
         result.setAdmin(user.getAdmin());

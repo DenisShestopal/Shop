@@ -48,8 +48,7 @@
         }
     </style>
 </head>
-<p>
-
+<body>
 
 <h1>Authorization</h1>
 

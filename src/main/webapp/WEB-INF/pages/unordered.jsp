@@ -56,8 +56,8 @@
 <p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
 
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    public Long price = 0L;
-    public Long totalPrice = 0L;
+    public Double price = 0d;
+    public Double totalPrice = 0d;
     public Integer totalQuantity = 0;
 %>
 
@@ -65,7 +65,11 @@
     <p style="color:red;">${exception}</p>
 </c:if>
 
-<c:if test="${!empty userOrder}">
+<c:if test="${empty userOrder.status}">
+    <h3><br><p style="color:dodgerblue;">Your basket is empty, please add products in.</p></h3>
+</c:if>
+
+<c:if test="${!empty userOrder.status}">
     <h3>Order status:
     <br><th>${userOrder.status}</th></h3>
 
@@ -83,18 +87,18 @@
         </tr>
 
         <c:forEach items="${userOrder.productList}" var="entry">
-            <% totalPrice =0L; %>
+            <% totalPrice =0d; %>
             <% totalQuantity =0; %>
             <c:set var="price" value="${entry.key.price}"/>
             <c:set var="quantity" value="${entry.value}"/>
-            <% price = Long.valueOf(pageContext.getAttribute("price").toString())
+            <% price = Double.valueOf(pageContext.getAttribute("price").toString())
                     * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
             <% totalPrice += price; %>
             <% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
 
             <tr>
                 <td>${entry.key.name}</td>
-                <td>${entry.key.price/100}</td>
+                <td>${entry.key.price}</td>
                     <td>
                         <c:if test="${userOrder.status == 'UNORDERED'}">
                         <form:form action="${'/unordered/changeQuantity'}">
@@ -106,7 +110,7 @@
                         </form:form>
                     </c:if>
                     </td>
-                <td><%=price/100%>.<%=price%100%></td>
+                <td><%=price%></td>
                 <td><a href="<c:url value='/unordered/removeProduct?orderId=${userOrder.id}&productId=${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
@@ -114,14 +118,14 @@
             <td><p><b>TOTAL:</b></p></td>
             <td></td>
             <td><p><b><%=totalQuantity%></b><p/></td>
-            <td><p><b><%=totalPrice/100%>.<%=totalPrice%100%></b><p/></td>
+            <td><p><b><%=totalPrice%></b><p/></td>
             <td></td>
         </tr>
     </table>
 </c:if>
 
 <c:set var="orderStatus" value="unordered"/>
-<br><br><a href="<c:url value="/ordered"/>">Back to confirmed orders</a>
+<br><br><a href="<c:url value="/ordered"/>">Forward to confirmed orders</a>
 <br><br><a href="<c:url value="/paid"/>">My paid orders</a>
 <br><br><a href="<c:url value="/products"/>">Back to products list</a>
 <br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a><br><br>

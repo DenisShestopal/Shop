@@ -19,4 +19,7 @@ public interface UserService extends BaseService<User> {
 
     boolean removeUserFromBlackList(User loggedUser, int userId);
 
+//    List<Boolean> listUsersWithOrderedAndUnpaid(User loggedUser, List<UserDTO> usersList);
+
 }
+

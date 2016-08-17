@@ -56,13 +56,19 @@
 <p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
 
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    public Long totalPrice = 0L;%>
+    public Double price = 0d;
+    public Double totalPrice = 0d;
+    public Integer totalQuantity = 0;%>
 
 <c:if test="${!empty exception}">
     <p style="color:red;">${exception}</p>
 </c:if>
 
-<c:if test="${!empty userOrder}">
+<c:if test="${empty userOrder.status}">
+    <h3><br><p style="color:dodgerblue;">Your order is not paid yet.</p></h3>
+</c:if>
+
+<c:if test="${!empty userOrder.status}">
     <h3>Order status:
     <br><th>${userOrder.status}</th></h3>
 
@@ -74,19 +80,24 @@
         </tr>
 
         <c:forEach items="${userOrder.productList}" var="entry">
+            <c:set var="price" value="${entry.key.price}"/>
+            <c:set var="quantity" value="${entry.value}"/>
+            <% price = Double.valueOf(pageContext.getAttribute("price").toString())
+                    * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
+            <% totalPrice += price; %>
+            <% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
             <c:if test="${userOrder.status == 'PAID'}">
             <tr>
                 <td>${entry.key.name}</td>
-                <td>${entry.key.price/100}</td>
+                <td>${entry.key.price}</td>
                 <td>${entry.value}</td>
             </tr>
             </c:if>
         </c:forEach>
         <tr>
-            <td></td>
-            <td>Total price : <%=totalPrice%></td>
-            <td>Total quantity : <%=totalPrice%></td>
-            <%--<td><a href="<c:url value='orders/confirm/${userOrder.id}'/>">Confirm</a></td>--%>
+            <td><p><b>TOTAL:</b></p></td>
+            <td><p><b><%=totalQuantity%></b><p/></td>
+            <td><p><b><%=totalPrice%></b><p/></td>
         </tr>
     </table>
 </c:if>

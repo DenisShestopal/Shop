@@ -67,6 +67,7 @@
             <th width="120">Login</th>
             <th width="60">Admin</th>
             <th width="60">Blocked</th>
+            <%--<th width="180">Orders status</th>--%>
             <th width="60"></th>
             <th width="60"></th>
             <th width="180"></th>
@@ -79,6 +80,14 @@
                 <td><a href="users/${user.id}">${user.login}</a></td>
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>
+                <%--<c:if test="${hasUnpaid}">--%>
+                <%--<td><p style="color:red;">Has unpaid orders</p></td>--%>
+                <%--</c:if>--%>
+                <%--<c:if test="${!hasUnpaid}">--%>
+                    <%--<td>Doesn't have unpaid orders<br>--%>
+                        <%--<p align = "center"><a href="<c:url value='/users/check'/>">Check</a></p>--%>
+                        <%--</td>--%>
+                <%--</c:if>--%>
                 <td><a href="<c:url value='/users/edit/${user.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/users/remove/${user.id}'/>">Delete</a>
 
@@ -123,7 +132,7 @@
                 </td>
             </tr>
         </c:if>
-        <h2>User data</h2>
+        <h3>Create new user</h3>
         <tr>
             <td>
                 <form:label path="login">

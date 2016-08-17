@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "users")
@@ -63,6 +64,38 @@ public class UserController {
                 Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
         req.setAttribute("user", new User());
         req.setAttribute("listUsers", this.userService.listUsers(loggedUser));
+
+        return "users";
+    }
+
+    /**
+     * @param req
+     * @param resp
+     * @return users page with users list
+     */
+    @RequestMapping(value = "/check", method = RequestMethod.GET)
+    public String checkUserForUnpaid(HttpServletRequest req, HttpServletResponse resp) {
+
+        User loggedUser;
+
+        try {
+            loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("loggedUser", loggedUser.getLogin());
+        } catch (AuthenticateException e) {
+            return "authorization";
+        }
+
+        if (!loggedUser.getAdmin()) {
+            req.setAttribute("exception", "Only admin can get the list of users");
+            return "redirect:/products";
+        }
+
+//        List<Boolean> unpaidList = userService.listUsersWithOrderedAndUnpaid(loggedUser, this.userService.listUsers(loggedUser));
+        User user = new User(req.getParameter("login"), req.getParameter("password"),
+                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
+        req.setAttribute("user", new User());
+        req.setAttribute("listUsers", this.userService.listUsers(loggedUser));
+//        req.setAttribute("hasUnpaid", unpaidList);
 
         return "users";
     }
@@ -200,7 +233,8 @@ public class UserController {
      * @return users page with added to blacklist or removed from blacklist user
      */
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
-    public String addToBlackList(HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
+    public String addToBlackList(@PathVariable("id") Integer userId,
+            HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
         User loggedUser = null;
 
@@ -215,7 +249,6 @@ public class UserController {
             return "redirect:/products";
         }
 
-        int userId = Integer.valueOf(req.getRequestURI().split("addtoblacklist/")[1]);
         getUserService().addUserToBlackList(loggedUser, userId);
 
         return "redirect:/users";
@@ -330,7 +363,7 @@ public class UserController {
         try {
             securityService.authorization(req, resp);
         } catch (AuthorizationException e) {
-            req.setAttribute("exception", "Wrong login or password");
+            req.setAttribute("exception", e.getMessage());
             return "authorization";
         }
 

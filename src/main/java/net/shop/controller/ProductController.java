@@ -127,7 +127,7 @@ public class ProductController {
      * @return products page with added product
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String add(@ModelAttribute Product product, HttpServletRequest req, HttpServletResponse resp) {
+    public String add(@ModelAttribute(value="product") Product product, HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -179,7 +179,7 @@ public class ProductController {
         }
 
         Product updatingProduct = new Product(req.getParameter("name"), req.getParameter("code"),
-                Long.parseLong(req.getParameter("price")), "USD");
+                Double.valueOf(req.getParameter("price")), "USD");
         String strProductId = req.getParameter("id");
 
         updatingProduct.setId(Integer.valueOf(strProductId));

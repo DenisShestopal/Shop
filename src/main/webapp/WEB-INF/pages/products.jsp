@@ -92,7 +92,7 @@
                 <td>${product.id}</td>
                 <td><a href="products/${product.id}">${product.name}</a></td>
                 <td>${product.code}</td>
-                <td>${product.price/100}</td>
+                <td>${product.price}</td>
                 <td>${product.currency}</td>
                 <c:if test="${user.admin==true}">
                     <td>
@@ -137,7 +137,7 @@
                     </td>
                 </tr>
             </c:if>
-            <h2>Product data</h2>
+            <h3>Create new product</h3>
             <tr>
                 <td>
                     <form:label path="name">
@@ -165,8 +165,9 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input type="number" min="0" max="10000" step="1" path="price" required="true"
-                                placeholder="10.00" title="format: 44.50"/>
+                    <form:input  path="price" pattern="^[0-9]+[.]?[0-9]*$" required="true"
+                                placeholder="10.00" title="format: '44.50' or '44' or '44.'"/>
+                        <%--type="number" min="0" max="10000" step="1"--%>
                 </td>
             </tr>
             <tr>

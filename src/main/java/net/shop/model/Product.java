@@ -20,7 +20,7 @@ public class Product extends BaseEntity {
     private String code;
 
     @Column(name = "PRICE")
-    private Long price;
+    private Double price;
 
     @Column(name = "CURRENCY")
     private String currency="USD";

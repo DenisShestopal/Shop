@@ -51,6 +51,12 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     @Override
+    public User update(User loggedUser, User entity) {
+        if (userDao.getUserByLogin(entity.getLogin()) != null) return null;
+        return super.update(loggedUser, entity);
+    }
+
+    @Override
     public List<UserDTO> listUnpaidUsers(User loggedUser) {
 //        List<User> usersList = userDao.listUsers();
 //        List<User> resultList = new ArrayList<>();
@@ -91,5 +97,33 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         }
         return true;
     }
+
+//    @Override
+//    public List<Boolean> listUsersWithOrderedAndUnpaid(User loggedUser, List<UserDTO> usersList) {
+//        List<Boolean> boolList = null;
+//        boolean[] hasOrdered = null;
+//        boolean[] hasPaid = null;
+//        int i = 0;
+//        for (UserDTO user : usersList) {
+//            for (Order order : user.getOrderList()) {
+//                if (order.getStatus().equals(OrderStatus.ORDERED)) {
+//                    hasOrdered[i] = true;
+//                    i += 1;
+//                }
+//                if (order.getStatus().equals(OrderStatus.PAID)) {
+//                    hasPaid[i] = true;
+//                    i += 1;
+//                }
+//            }
+//        }
+//
+//        for (int j = 0; i < hasOrdered.length; i++) {
+//            if (hasOrdered[j] && !hasPaid[j])
+//                boolList.add(true);
+//            else
+//                boolList.add(false);
+//        }
+//        return boolList;
+//    }
 
 }

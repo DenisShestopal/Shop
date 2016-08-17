@@ -3,6 +3,10 @@ package net.shop.model;
 
 import lombok.*;
 
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+import java.util.Set;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +23,7 @@ public class UserDTO {
     private Boolean admin;
 
     private Boolean blocked;
+
+//    private Set<Order> orderList;
 }
 

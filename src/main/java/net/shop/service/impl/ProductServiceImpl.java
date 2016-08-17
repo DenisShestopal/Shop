@@ -54,6 +54,12 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
+    public Product update(User loggedUser, Product entity) {
+        if(productDao.getProductByCode(entity.getCode()) != null) return null;
+        return super.update(loggedUser, entity);
+    }
+
+    @Override
     public List<Product> listProducts(User loggedUser) {
         return this.productDao.listProducts();
     }
