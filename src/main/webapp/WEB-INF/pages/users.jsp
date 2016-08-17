@@ -67,7 +67,7 @@
             <th width="120">Login</th>
             <th width="60">Admin</th>
             <th width="60">Blocked</th>
-            <%--<th width="180">Orders status</th>--%>
+                <%--<th width="180">Orders status</th>--%>
             <th width="60"></th>
             <th width="60"></th>
             <th width="180"></th>
@@ -80,23 +80,26 @@
                 <td><a href="users/${user.id}">${user.login}</a></td>
                 <td>${user.admin}</td>
                 <td>${user.blocked}</td>
-                <%--<c:if test="${hasUnpaid}">--%>
-                <%--<td><p style="color:red;">Has unpaid orders</p></td>--%>
-                <%--</c:if>--%>
-                <%--<c:if test="${!hasUnpaid}">--%>
+                    <%--<c:if test="${hasUnpaid}">--%>
+                    <%--<td><p style="color:red;">Has unpaid orders</p></td>--%>
+                    <%--</c:if>--%>
+                    <%--<c:if test="${!hasUnpaid}">--%>
                     <%--<td>Doesn't have unpaid orders<br>--%>
-                        <%--<p align = "center"><a href="<c:url value='/users/check'/>">Check</a></p>--%>
-                        <%--</td>--%>
-                <%--</c:if>--%>
+                    <%--<p align = "center"><a href="<c:url value='/users/check'/>">Check</a></p>--%>
+                    <%--</td>--%>
+                    <%--</c:if>--%>
                 <td><a href="<c:url value='/users/edit/${user.id}'/>">Edit</a></td>
                 <td><a href="<c:url value='/users/remove/${user.id}'/>">Delete</a>
 
-                <td><a href="<c:if test="${!user.blocked}">
+                <td>
+                    <c:if test="${!user.admin}">
+                    <a href="<c:if test="${!user.blocked}">
                 <c:url value='/users/addtoblacklist/${user.id}'/>">Add to blacklist</c:if>
-                    <c:if test="${user.blocked}">
-                        <c:url value='/users/removefromblacklist/${user.id}'/>">Remove from blacklist</c:if></a></td>
+                        <c:if test="${user.blocked}">
+                            <c:url value='/users/removefromblacklist/${user.id}'/>">Remove from blacklist</c:if></a>
+                </td>
 
-
+                </c:if>
                     <%--<td><a href="<c:url value="/products"/>" target="_blank">Products list</a></td>--%>
             </tr>
         </c:forEach>
@@ -165,12 +168,13 @@
         </tr>
         <tr>
             <td>
+                <c:if test="${!user.admin}">
                 <form:label path="blocked">
                     <spring:message text="Blocked"/>
                 </form:label>
             </td>
             <td>
-                <form:select path="blocked" items="<%=tf%>"/>
+                <form:select path="blocked" items="<%=tf%>"/></c:if>
             </td>
         </tr>
         <tr>
