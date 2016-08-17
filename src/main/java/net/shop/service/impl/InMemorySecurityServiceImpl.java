@@ -96,7 +96,6 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         Cookie cookie = new Cookie(TOKEN, token);
         cookie.setPath("/");
         resp.addCookie(cookie);
-//        return UserUtils.getShallowCloneWithoutSecureData(user, new User());
     }
 
     /**
