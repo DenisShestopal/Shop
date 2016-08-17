@@ -42,6 +42,12 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return userDao;
     }
 
+    /**
+     * adds user with checking if already exists
+     * @param loggedUser
+     * @param entity
+     * @return
+     */
     @Override
     public User add(User loggedUser, User entity) {
         if (userDao.getUserByLogin(entity.getLogin()) != null) return null;
@@ -50,12 +56,23 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return super.add(loggedUser, entity);
     }
 
+    /**
+     * updates user with checking if another user with such login already exists
+     * @param loggedUser
+     * @param entity
+     * @return
+     */
     @Override
     public User update(User loggedUser, User entity) {
         if (userDao.getUserByLogin(entity.getLogin()) != null) return null;
         return super.update(loggedUser, entity);
     }
 
+    /**
+     * working with userDTO, need to be realized correctly
+     * @param loggedUser
+     * @return
+     */
     @Override
     public List<UserDTO> listUnpaidUsers(User loggedUser) {
 //        List<User> usersList = userDao.listUsers();
@@ -71,6 +88,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return new ArrayList<>();//resultList;
     }
 
+    /**
+     * working with userDTO, need to add isAdmin verification
+     * @param loggedUser
+     * @return
+     */
     @Override
     public List<UserDTO> listUsers(User loggedUser) {
         //TODO check isAdmin
@@ -98,7 +120,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return true;
     }
 
-//    @Override
+/**
+ * need to be realized. returns a list of users which have confirmed but unpaid orders
+  */
+// @Override
 //    public List<Boolean> listUsersWithOrderedAndUnpaid(User loggedUser, List<UserDTO> usersList) {
 //        List<Boolean> boolList = null;
 //        boolean[] hasOrdered = null;

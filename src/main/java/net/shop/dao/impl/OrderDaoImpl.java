@@ -35,9 +35,9 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
         Session session = getSessionFactory().getCurrentSession();
         List<Order> orderList = session.createQuery("from Order").list();
 
-//        for (Order order : orderList) {
-//            logger.info("Orders list: " + order);
-//        }
+        for (Order order : orderList) {
+            logger.info("Orders list: " + order);
+        }
 
         return orderList;
     }
@@ -61,7 +61,6 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
     @SuppressWarnings("unchecked")
     public List<Order> getOrderByUserIdAndStatus(int userId, OrderStatus status) {
         Session session = getSessionFactory().getCurrentSession();
-
 
         return session.createQuery("from net.shop.model.Order o where o.owner.id = :userId and o.status = :status")
                 .setParameter("userId", userId)

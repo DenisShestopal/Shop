@@ -25,9 +25,7 @@ import java.util.List;
 public class ProductServiceImpl extends BaseServiceImpl<Product> implements ProductService {
 
     private ProductDao productDao;
-
     private OrderDao orderDao;
-
     private UserDao userDao;
 
     @Autowired
@@ -64,6 +62,12 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
         return this.productDao.listProducts();
     }
 
+    /**
+     *
+     * @param loggedUser
+     * @param productId
+     * @return true if product was successfully added to basket (unordered order)
+     */
     @Override
     public boolean addToOrder(User loggedUser, int productId) {
 

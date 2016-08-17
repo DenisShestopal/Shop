@@ -71,6 +71,13 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return true;
     }
 
+    /**
+     *
+     * @param loggedUser
+     * @param productId
+     * @param quantity
+     * @return true if quantity of products successfully changed
+     */
     @Override
     public boolean changeQuantity(User loggedUser, Integer productId, Integer quantity) {
 
@@ -86,15 +93,24 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return true;
     }
 
-//    public List<Product> getOrderProductsList(int orderId) {
-//        return getProductDao().listProducts();
-//    }
-
+    /**
+     *
+     * @param loggedUser
+     * @param status
+     * @return user's orders list by order status
+     */
     @Override
     public List<Order> getOrderByUserIdAndStatus(User loggedUser, OrderStatus status) {
         return orderDao.getOrderByUserIdAndStatus(loggedUser.getId(), status);
     }
 
+    /**
+     *
+     * @param loggedUser
+     * @param orderId
+     * @param productId
+     * @return true if product was successfully removed from order
+     */
     @Override
     public boolean removeProduct(User loggedUser, Integer orderId, Integer productId) {
 
@@ -108,6 +124,12 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
         return false;
     }
 
+    /**
+     *
+     * @param loggedUser
+     * @param orderId
+     * @return true if all products were removed from order
+     */
     @Override
     public boolean remove(User loggedUser, Integer orderId) {
         List<Integer> userOrdersId = orderDao.listOrdersIdsByUser(loggedUser.getId());

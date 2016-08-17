@@ -20,13 +20,8 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
 
-//    private SessionFactory sessionFactory;
-
     public abstract SessionFactory getSessionFactory();
 
-//    public void setSessionFactory(SessionFactory sessionFactory) {
-//        this.sessionFactory = sessionFactory;
-//    }
 
     @Override
     public T add(T entity) {

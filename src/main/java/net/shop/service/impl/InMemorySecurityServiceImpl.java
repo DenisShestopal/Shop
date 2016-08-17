@@ -31,6 +31,13 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         this.userDao = userDao;
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return userDTO if success or throws exception
+     * @throws AuthenticateException
+     */
     @Override
     @Transactional
     public User authenticate(HttpServletRequest req, HttpServletResponse resp) throws AuthenticateException {
@@ -59,6 +66,13 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         return InMemorySecurityServiceImpl.getShallowCloneWithoutSecureData(user);
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @return userDTO if success or throws exception
+     * @throws AuthorizationException
+     */
     @Override
     @Transactional
     public User authorization(HttpServletRequest req, HttpServletResponse resp) throws AuthorizationException {
@@ -84,6 +98,13 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         return InMemorySecurityServiceImpl.getShallowCloneWithoutSecureData(user);
     }
 
+    /**
+     *
+     * @param req
+     * @param resp
+     * @param user
+     * @return true if success
+     */
     @Override
     public boolean logout(HttpServletRequest req, HttpServletResponse resp, User user) {
         Cookie[] cookies = req.getCookies();
@@ -98,6 +119,11 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         return true;
     }
 
+    /**
+     *
+     * @param user
+     * @return userDTO without password for security thoughts
+     */
     private static User getShallowCloneWithoutSecureData(User user) {
         User result = new User();
         result.setId(user.getId());
@@ -107,6 +133,13 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         return result;
     }
 
+    /**
+     *
+     * @param loggedUser
+     * @param user
+     * @return true if user's tokens was successfully removed from Map
+     * @throws PermissionException
+     */
     @Override
     public boolean deleteUserTokens(User loggedUser, User user) throws PermissionException {
         if (loggedUser.getAdmin()) {

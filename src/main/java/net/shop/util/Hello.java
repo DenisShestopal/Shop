@@ -6,6 +6,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
 public class Hello extends TagSupport {
+
     private static final long serialVersionUID = 1L;
 
     public static String userLogin = "you can <a href=\"../../users/authorization\">SignIn</a> and get an account!";
