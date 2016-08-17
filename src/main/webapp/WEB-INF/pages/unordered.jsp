@@ -75,7 +75,6 @@
 
 
     <br><a href="<c:url value='unordered/confirm/${userOrder.id}'/>">Confirm</a>
-    <%--<a href="<c:url value='orders/pay/${userOrder.id}'/>">Pay</a>--%>
     <a href="<c:url value='unordered/remove/${userOrder.id}'/>">Delete all products</a><br><br>
     <table class="tg">
         <tr>
@@ -114,13 +113,13 @@
                 <td><a href="<c:url value='/unordered/removeProduct?orderId=${userOrder.id}&productId=${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
-        <tr>
-            <td><p><b>TOTAL:</b></p></td>
-            <td></td>
-            <td><p><b><%=totalQuantity%></b><p/></td>
-            <td><p><b><%=totalPrice%></b><p/></td>
-            <td></td>
-        </tr>
+        <%--<tr>--%>
+            <%--<td><p><b>TOTAL:</b></p></td>--%>
+            <%--<td></td>--%>
+            <%--<td><p><b><%=totalQuantity%></b><p/></td>--%>
+            <%--<td><p><b><%=totalPrice%></b><p/></td>--%>
+            <%--<td></td>--%>
+        <%--</tr>--%>
     </table>
 </c:if>
 

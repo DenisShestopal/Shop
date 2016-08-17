@@ -94,11 +94,11 @@
             </tr>
             </c:if>
         </c:forEach>
-        <tr>
-            <td><p><b>TOTAL:</b></p></td>
-            <td><p><b><%=totalQuantity%></b><p/></td>
-            <td><p><b><%=totalPrice%></b><p/></td>
-        </tr>
+        <%--<tr>--%>
+            <%--<td><p><b>TOTAL:</b></p></td>--%>
+            <%--<td><p><b><%=totalQuantity%></b><p/></td>--%>
+            <%--<td><p><b><%=totalPrice%></b><p/></td>--%>
+        <%--</tr>--%>
     </table>
 </c:if>
 

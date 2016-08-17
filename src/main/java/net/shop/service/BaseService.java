@@ -1,9 +1,7 @@
 package net.shop.service;
 
 import net.shop.model.BaseEntity;
-import net.shop.model.Product;
 import net.shop.model.User;
-import org.springframework.stereotype.Service;
 
 public interface BaseService<T extends BaseEntity> {
 

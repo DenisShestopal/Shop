@@ -10,13 +10,11 @@ import net.shop.model.OrderStatus;
 import net.shop.model.Product;
 import net.shop.model.User;
 import net.shop.service.ProductService;
-import net.shop.util.NoOrdersException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,7 +50,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
-    public Product update(User loggedUser, Product entity) {
+    public Product update(User loggedUser, Product entity){
         if(productDao.getProductByCode(entity.getCode()) != null) return null;
         return super.update(loggedUser, entity);
     }
@@ -66,7 +64,7 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
      *
      * @param loggedUser
      * @param productId
-     * @return true if product was successfully added to basket (unordered order)
+     * @return
      */
     @Override
     public boolean addToOrder(User loggedUser, int productId) {

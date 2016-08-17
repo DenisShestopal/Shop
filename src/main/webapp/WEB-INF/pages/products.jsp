@@ -67,6 +67,9 @@
 </c:if>
 </c:if>
 
+<c:if test="${!empty basketStatus}">
+   <p style="color:blue;">${basketStatus}</p>
+</c:if>
 
 <c:if test="${!empty listProducts}">
     <table class="tg">
@@ -82,9 +85,6 @@
             </c:if>
             <c:if test="${!empty user.login}">
                 <th width="120">Order product</th>
-                <c:if test="${!empty result}">
-                    <th width="60">Product status</th>
-                </c:if>
             </c:if>
         </tr>
         <c:forEach items="${listProducts}" var="product">
@@ -102,9 +102,6 @@
                 </c:if>
                 <c:if test="${!empty user.login}">
                     <td><a href="<c:url value='/products/addtoorder/${product.id}'/>" onclick="">Add to Basket</a></td>
-                    <c:if test="${!empty result}">
-                        <td>${result}</td>
-                    </c:if>
                 </c:if>
             </tr>
         </c:forEach>

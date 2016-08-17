@@ -77,25 +77,29 @@ public class ProductController {
      * @return products page with added to order product
      */
     @RequestMapping(value = "/addtoorder/{productId}", method = RequestMethod.GET)
-    public String addToOrder(HttpServletRequest req, HttpServletResponse resp) {
+    public String addToOrder(@PathVariable("productId") Integer productId,
+                             HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
+            req.setAttribute("user", loggedUser);
+            Hello.userLogin = loggedUser.getLogin();
         } catch (AuthenticateException e) {
             req.setAttribute("exception", "You need to get authorized first");
             return "authorization";
         }
 
-        int userId = loggedUser.getId();
-        int productId = Integer.valueOf(req.getRequestURI().split("products/addtoorder/")[1]);
         boolean result = getProductService().addToOrder(loggedUser, productId);
-//        if (result)
-//            req.setAttribute("result", "product added");
-//        else
-//            req.setAttribute("result", "product was not added");
+        if (result)
+            req.setAttribute("basketStatus", "You have added products in your basket now");
+        else
+            req.setAttribute("basketStatus", "Product was not added");
 
-        return "redirect:/products";
+        req.setAttribute("product", new Product());
+        req.setAttribute("listProducts", this.productService.listProducts(loggedUser));
+        return "products";
+//        return "redirect:/products";
     }
 
     /**
@@ -163,7 +167,7 @@ public class ProductController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(@ModelAttribute Product product,
                          HttpServletRequest req, HttpServletResponse resp) {
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -178,12 +182,12 @@ public class ProductController {
             return "redirect:/products";
         }
 
-        Product updatingProduct = new Product(req.getParameter("name"), req.getParameter("code"),
-                Double.valueOf(req.getParameter("price")), "USD");
-        String strProductId = req.getParameter("id");
-
-        updatingProduct.setId(Integer.valueOf(strProductId));
-        this.productService.update(loggedUser, updatingProduct);
+//        Product updatingProduct = new Product(req.getParameter("name"), req.getParameter("code"),
+//                Double.valueOf(req.getParameter("price")), "USD");
+//        String strProductId = req.getParameter("id");
+//
+//        updatingProduct.setId(Integer.valueOf(strProductId));
+        this.productService.update(loggedUser, product);
 
         return "redirect:/products";
     }

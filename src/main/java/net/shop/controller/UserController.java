@@ -4,10 +4,7 @@ import lombok.Getter;
 import net.shop.model.User;
 import net.shop.service.SecurityService;
 import net.shop.service.UserService;
-import net.shop.util.AuthenticateException;
-import net.shop.util.AuthorizationException;
-import net.shop.util.Hello;
-import net.shop.util.PermissionException;
+import net.shop.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -141,7 +138,7 @@ public class UserController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -161,7 +158,6 @@ public class UserController {
 
         updatingUser.setId(Integer.valueOf(strUserId));
         this.userService.update(loggedUser, updatingUser);
-
         return "redirect:/users";
     }
 
@@ -172,7 +168,7 @@ public class UserController {
      */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String getForEdit(@PathVariable("id") Integer userId,
-                                 HttpServletRequest req, HttpServletResponse resp) {
+                             HttpServletRequest req, HttpServletResponse resp) {
         User loggedUser = null;
 
         try {
@@ -234,7 +230,7 @@ public class UserController {
      */
     @RequestMapping(value = "/addtoblacklist/{id}", method = RequestMethod.GET)
     public String addToBlackList(@PathVariable("id") Integer userId,
-            HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
+                                 HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
         User loggedUser = null;
 
@@ -255,7 +251,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/removefromblacklist/{id}", method = RequestMethod.GET)
-    public String removeFromBlackList(@PathVariable ("id") Integer userId,
+    public String removeFromBlackList(@PathVariable("id") Integer userId,
                                       HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
         User loggedUser = null;
@@ -388,7 +384,6 @@ public class UserController {
         }
 
         User user = new User(login, password, false, false, new HashSet<>());
-
 
         User addingUser = userService.add(new User(), user);
         if (addingUser == null) {

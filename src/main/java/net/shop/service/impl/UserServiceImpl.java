@@ -2,8 +2,6 @@ package net.shop.service.impl;
 
 import net.shop.dao.BaseDao;
 import net.shop.dao.UserDao;
-import net.shop.model.Order;
-import net.shop.model.OrderStatus;
 import net.shop.model.User;
 import net.shop.model.UserDTO;
 import net.shop.service.SecurityService;
@@ -63,8 +61,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
      * @return
      */
     @Override
-    public User update(User loggedUser, User entity) {
+    public User update(User loggedUser, User entity){
         if (userDao.getUserByLogin(entity.getLogin()) != null) return null;
+        entity.setPassword(Base64.getEncoder()
+                .encodeToString((entity.getLogin() + ":" + entity.getPassword()).getBytes()));
         return super.update(loggedUser, entity);
     }
 

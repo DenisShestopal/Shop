@@ -23,10 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
-//@RequestMapping(value = "orders")
 @Getter
 public class OrderController {
-
 
     private SecurityService securityService;
     private OrderService orderService;
@@ -58,7 +56,7 @@ public class OrderController {
     @RequestMapping(value = "unordered", method = RequestMethod.GET)
     public String unorderedOrders(HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -70,8 +68,8 @@ public class OrderController {
         List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.UNORDERED);
         if (orderList.size() != 0)
             req.setAttribute("userOrder", orderList.get(0));
-        else req.setAttribute("userOrder", new Order());
-        req.setAttribute("order", new Order());
+        else
+            req.setAttribute("userOrder", new Order());
 
         return "unordered";
     }
@@ -142,8 +140,6 @@ public class OrderController {
         } catch (AuthenticateException e) {
             return "authorization";
         }
-
-//        Integer orderId = Integer.valueOf(req.getRequestURI().split("unordered/confirm/")[1]);
 
         try {
             if (!(getOrderService().confirmOrder(loggedUser, orderId))) {
@@ -216,7 +212,7 @@ public class OrderController {
                                 @RequestParam(value = "orderId") Integer orderId,
                                 HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
         } catch (AuthenticateException e) {
