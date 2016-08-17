@@ -56,6 +56,13 @@ public class ProductServiceImpl extends BaseServiceImpl<Product> implements Prod
     }
 
     @Override
+    public boolean remove(User loggedUser, Integer id) {
+        if(productDao.listProducts().size()==1)
+            return false;
+        return super.remove(loggedUser, id);
+    }
+
+    @Override
     public List<Product> listProducts(User loggedUser) {
         return this.productDao.listProducts();
     }

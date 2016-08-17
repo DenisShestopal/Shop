@@ -40,6 +40,13 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return userDao;
     }
 
+    @Override
+    public boolean remove(User loggedUser, Integer id) {
+        User admin= userDao.getById(id);
+        if(admin.getAdmin()) return false;
+        return super.remove(loggedUser, id);
+    }
+
     /**
      * adds user with checking if already exists
      * @param loggedUser

@@ -5,9 +5,9 @@
     <title>Shop</title>
 </head>
 <body>
-<h3>Shop project</h3>
+<h1>Shop project</h1>
 <br/>
-<a href="<c:url value="/products"/>">Products list</a>
+<a href="<c:url value="/products"/>">Products list</a><br>
 <br><a href="<c:url value="/users/authorization"/>">Authorization</a>
 <br/>
 </body>

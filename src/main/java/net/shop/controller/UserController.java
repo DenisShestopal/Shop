@@ -294,7 +294,7 @@ public class UserController {
             return "redirect:/products";
         }
 
-        this.userService.remove(loggedUser, userId);
+        if(this.userService.remove(loggedUser, userId));
 
         return "redirect:/users";
     }

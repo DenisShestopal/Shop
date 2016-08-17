@@ -5,7 +5,7 @@
 <%@ page session="false" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/helloTag.tld" prefix="tag"%>
+<%@ taglib uri="/WEB-INF/helloTag.tld" prefix="tag" %>
 
 <head>
     <title>Products Page</title>
@@ -59,16 +59,17 @@
 <%--<p align="center">--%>
 <%--<h3>Welcome, ${loggedUser}!</h3></p>--%>
 
-<p><h3><tag:hello /></h3></p>
+<p>
+<h3><tag:hello/></h3></p>
 
 <c:if test="${!loggedUser == 'Unsigned User'}">
-<c:if test="${!empty exception}">
-    <p style="color:red;">${exception}</p>
-</c:if>
+    <c:if test="${!empty exception}">
+        <p style="color:red;">${exception}</p>
+    </c:if>
 </c:if>
 
 <c:if test="${!empty basketStatus}">
-   <p style="color:blue;">${basketStatus}</p>
+    <p style="color:blue;">${basketStatus}</p>
 </c:if>
 
 <c:if test="${!empty listProducts}">
@@ -162,7 +163,7 @@
                     </form:label>
                 </td>
                 <td>
-                    <form:input  path="price" pattern="^[0-9]+[.]?[0-9]*$" required="true"
+                    <form:input path="price" pattern="^[0-9]+[.]?[0-9]*$" required="true"
                                 placeholder="10.00" title="format: '44.50' or '44' or '44.'"/>
                         <%--type="number" min="0" max="10000" step="1"--%>
                 </td>
@@ -188,8 +189,8 @@
     <br><br><a href="../../users">Manage users</a>
 </c:if>
 <br><br><a href="<c:url value="/users/authorization"/>">Authorization page</a><br><br>
-<form action="/users/logout" method="get">
-    <input type="submit" value="Logout"></td>
-</form>
+    <form action="/users/logout" method="get">
+        <input type="submit" value="Logout"></td>
+    </form>
 </body>
 </html>

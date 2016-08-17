@@ -3,10 +3,7 @@ package net.shop.service.impl;
 import net.shop.dao.UserDao;
 import net.shop.model.User;
 import net.shop.service.SecurityService;
-import net.shop.util.AuthenticateException;
-import net.shop.util.AuthorizationException;
-import net.shop.util.Hello;
-import net.shop.util.PermissionException;
+import net.shop.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -63,7 +60,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
 
         Hello.userLogin = user.getLogin();
         //erase credentials after authentication fo security
-        return InMemorySecurityServiceImpl.getShallowCloneWithoutSecureData(user);
+        return UserUtils.getShallowCloneWithoutSecureData(user, new User());
     }
 
     /**
@@ -95,7 +92,7 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         Cookie cookie = new Cookie(TOKEN, token);
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return InMemorySecurityServiceImpl.getShallowCloneWithoutSecureData(user);
+        return UserUtils.getShallowCloneWithoutSecureData(user, new User());
     }
 
     /**
@@ -119,19 +116,19 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         return true;
     }
 
-    /**
-     *
-     * @param user
-     * @return userDTO without password for security thoughts
-     */
-    private static User getShallowCloneWithoutSecureData(User user) {
-        User result = new User();
-        result.setId(user.getId());
-        result.setAdmin(user.getAdmin());
-        result.setBlocked(user.getBlocked());
-        result.setLogin(user.getLogin());
-        return result;
-    }
+//    /**
+//     *
+//     * @param user
+//     * @return userDTO without password for security thoughts
+//     */
+//    private static User getShallowCloneWithoutSecureData(User user) {
+//        User result = new User();
+//        result.setId(user.getId());
+//        result.setAdmin(user.getAdmin());
+//        result.setBlocked(user.getBlocked());
+//        result.setLogin(user.getLogin());
+//        return result;
+//    }
 
     /**
      *
