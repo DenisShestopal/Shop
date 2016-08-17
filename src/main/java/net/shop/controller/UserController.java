@@ -66,9 +66,10 @@ public class UserController {
     }
 
     /**
+     * not realized yet
      * @param req
      * @param resp
-     * @return users page with users list
+     * @return users page with users list.
      */
     @RequestMapping(value = "/check", method = RequestMethod.GET)
     public String checkUserForUnpaid(HttpServletRequest req, HttpServletResponse resp) {
@@ -105,7 +106,7 @@ public class UserController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String add(@ModelAttribute User user, HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -169,7 +170,7 @@ public class UserController {
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String getForEdit(@PathVariable("id") Integer userId,
                              HttpServletRequest req, HttpServletResponse resp) {
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -186,7 +187,6 @@ public class UserController {
 
 //        User updatingUser = new User(req.getParameter("login"), req.getParameter("password"),
 //                Boolean.parseBoolean(req.getParameter("admin")), Boolean.parseBoolean(req.getParameter("blocked")), new HashSet<>());
-//        int userId = Integer.valueOf(req.getRequestURI().split("users/edit/")[1]);
         req.setAttribute("user", this.userService.getById(loggedUser, userId));
         req.setAttribute("listUsers", this.userService.listUsers(loggedUser));
 
@@ -201,7 +201,7 @@ public class UserController {
     @RequestMapping(value = "/blacklist", method = RequestMethod.GET)
     public String blackList(HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -232,7 +232,7 @@ public class UserController {
     public String addToBlackList(@PathVariable("id") Integer userId,
                                  HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -254,7 +254,7 @@ public class UserController {
     public String removeFromBlackList(@PathVariable("id") Integer userId,
                                       HttpServletRequest req, HttpServletResponse resp) throws PermissionException {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -278,9 +278,10 @@ public class UserController {
      * @return users page without deleted user
      */
     @RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
-    public String remove(HttpServletRequest req, HttpServletResponse resp) {
+    public String remove(@PathVariable("id") Integer userId,
+                         HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -293,7 +294,6 @@ public class UserController {
             return "redirect:/products";
         }
 
-        int userId = Integer.valueOf(req.getRequestURI().split("users/remove/")[1]);
         this.userService.remove(loggedUser, userId);
 
         return "redirect:/users";
@@ -305,9 +305,10 @@ public class UserController {
      * @return users details page
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String productData(HttpServletRequest req, HttpServletResponse resp) {
+    public String productData(@PathVariable("id") Integer userId,
+                              HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = securityService.authenticate(req, resp);
@@ -322,7 +323,6 @@ public class UserController {
             return "redirect:/products";
         }
 
-        int userId = Integer.valueOf(req.getRequestURI().split("users/")[1]);
         req.setAttribute("user", this.userService.getById(loggedUser, userId));
 
         return "userdata";
@@ -406,7 +406,7 @@ public class UserController {
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest req, HttpServletResponse resp) {
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = securityService.authenticate(req, resp);

@@ -11,8 +11,6 @@ public interface OrderDao extends BaseDao<Order> {
 
     List<Order> listOrders();
 
-//    Order getOrderByUserId(int userId);
-
     List<Integer> listOrdersIdsByUser(Integer userId);
 
     List<Order> getOrderByUserIdAndStatus(int userId, OrderStatus status);

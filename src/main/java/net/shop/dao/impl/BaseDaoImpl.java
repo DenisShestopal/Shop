@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.stereotype.Repository;
 
-//@Repository
-//@Transactional
 public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     //get type of T by reflection

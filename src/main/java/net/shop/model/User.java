@@ -27,8 +27,8 @@ public class User extends BaseEntity {
     @Column(name = "BLOCKED")
     private Boolean blocked;
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner") //TODO add to OrderDao getOrderByUserId
-    private Set<Order> orderList;//TODO see composition
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "owner")
+    private Set<Order> orderList;
 
     public void setBlocked(Boolean isBlocked) {
         this.blocked = isBlocked;
