@@ -14,7 +14,6 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@ToString(callSuper = true)
 @Table(name = "ORDERS")
 public class Order extends BaseEntity {
 

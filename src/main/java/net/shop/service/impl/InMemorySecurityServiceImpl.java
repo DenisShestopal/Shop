@@ -64,7 +64,6 @@ public class InMemorySecurityServiceImpl implements SecurityService {
         User detached = new User();
         BeanUtils.copyProperties(user, detached, "password", "orderList");
         return detached;
-//        return UserUtils.getShallowCloneWithoutSecureData(user, new User());
     }
 
     /**

@@ -8,9 +8,6 @@
 
     <context:component-scan base-package="net.shop"/>
 
-    <!--<util:map id="usersTokenMap" map-class="java.util.concurrent.ConcurrentHashMap" key-type="java:java.lang.String" value-type="java.lang.Integer">-->
-    <!--</util:map>-->
-
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>

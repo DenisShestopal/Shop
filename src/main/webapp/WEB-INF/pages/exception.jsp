@@ -57,8 +57,8 @@
 
 <h1>Products List</h1>
 
-<p>
-<h3><tag:hello/></h3></p>
+<%--<p>--%>
+<%--<h3><tag:hello/></h3></p>--%>
 
 <br><p style="color:red;"><b>Sorry, something has gone wrong:</b></p>
 
