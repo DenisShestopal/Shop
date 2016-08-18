@@ -96,8 +96,7 @@
 
             <% price = Double.valueOf(pageContext.getAttribute("price").toString())
                     * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
-            <%--<% totalPrice += price; %>--%>
-            <%--<% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>--%>
+
             <c:forEach items="${order.productList}">
                 <c:set var="price" value="<%=price%>"/>
                 <c:set var="totalPrice" value="${totalPrice+price}"/>
@@ -121,14 +120,13 @@
                 <td><a href="<c:url value='/unordered/removeProduct?orderId=${order.id}&productId=${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
-        <%--<tr>--%>
-            <%--<td><p><b>TOTAL:</b></p></td>--%>
-            <%--<td></td>--%>
-            <%--<td><p><b><%=totalQuantity%></b><p/></td>--%>
-            <%--<td><p><b><%=totalPrice%></b><p/></td>--%>
-            <%--<td></td>--%>
-        <%--</tr>--%>
-        <td>${totalPrice}</td>
+        <tr>
+            <td><p><b>TOTAL:</b></p></td>
+            <td></td>
+            <td></td>
+            <td><p><b>${totalPrice}</b><p/></td>
+            <td></td>
+        </tr>
     </table>
 </c:if>
     </c:forEach>
