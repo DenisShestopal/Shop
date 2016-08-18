@@ -93,9 +93,10 @@ public class OrderController {
         }
 
         List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.ORDERED);
-        if (orderList.size() != 0)
+        if (orderList.size() != 0) {
             req.setAttribute("userOrder", orderList.get(0));
-        else req.setAttribute("userOrder", new Order());
+            req.setAttribute("ordersList", orderList);
+        } else req.setAttribute("userOrder", new Order());
         req.setAttribute("order", new Order());
         return "ordered";
     }
