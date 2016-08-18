@@ -76,7 +76,6 @@
     <h3>Order status:
     <br><th>${userOrder.status}</th></h3>
 
-
     <br><a href="<c:url value='unordered/confirm/${order.id}'/>">Confirm</a>
     <a href="<c:url value='unordered/remove/${order.id}'/>">Delete all products</a><br><br>
     <table class="tg">
@@ -89,6 +88,7 @@
         </tr>
 
         <c:forEach items="${order.productList}" var="entry">
+            <c:set var="totalPrice" value="0"/>
             <% totalPrice =0d; %>
             <% totalQuantity =0; %>
             <c:set var="price" value="${entry.key.price}"/>
@@ -98,10 +98,9 @@
                     * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
             <%--<% totalPrice += price; %>--%>
             <%--<% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>--%>
-
-            <c:set var="totalPrice" value="0"/>
             <c:forEach items="${order.productList}">
-                <c:set var="totalPrice" value="${totalPrice} + <%=price%>}"/>
+                <c:set var="price" value="<%=price%>"/>
+                <c:set var="totalPrice" value="${totalPrice+price}"/>
             </c:forEach>
 
             <tr>
