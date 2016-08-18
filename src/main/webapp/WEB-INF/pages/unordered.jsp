@@ -69,8 +69,8 @@
     <h3><br><p style="color:dodgerblue;">Your basket is empty, please add products in.</p></h3>
 </c:if>
 
-<c:if test="${!empty orderList}">
-    <c:forEach items="${orderList.orderId}" var="entry">
+<c:if test="${!empty ordersList}">
+    <c:forEach items="${ordersList}" var="entry">
 
 <c:if test="${!empty userOrder.status}">
     <h3>Order status:

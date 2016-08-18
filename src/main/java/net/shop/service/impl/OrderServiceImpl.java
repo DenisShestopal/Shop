@@ -52,8 +52,10 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
     }
 
     @Override
-    public boolean confirmOrder(User loggedUser, int orderId) throws PermissionException {
-        Order order = orderDao.getOrderByUserIdAndStatus(loggedUser.getId(), OrderStatus.UNORDERED).get(0);
+    public boolean confirmOrder(User user, int orderId) throws PermissionException {
+        Order order = orderDao.getById(orderId);
+        List<Integer> userOrdersIds = orderDao.listOrdersIdsByUser(user.getId());
+        if (!userOrdersIds.contains(orderId)) throw new PermissionException("User don't have order with given id");
         if (!order.getStatus().equals(OrderStatus.UNORDERED)) return false;
         order.setStatus(OrderStatus.ORDERED);
         orderDao.update(order);
@@ -62,7 +64,9 @@ public class OrderServiceImpl extends BaseServiceImpl<Order> implements OrderSer
 
     @Override
     public boolean payOrder(User user, int orderId) throws PermissionException {
-        Order order = orderDao.getOrderByUserIdAndStatus(user.getId(), OrderStatus.ORDERED).get(0);
+        Order order = orderDao.getById(orderId);
+        List<Integer> userOrdersIds = orderDao.listOrdersIdsByUser(user.getId());
+        if (!userOrdersIds.contains(orderId)) throw new PermissionException("User don't have order with given id");
         if (!order.getStatus().equals(OrderStatus.ORDERED)) return false;
         order.setStatus(OrderStatus.PAID);
         orderDao.update(order);
