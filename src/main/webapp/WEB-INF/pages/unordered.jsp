@@ -69,6 +69,9 @@
     <h3><br><p style="color:dodgerblue;">Your basket is empty, please add products in.</p></h3>
 </c:if>
 
+<c:if test="${!empty orderList}">
+    <c:forEach items="${orderList.orderId}" var="entry">
+
 <c:if test="${!empty userOrder.status}">
     <h3>Order status:
     <br><th>${userOrder.status}</th></h3>
@@ -122,6 +125,8 @@
         <%--</tr>--%>
     </table>
 </c:if>
+    </c:forEach>
+    </c:if>
 
 <c:set var="orderStatus" value="unordered"/>
 <br><br><a href="<c:url value="/ordered"/>">Forward to confirmed orders</a>

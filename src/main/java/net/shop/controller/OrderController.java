@@ -66,9 +66,10 @@ public class OrderController {
         }
 
         List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.UNORDERED);
-        if (orderList.size() != 0)
+        if (orderList.size() != 0) {
             req.setAttribute("userOrder", orderList.get(0));
-        else
+            req.setAttribute("ordersList", orderList);
+        } else
             req.setAttribute("userOrder", new Order());
 
         return "unordered";
@@ -118,7 +119,7 @@ public class OrderController {
 
         List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.PAID);
         if (orderList.size() != 0)
-            req.setAttribute("userOrder", orderList.get(orderList.size()-1));
+            req.setAttribute("userOrder", orderList.get(orderList.size() - 1));
         else req.setAttribute("userOrder", new Order());
         req.setAttribute("order", new Order());
         return "paid";
