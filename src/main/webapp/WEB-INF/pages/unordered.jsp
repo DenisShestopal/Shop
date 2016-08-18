@@ -70,15 +70,15 @@
 </c:if>
 
 <c:if test="${!empty ordersList}">
-    <c:forEach items="${ordersList}" var="entry">
+    <c:forEach items="${ordersList}" var="order">
 
-<c:if test="${!empty userOrder.status}">
+<c:if test="${!empty order.status}">
     <h3>Order status:
     <br><th>${userOrder.status}</th></h3>
 
 
-    <br><a href="<c:url value='unordered/confirm/${userOrder.id}'/>">Confirm</a>
-    <a href="<c:url value='unordered/remove/${userOrder.id}'/>">Delete all products</a><br><br>
+    <br><a href="<c:url value='unordered/confirm/${order.id}'/>">Confirm</a>
+    <a href="<c:url value='unordered/remove/${order.id}'/>">Delete all products</a><br><br>
     <table class="tg">
         <tr>
             <th width="120">Product</th>
@@ -88,7 +88,7 @@
             <th width="60">Action</th>
         </tr>
 
-        <c:forEach items="${userOrder.productList}" var="entry">
+        <c:forEach items="${order.productList}" var="entry">
             <% totalPrice =0d; %>
             <% totalQuantity =0; %>
             <c:set var="price" value="${entry.key.price}"/>
@@ -102,7 +102,7 @@
                 <td>${entry.key.name}</td>
                 <td>${entry.key.price}</td>
                     <td>
-                        <c:if test="${userOrder.status == 'UNORDERED'}">
+                        <c:if test="${order.status == 'UNORDERED'}">
                         <form:form action="${'/unordered/changeQuantity'}">
                             <input name="productId" type="hidden" value="${entry.key.id}">
                             <input name="quantity" type="number" value = "${entry.value}" required min="0"
@@ -113,7 +113,7 @@
                     </c:if>
                     </td>
                 <td><%=price%></td>
-                <td><a href="<c:url value='/unordered/removeProduct?orderId=${userOrder.id}&productId=${entry.key.id}'/>">Delete</a></td>
+                <td><a href="<c:url value='/unordered/removeProduct?orderId=${order.id}&productId=${entry.key.id}'/>">Delete</a></td>
             </tr>
         </c:forEach>
         <%--<tr>--%>

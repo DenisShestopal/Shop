@@ -53,7 +53,8 @@
 
 <h1>Last paid order</h1>
 
-<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+<p align="center">
+<h3>Welcome, ${loggedUser}!</h3></p>
 
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public Double price = 0d;
@@ -65,41 +66,49 @@
 </c:if>
 
 <c:if test="${empty userOrder.status}">
-    <h3><br><p style="color:dodgerblue;">Your order is not paid yet.</p></h3>
+    <h3><br>
+        <p style="color:dodgerblue;">Your order is not paid yet.</p></h3>
 </c:if>
 
-<c:if test="${!empty userOrder.status}">
-    <h3>Order status:
-    <br><th>${userOrder.status}</th></h3>
+<c:if test="${!empty ordersList}">
+    <c:forEach items="${ordersList}" var="order">
 
-    <table class="tg">
-        <tr>
-            <th width="120">Product</th>
-            <th width="120">Price</th>
-            <th width="60">Quantity</th>
-        </tr>
+        <c:if test="${!empty order.status}">
+            <h3>Order status:
+                <br>
+                <th>${order.status}</th>
+            </h3>
 
-        <c:forEach items="${userOrder.productList}" var="entry">
-            <c:set var="price" value="${entry.key.price}"/>
-            <c:set var="quantity" value="${entry.value}"/>
-            <% price = Double.valueOf(pageContext.getAttribute("price").toString())
-                    * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
-            <% totalPrice += price; %>
-            <% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
-            <c:if test="${userOrder.status == 'PAID'}">
-            <tr>
-                <td>${entry.key.name}</td>
-                <td>${entry.key.price}</td>
-                <td>${entry.value}</td>
-            </tr>
-            </c:if>
-        </c:forEach>
-        <%--<tr>--%>
-            <%--<td><p><b>TOTAL:</b></p></td>--%>
-            <%--<td><p><b><%=totalQuantity%></b><p/></td>--%>
-            <%--<td><p><b><%=totalPrice%></b><p/></td>--%>
-        <%--</tr>--%>
-    </table>
+            <table class="tg">
+                <tr>
+                    <th width="120">Product</th>
+                    <th width="120">Price</th>
+                    <th width="60">Quantity</th>
+                </tr>
+
+                <c:forEach items="${order.productList}" var="entry">
+                    <c:set var="price" value="${entry.key.price}"/>
+                    <c:set var="quantity" value="${entry.value}"/>
+                    <% price = Double.valueOf(pageContext.getAttribute("price").toString())
+                            * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
+                    <% totalPrice += price; %>
+                    <% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
+                    <c:if test="${order.status == 'PAID'}">
+                        <tr>
+                            <td>${entry.key.name}</td>
+                            <td>${entry.key.price}</td>
+                            <td>${entry.value}</td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+                    <%--<tr>--%>
+                    <%--<td><p><b>TOTAL:</b></p></td>--%>
+                    <%--<td><p><b><%=totalQuantity%></b><p/></td>--%>
+                    <%--<td><p><b><%=totalPrice%></b><p/></td>--%>
+                    <%--</tr>--%>
+            </table>
+        </c:if>
+    </c:forEach>
 </c:if>
 
 <c:set var="orderStatus" value="paid"/>

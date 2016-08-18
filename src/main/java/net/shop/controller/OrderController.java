@@ -83,7 +83,7 @@ public class OrderController {
     @RequestMapping(value = "ordered", method = RequestMethod.GET)
     public String orderedOrders(HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -109,7 +109,7 @@ public class OrderController {
     @RequestMapping(value = "paid", method = RequestMethod.GET)
     public String paidOrders(HttpServletRequest req, HttpServletResponse resp) {
 
-        User loggedUser = null;
+        User loggedUser;
 
         try {
             loggedUser = getSecurityService().authenticate(req, resp);
@@ -119,9 +119,10 @@ public class OrderController {
         }
 
         List<Order> orderList = orderService.getOrderByUserIdAndStatus(loggedUser, OrderStatus.PAID);
-        if (orderList.size() != 0)
+        if (orderList.size() != 0) {
             req.setAttribute("userOrder", orderList.get(orderList.size() - 1));
-        else req.setAttribute("userOrder", new Order());
+            req.setAttribute("ordersList", orderList);
+        } else req.setAttribute("userOrder", new Order());
         req.setAttribute("order", new Order());
         return "paid";
     }

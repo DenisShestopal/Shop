@@ -73,15 +73,15 @@
 </c:if>
 
 <c:if test="${!empty ordersList}">
-    <c:forEach items="${ordersList}" var="entry">
+    <c:forEach items="${ordersList}" var="order">
 
-        <c:if test="${!empty userOrder.status}">
+        <c:if test="${!empty order.status}">
             <h3>Order status:
                 <br>
-                <th>${userOrder.status}</th>
+                <th>${order.status}</th>
             </h3>
 
-            <a href="<c:url value='ordered/pay/${userOrder.id}'/>">Pay</a>
+            <a href="<c:url value='ordered/pay/${order.id}'/>">Pay</a>
             <table class="tg">
                 <tr>
                     <th width="120">Product</th>
@@ -90,7 +90,7 @@
                     <th width="120">Total price</th>
                 </tr>
 
-                <c:forEach items="${userOrder.productList}" var="entry">
+                <c:forEach items="${order.productList}" var="entry">
                     <c:set var="price" value="${entry.key.price}"/>
                     <c:set var="quantity" value="${entry.value}"/>
                     <% price = Double.valueOf(pageContext.getAttribute("price").toString())
