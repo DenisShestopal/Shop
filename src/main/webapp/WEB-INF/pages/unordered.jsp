@@ -53,7 +53,8 @@
 
 <h1>Unordered order</h1>
 
-<p align = "center"><h3>Welcome, ${loggedUser}!</h3></p>
+<p align="center">
+<h3>Welcome, ${loggedUser}!</h3></p>
 
 <%! public int[] numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     public Double price = 0d;
@@ -66,71 +67,77 @@
 </c:if>
 
 <c:if test="${empty userOrder.status}">
-    <h3><br><p style="color:dodgerblue;">Your basket is empty, please add products in.</p></h3>
+    <h3><br>
+        <p style="color:dodgerblue;">Your basket is empty, please add products in.</p></h3>
 </c:if>
 
 <c:if test="${!empty ordersList}">
     <c:forEach items="${ordersList}" var="order">
 
-<c:if test="${!empty order.status}">
-    <h3>Order status:
-    <br><th>${userOrder.status}</th></h3>
+        <c:if test="${!empty order.status}">
+            <h3>Order status:
+                <br>
+                <th>${userOrder.status}</th>
+            </h3>
 
-    <br><a href="<c:url value='unordered/confirm/${order.id}'/>">Confirm</a>
-    <a href="<c:url value='unordered/remove/${order.id}'/>">Delete all products</a><br><br>
-    <table class="tg">
-        <tr>
-            <th width="120">Product</th>
-            <th width="120">Price</th>
-            <th width="60">Quantity</th>
-            <th width="60">Total price</th>
-            <th width="60">Action</th>
-        </tr>
+            <br><a href="<c:url value='unordered/confirm/${order.id}'/>">Confirm</a>
+            <a href="<c:url value='unordered/remove/${order.id}'/>">Delete all products</a><br><br>
+            <table class="tg">
+                <tr>
+                    <th width="120">Product</th>
+                    <th width="120">Price</th>
+                    <th width="60">Quantity</th>
+                    <th width="60">Total price</th>
+                    <th width="60">Action</th>
+                </tr>
 
-        <c:forEach items="${order.productList}" var="entry">
-            <c:set var="totalPrice" value="0"/>
-            <% totalPrice =0d; %>
-            <% totalQuantity =0; %>
-            <c:set var="price" value="${entry.key.price}"/>
-            <c:set var="quantity" value="${entry.value}"/>
+                <c:set var="totalPrice" value="0"/>
 
-            <% price = Double.valueOf(pageContext.getAttribute("price").toString())
-                    * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
+                <c:forEach items="${order.productList}" var="entry">
+                    <% totalPrice = 0d; %>
+                    <% totalQuantity = 0; %>
+                    <c:set var="price" value="${entry.key.price}"/>
+                    <c:set var="quantity" value="${entry.value}"/>
 
-            <c:forEach items="${order.productList}">
-                <c:set var="price" value="<%=price%>"/>
-                <c:set var="totalPrice" value="${totalPrice+price}"/>
-            </c:forEach>
+                    <% price = Double.valueOf(pageContext.getAttribute("price").toString())
+                            * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
 
-            <tr>
-                <td>${entry.key.name}</td>
-                <td>${entry.key.price}</td>
-                    <td>
-                        <c:if test="${order.status == 'UNORDERED'}">
-                        <form:form action="${'/unordered/changeQuantity'}">
-                            <input name="productId" type="hidden" value="${entry.key.id}">
-                            <input name="quantity" type="number" value = "${entry.value}" required min="0"
-                                   max="1000"/>
-                            <input type="submit"
-                                   value="<spring:message text="accept"/>"/>
-                        </form:form>
-                    </c:if>
-                    </td>
-                <td><%=price%></td>
-                <td><a href="<c:url value='/unordered/removeProduct?orderId=${order.id}&productId=${entry.key.id}'/>">Delete</a></td>
-            </tr>
-        </c:forEach>
-        <tr>
-            <td><p><b>TOTAL:</b></p></td>
-            <td></td>
-            <td></td>
-            <td><p><b>${totalPrice}</b><p/></td>
-            <td></td>
-        </tr>
-    </table>
-</c:if>
+                    <c:set var="price" value="<%=price%>"/>
+                    <c:set var="totalPrice" value="${totalPrice+price}"/>
+
+                    <tr>
+                        <td>${entry.key.name}</td>
+                        <td>${entry.key.price}</td>
+                        <td>
+                            <c:if test="${order.status == 'UNORDERED'}">
+                                <form:form action="${'/unordered/changeQuantity'}">
+                                    <input name="productId" type="hidden" value="${entry.key.id}">
+                                    <input name="quantity" type="number" value="${entry.value}" required min="0"
+                                           max="1000"/>
+                                    <input type="submit"
+                                           value="<spring:message text="accept"/>"/>
+                                </form:form>
+                            </c:if>
+                        </td>
+                        <td><%=price%>
+                        </td>
+                        <td>
+                            <a href="<c:url value='/unordered/removeProduct?orderId=${order.id}&productId=${entry.key.id}'/>">Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td><p><b>TOTAL:</b></p></td>
+                    <td></td>
+                    <td></td>
+                    <td><p><b>${totalPrice}</b>
+                        <p/></td>
+                    <td></td>
+                </tr>
+            </table>
+        </c:if>
     </c:forEach>
-    </c:if>
+</c:if>
 
 <c:set var="orderStatus" value="unordered"/>
 <br><br><a href="<c:url value="/ordered"/>">Forward to confirmed orders</a>
