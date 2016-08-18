@@ -93,10 +93,16 @@
             <% totalQuantity =0; %>
             <c:set var="price" value="${entry.key.price}"/>
             <c:set var="quantity" value="${entry.value}"/>
+
             <% price = Double.valueOf(pageContext.getAttribute("price").toString())
                     * Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
-            <% totalPrice += price; %>
-            <% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>
+            <%--<% totalPrice += price; %>--%>
+            <%--<% totalQuantity += Integer.valueOf(pageContext.getAttribute("quantity").toString()); %>--%>
+
+            <c:set var="totalPrice" value="0"/>
+            <c:forEach items="${order.productList}">
+                <c:set var="totalPrice" value="${totalPrice} + <%=price%>}"/>
+            </c:forEach>
 
             <tr>
                 <td>${entry.key.name}</td>
@@ -123,6 +129,7 @@
             <%--<td><p><b><%=totalPrice%></b><p/></td>--%>
             <%--<td></td>--%>
         <%--</tr>--%>
+        <td>${totalPrice}</td>
     </table>
 </c:if>
     </c:forEach>
