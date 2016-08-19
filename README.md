@@ -4,6 +4,10 @@
 <br>+ 2. Клиент делает и оплачивает Заказ на Товары.
 <br>+ 3. Администратор может занести неплательщиков в “черный список”.
 
+1. The Administrator can maintain the Products catalog.
+2. The client makes and pays goods orders.
+3. The administrator can add users with unpaid orders to the blacklist.
+
 #Done
 <br>1. Domain model.
 <br>2. CRUD Service and Dao and Controllers interfaces and Classes.
@@ -36,4 +40,18 @@
 <br>+ 10. При разработке бизнес логики использовать сессии и фильтры.
 <br>+ 11. Выполнить журналирование событий, то есть информацию о возникающих исключениях и событиях в системе обрабатывать с помощью Log4j.
 <br>+ 12.	Код должен содержать комментарии.
+
+<br>+ 1. Create entities and classes.
+<br>+ 2. Classes and method should have appropriative names and shoud be correctly structured by packages.
+<br>+ 3. Java Code Convention rules required.
+<br>+ 4. Information about entities should be stored in the DataBase, API JDBC and connections pool using to get access.
+<br> As DBMS MySQL или Derby recommended.
+<br>+ 5. Multilanguage app required.
+<br>+ 6. Model-View-Controller architecture required.
+<br>+- 7. Using GoF patterns: Factory Method, Command, Builder, Strategy, State, Observer etc.
+<br>+ 8. Using Servlets and JSP, functionalities need to be realized.
+<br>+ 9. JSTL in JSP usage required, implement own tags.
+<br>+ 10. Sessions and Filters usage required.
+<br>+ 11. Make logging using Log4j.
+<br>+ 12.	Comments required.
 
