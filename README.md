@@ -16,6 +16,16 @@
 <br>5. Logging.
 <br>6. Comments
 
+#Technologies used
+Database: MySQL
+UI: JSP, JSTL, HTML, CSS
+Spring (Core, MVC)
+ORM: Hibernate
+Servlet
+Generic DAO Patterns
+Token Authentication
+Server: Tomcat
+
 #Todo
 <br>Add Tests
 
